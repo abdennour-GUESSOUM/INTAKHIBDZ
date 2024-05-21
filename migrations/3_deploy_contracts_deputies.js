@@ -14,7 +14,7 @@ module.exports = function(deployer) {
     "0x828Da9fc4EEa60646356E4bD79264Ee936dBF98a"
   ];
   const escrow = "0xc60A10b0cA12AC42116b8C76d177a3267C748fBB";
-  const duration = 400;
+  const duration = 500;
 
   deployer.deploy(Deputies, escrow, duration, groupNames, groupPictures, groupAddresses).then(async (instance) => {
     const candidates = [

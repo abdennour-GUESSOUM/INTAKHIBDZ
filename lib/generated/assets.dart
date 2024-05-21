@@ -9,6 +9,7 @@ class Assets {
   static const String assetsBlockchain = 'assets/blockchain.png';
   static const String assetsBlockchainAuth = 'assets/blockchain_auth.json';
   static const String assetsCrown = 'assets/crown.svg';
+  static const String assetsDeputies = 'assets/deputies.json';
   static const String assetsFaceAuth = 'assets/face_auth.json';
   static const String assetsFaceid = 'assets/faceid.png';
   static const String assetsFingerprint = 'assets/fingerprint.png';
@@ -20,6 +21,7 @@ class Assets {
   static const String assetsMrz = 'assets/mrz.json';
   static const String assetsNfcIcon = 'assets/nfc_icon.png';
   static const String assetsNoSignal = 'assets/no-signal.png';
+  static const String assetsPresident = 'assets/president.json';
   static const String assetsSayonara = 'assets/sayonara.png';
   static const String assetsScanMrzDark = 'assets/scan_mrz_dark.json';
   static const String assetsScanMrzLight = 'assets/scan_mrz_light.json';

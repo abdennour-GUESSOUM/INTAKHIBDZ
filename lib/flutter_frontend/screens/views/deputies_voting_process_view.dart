@@ -74,7 +74,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
 
   Future<void> _fetchNumberOfVoters() async {
     try {
-      final result = await blockchain.queryView("get_vote_count", []);
+      final result = await blockchain.queryViewSecond("get_vote_count", []);
       print("Result from get_vote_count: $result"); // Add logging
 
       if (result.isNotEmpty) {
@@ -94,7 +94,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   }
 
   Future<void> _loadDeadline() async {
-    final result = await blockchain.queryView("get_deadline", []);
+    final result = await blockchain.queryViewSecond("get_deadline", []);
     if (result.isNotEmpty) {
       final deadline = result[0] as BigInt;
       final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
@@ -131,7 +131,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   }
 
   Future<void> _updateTimeRemaining() async {
-    final result = await blockchain.queryView("get_deadline", []);
+    final result = await blockchain.queryViewSecond("get_deadline", []);
     if (result.isNotEmpty) {
       final deadline = result[0] as BigInt;
       final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
@@ -170,7 +170,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
-      final result = await blockchain.queryView("get_deadline", []);
+      final result = await blockchain.queryViewSecond("get_deadline", []);
       if (result.isNotEmpty) {
         final deadline = result[0] as BigInt;
         final timeRemaining = deadline - currentTime;
@@ -303,7 +303,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
     ).show();
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        await blockchain.query("confirm_envelope", args);
+        await blockchain.querySecond("confirm_envelope", args);
         Navigator.of(context).pop();
         Alert(
           buttons: [
@@ -425,7 +425,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
     ).show();
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        await blockchain.query("cast_envelope", args);
+        await blockchain.querySecond("cast_envelope", args);
         Navigator.of(context).pop();
         Alert(
           buttons: [
@@ -544,7 +544,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
 
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        final groupDetails = await blockchain.queryView("getAllDetails", []);
+        final groupDetails = await blockchain.queryViewSecond("getAllDetails", []);
         Navigator.of(context).pop();
         setState(() {
           groupNames = groupDetails[0];

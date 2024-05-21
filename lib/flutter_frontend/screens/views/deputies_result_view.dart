@@ -65,7 +65,7 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
     ).show();
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      blockchain.queryView("get_results", []).then((value) {
+      blockchain.queryViewSecond("get_results", []).then((value) {
         Navigator.of(context).pop();
         print("Results fetched successfully: $value");
         setState(() {

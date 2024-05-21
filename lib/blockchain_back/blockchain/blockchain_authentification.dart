@@ -16,22 +16,30 @@ class BlockchainAuthentification extends StatefulWidget {
 }
 
 class _BlockchainAuthentificationState extends State<BlockchainAuthentification> {
-  final String smartContractAddress = "0xC298069A8a93d2b66657Ddae235143329d17bf6b";
+
+
+  final String smartContractAddress = "0x3F072216BeC7963fCd6fEdeDcB84323014466780";
+  final String secondSmartContractAddress = "0xCab14A3101de74327589000F3629724AF5413481"; // Replace with your actual second contract address
+
+
+
   final keyController = TextEditingController();
 
   @override
+  @override
   void initState() {
     super.initState();
-    process(smartContractAddress);
+    process(smartContractAddress, secondSmartContractAddress); // Pass both contract addresses here
   }
 
-  void process(String addr) {
-    if (addr.length == 42) {
+  void process(String addr, String secondAddr) {
+    if (addr.length == 42 && secondAddr.length == 42) {
       SharedPreferences.getInstance().then((sp) {
         sp.setString("contract", addr);
+        sp.setString("second_contract", secondAddr);
       });
     } else {
-      print("Address not valid");
+      print("One or both addresses are not valid");
     }
   }
 

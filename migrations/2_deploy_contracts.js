@@ -6,7 +6,7 @@ module.exports = function(deployer) {
     "0x791f85aB7B725380370949c1576a19B47EfB32C3"
   ];
   const escrow = "0xb71645E9752fB726a082FE3899e39962e2933795";
-  const duration = 300; // Duration in seconds (3 minutes)
+  const duration = 500; // Duration in seconds (3 minutes)
   const firstNames = ["Guessoum", "Lesbat", "Daoud"];
   const lastNames = ["Abdennour", "Haithem", "Yasser"];
   const imageUrls = [
