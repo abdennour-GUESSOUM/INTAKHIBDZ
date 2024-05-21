@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/json_rpc.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
@@ -102,7 +103,7 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
         print('Error fetching results: $error');
         String errorMessage = (error is RPCError) ? blockchain.translateError(error) : error.toString();
         if (error.toString().contains("invalid")) {
-          errorMessage = "Elections are invalid (there was a tie). InvalidElections!";
+          errorMessage = "Invalid results!";
           setState(() {
             valid = false;
             print("Election results invalid due to tie. 'valid' set to false.");
@@ -110,9 +111,8 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
         }
         Alert(
           context: context,
-          type: AlertType.error,
           title: "Error",
-          desc: errorMessage,
+          desc: "",
           style: AlertStyle(
             animationType: AnimationType.grow,
             isCloseButton: false,
@@ -140,6 +140,44 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
             buttonAreaPadding: EdgeInsets.all(20),
             alertPadding: EdgeInsets.all(20),
           ),
+          content: Container(
+            height: 150, // Set your desired height
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/invalid_elect.json',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
+                ),
+                Text(
+                  errorMessage,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ok",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Theme.of(context).colorScheme.secondary,
+              radius: BorderRadius.circular(10.0),
+              width: 120,
+            ),
+          ],
         ).show();
       });
     });
@@ -224,7 +262,61 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
 
     List<Widget> content;
     if (valid == null) {
-      content = [Container()];
+      content = [Center(
+    child: Container(
+    margin: const EdgeInsets.only(top: 30.0),
+    child: Column(
+    children: <Widget>[
+    Text(
+    "Unexpected error",
+    style: TextStyle(fontSize: 40, color: Theme.of(context).colorScheme.primary , fontWeight: FontWeight.bold),
+    ),
+    const SizedBox(height: 20),
+    const Text(
+    "an error occured during elections!",
+    textAlign: TextAlign.center,
+    ),
+    const SizedBox(height: 50),
+    Center(
+    child: Lottie.asset(
+    'assets/invalid_elect.json',
+    height: 200,
+    ),
+    ),
+    const SizedBox(height: 50),
+    Align(
+    alignment: Alignment.bottomCenter,
+    child: SizedBox(
+    width: double.infinity,
+    child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+    foregroundColor: Theme.of(context).colorScheme.primary,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(30.0),
+    side: BorderSide(
+    color: Theme.of(context).colorScheme.secondary,
+    width: 1.0,
+    ), // Border color and width
+    ),
+    ),
+    onPressed: () {
+    blockchain.logout();
+    setState(() {
+    Navigator.pushAndRemoveUntil(
+    context,
+    SlideRightRoute(page: BlockchainAuthentification(documentNumber: '1122334455')),
+    (Route<dynamic> route) => false,
+    );
+    });
+    },
+    child: const Text("Log Out"),
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+    )];
     } else if (valid == false) {
       content = [
         Center(
@@ -242,6 +334,13 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 50),
+                Center(
+                  child: Lottie.asset(
+                    'assets/invalid_elect.json',
+                    height: 200,
+                  ),
+                ),
+                const SizedBox(height: 100),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(

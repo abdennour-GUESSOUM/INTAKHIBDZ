@@ -89,7 +89,7 @@ class _VoteviewState extends State<Voteview> {
       Navigator.of(context).pop();
 
       // Navigate to the ResultsView
-      print("Navigating to ResultsView...");
+      print("Navigating to Results...");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => PresidentialResultView()),
@@ -99,7 +99,7 @@ class _VoteviewState extends State<Voteview> {
 
       if (error.toString().contains("has already been")) {
         // Navigate to the MainView if the error indicates that the results have already been checked
-        print("Results have already been checked. Navigating to MainView...");
+        print("Results have already been checked. Navigating to home...");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MainView()),
@@ -193,7 +193,6 @@ class _VoteviewState extends State<Voteview> {
           ),
         ).show();
       } else {
-        // Handle generic error
         Alert(
           context: context,
           type: AlertType.error,
@@ -292,7 +291,7 @@ class _VoteviewState extends State<Voteview> {
       Navigator.of(context).pop();
 
       // Navigate to the ResultsView
-      print("Navigating to ResultsView...");
+      print("Navigating to Results...");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => DeputiesResultView()),

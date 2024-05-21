@@ -106,7 +106,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
         print('Error fetching results: $error');
         String errorMessage = (error is RPCError) ? blockchain.translateError(error) : error.toString();
         if (error.toString().contains("invalid")) {
-          errorMessage = "Election results invalid due to tie!";
+          errorMessage = "Invalid results!";
           setState(() {
             valid = false;
             print("Election results invalid due to tie. 'valid' set to false.");
