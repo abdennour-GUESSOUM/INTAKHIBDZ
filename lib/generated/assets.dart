@@ -42,7 +42,7 @@ class Assets {
   static const String imagesWelcome1 = 'assets/images/welcome_1.jpg';
   static const String imagesWelcome2 = 'assets/images/welcome_2.jpg';
   static const String imagesWelcome3 = 'assets/images/welcome_3.jpg';
-  static const String intakhibDZMasterAssetsBlockchain = 'assets/blockchain.json';
-  static const String intakhibDZMasterAssetsFingerprint = 'assets/fingerprint.json';
+  static const String intakhibDZAssetsBlockchain = 'assets/blockchain.json';
+  static const String intakhibDZAssetsFingerprint = 'assets/fingerprint.json';
 
 }
