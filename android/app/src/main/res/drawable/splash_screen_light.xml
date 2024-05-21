@@ -1,0 +1,5 @@
+<!-- android/app/src/main/res/drawable/splash_screen_light.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white"/>
+    <!-- Add logo or additional items here if needed -->
+</layer-list>

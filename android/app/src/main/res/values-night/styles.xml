@@ -1,0 +1,9 @@
+<!-- android/app/src/main/res/values-night/styles.xml -->
+<resources>
+    <style name="LaunchTheme.Dark" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+    </style>
+    <style name="NormalTheme.Dark" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your normal dark theme here -->
+    </style>
+</resources>

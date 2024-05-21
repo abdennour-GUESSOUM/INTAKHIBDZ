@@ -1,0 +1,4 @@
+<!-- android/app/src/main/res/drawable/splash_screen_dark.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/black"/>
+</layer-list>
