@@ -26,8 +26,8 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _updateGroups());
     _controllerCenter = ConfettiController(duration: const Duration(seconds: 5));
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateGroups());
   }
 
   Future<void> _updateGroups() async {
@@ -193,197 +193,218 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
 
     List<Widget> buildValidContent() {
       return [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "The winning party is",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(height: 20),
-        Container(
-          height: 140,
-          child: Card(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Stack(
-                    children: [
-                      Align(
-                        child: Text("${groups[0].groupName}",
-                            style: TextStyle(fontSize: 40,
-                                color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          height: 50,
-                          child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Align(
-
-                  child: Text("Collected ${groups[0].votes} votes    ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold , fontSize: 20)),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: 30),
-        Text("Results ranking", style: TextStyle(fontSize: 40)),
-        SizedBox(height: 30),
-        ...List<Widget>.generate(groups.length, (index) {
-          return Card(
-            color: Theme.of(context).colorScheme.background.withOpacity(1),
-            child: ListTile(
-              title: Text("${groups[index].groupName}", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-              subtitle: Text(' Collected ${groups[index].votes} votes          ${groups[index].percentage!.toStringAsFixed(0)}%'),
-              trailing: Container(
-                width: 40,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  image: DecorationImage(
-                    image: NetworkImage(groups[index].pictureUrl!),
-                  ),
-                ),
+        Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _controllerCenter,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: true,
+                numberOfParticles: 30,
+                maxBlastForce: 20,
+                minBlastForce: 10,
+                emissionFrequency: 0.06,
+                gravity: 0.2,
+                particleDrag: 0.05,
+                colors: [
+                  Colors.green.withOpacity(0.7),
+                  Colors.white.withOpacity(0.7),
+                  Colors.red.withOpacity(0.7),
+                ],
+                createParticlePath: (size) {
+                  final Path path = Path();
+                  double radius = size.width / 5;
+                  path.addPolygon([
+                    Offset(radius, 0),
+                    Offset(1.5 * radius, radius),
+                    Offset(1.5 * radius, 2.5 * radius),
+                    Offset(0.5 * radius, 2.5 * radius),
+                    Offset(0.5 * radius, radius),
+                  ], true);
+                  return path;
+                },
               ),
             ),
-          );
-        }),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "The winning party is",
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: 140,
+                  child: Card(
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.9),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Stack(
+                            children: [
+                              Align(
+                                child: Text("${groups[0].groupName}",
+                                    style: TextStyle(fontSize: 40,
+                                        color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  height: 50,
+                                  child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+
+                          child: Text("Collected ${groups[0].votes} votes    ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold , fontSize: 20)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Text("Results ranking", style: TextStyle(fontSize: 40)),
+                SizedBox(height: 30),
+                ...List<Widget>.generate(groups.length, (index) {
+                  return Card(
+                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+                    child: ListTile(
+                      title: Text("${groups[index].groupName}", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                      subtitle: Text(' Collected ${groups[index].votes} votes          ${groups[index].percentage!.toStringAsFixed(0)}%'),
+                      trailing: Container(
+                        width: 40,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(
+                            image: NetworkImage(groups[index].pictureUrl!),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+
+          ],
+        ),
+
       ];
     }
 
     List<Widget> content;
-    if (valid == null) {
-      content = [Center(
-    child: Container(
-    margin: const EdgeInsets.only(top: 30.0),
-    child: Column(
-    children: <Widget>[
-    Text(
-    "Unexpected error",
-    style: TextStyle(fontSize: 40, color: Theme.of(context).colorScheme.primary , fontWeight: FontWeight.bold),
-    ),
-    const SizedBox(height: 20),
-    const Text(
-    "an error occured during elections!",
-    textAlign: TextAlign.center,
-    ),
-    const SizedBox(height: 50),
-    Center(
-    child: Lottie.asset(
-    'assets/invalid_elect.json',
-    height: 200,
-    ),
-    ),
-    const SizedBox(height: 50),
-    Align(
-    alignment: Alignment.bottomCenter,
-    child: SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-    style: ElevatedButton.styleFrom(
-    foregroundColor: Theme.of(context).colorScheme.primary,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(30.0),
-    side: BorderSide(
-    color: Theme.of(context).colorScheme.secondary,
-    width: 1.0,
-    ), // Border color and width
-    ),
-    ),
-    onPressed: () {
-    blockchain.logout();
-    setState(() {
-    Navigator.pushAndRemoveUntil(
-    context,
-    SlideRightRoute(page: BlockchainAuthentification(documentNumber: '1122334455')),
-    (Route<dynamic> route) => false,
-    );
-    });
-    },
-    child: const Text("Log Out"),
-    ),
-    ),
-    ),
-    ],
-    ),
-    ),
-    )];
-    } else if (valid == false) {
+     if (valid == false) {
       content = [
-        Center(
-          child: Container(
-            margin: const EdgeInsets.only(top: 30.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Invalid Elections",
-                  style: TextStyle(fontSize: 40, color: Theme.of(context).colorScheme.primary , fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  "There was a tie, Elections are invalid!",
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 50),
-                Center(
-                  child: Lottie.asset(
-                    'assets/invalid_elect.json',
-                    height: 200,
-                  ),
-                ),
-                const SizedBox(height: 100),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.secondary,
-                            width: 1.0,
-                          ), // Border color and width
+        Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _controllerCenter,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: true,
+                numberOfParticles: 30,
+                maxBlastForce: 20,
+                minBlastForce: 10,
+                emissionFrequency: 0.06,
+                gravity: 0.2,
+                particleDrag: 0.05,
+                colors: [
+                  Colors.green.withOpacity(0.7),
+                  Colors.white.withOpacity(0.7),
+                  Colors.red.withOpacity(0.7),
+                ],
+                createParticlePath: (size) {
+                  final Path path = Path();
+                  double radius = size.width / 5;
+                  path.addPolygon([
+                    Offset(radius, 0),
+                    Offset(1.5 * radius, radius),
+                    Offset(1.5 * radius, 2.5 * radius),
+                    Offset(0.5 * radius, 2.5 * radius),
+                    Offset(0.5 * radius, radius),
+                  ], true);
+                  return path;
+                },
+              ),
+            ),
+
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 30.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "Invalid Elections",
+                      style: TextStyle(fontSize: 40, color: Theme.of(context).colorScheme.primary , fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Elections are invalid!",
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 50),
+                    Center(
+                      child: Lottie.asset(
+                        'assets/invalid_elect.json',
+                        height: 200,
+                      ),
+                    ),
+                    const SizedBox(height: 100),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Theme.of(context).colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.secondary,
+                                width: 1.0,
+                              ), // Border color and width
+                            ),
+                          ),
+                          onPressed: () {
+                            blockchain.logout();
+                            setState(() {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                SlideRightRoute(page: BlockchainAuthentification(documentNumber: '1122334455')),
+                                    (Route<dynamic> route) => false,
+                              );
+                            });
+                          },
+                          child: const Text("Log Out"),
                         ),
                       ),
-                      onPressed: () {
-                        blockchain.logout();
-                        setState(() {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            SlideRightRoute(page: BlockchainAuthentification(documentNumber: '1122334455')),
-                                (Route<dynamic> route) => false,
-                          );
-                        });
-                      },
-                      child: const Text("Log Out"),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ];
     } else if (valid == true) {
       content = buildValidContent();
     } else {
-      content = [const Center(
+      content = [ Center(
         child: Text(
             "Unknown state",
             style: TextStyle(
                 fontSize: 40,
-                color: Colors.red
+                color: Theme.of(context).colorScheme.background,
             )
         ),
       )];

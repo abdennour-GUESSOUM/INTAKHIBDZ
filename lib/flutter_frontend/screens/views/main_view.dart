@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
-import 'presindential_result_view.dart';
+import 'presidential_result_view.dart';
 
 class MainView extends StatefulWidget {
   @override

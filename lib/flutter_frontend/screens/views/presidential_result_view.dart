@@ -316,35 +316,38 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                   ),
                   const SizedBox(height: 10),
                   Card(
-                    color: Theme.of(context).colorScheme.secondary,
-                    child: Container(
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Winner!",
-                            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "${candidates[0].firstName}\n${candidates[0].lastName}",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.background,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 40,
+                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              "Winner!",
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "Collected ${candidates[0].votes} votes (${candidates[0].percentage!.toStringAsFixed(2)}%)",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.background,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
+                            Text(
+                              "${candidates[0].firstName}\n${candidates[0].lastName}",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                              ),
                             ),
-                          ),
-                        ],
+                            Text(
+                              "${candidates[0].votes} votes  \n  ${candidates[0].percentage!.toStringAsFixed(0)}%",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -378,33 +381,12 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                     ),
                                   ),
                                 ),
-                                trailing: ExcludeSemantics(
-                                  child: Stack(
-                                    children: [
-                                      Text(
-                                        (() {
-                                          switch (index) {
-                                            case 0:
-                                              return "🥇";
-                                            case 1:
-                                              return "🥈";
-                                            case 2:
-                                              return "🥉";
-                                          }
-                                          return "";
-                                        }()),
-                                        textAlign: TextAlign.right,
-                                        style: const TextStyle(fontSize: 30),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                                 title: Text(
                                   "${candidates[index].firstName} ${candidates[index].lastName}",
                                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                                 ),
                                 subtitle: Text(
-                                  '🗳 Votes: ${candidates[index].votes.toString()} (${candidates[index].percentage!.toStringAsFixed(2)}%)',
+                                  ' ${candidates[index].votes.toString()} Votes      ${candidates[index].percentage!.toStringAsFixed(0)}%',
                                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                                 ),
                               ),

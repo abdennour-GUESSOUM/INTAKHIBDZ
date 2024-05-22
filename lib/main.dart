@@ -1,8 +1,8 @@
 import 'package:IntakhibDZ/flutter_frontend/screens/mrz_nfc_scan_screen.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/scanned_data_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blockchain_back/blockchain/blockchain_authentification.dart';
+import 'flutter_frontend/screens/facial_screen.dart';
 import 'flutter_frontend/screens/onboarding_screen.dart';
 import 'flutter_frontend/themes/dark_theme.dart';
 import 'flutter_frontend/themes/light_theme.dart';
@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'INTAKHIBDZ',
+      title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? BlockchainAuthentification(documentNumber: '0987654321',) : OnboardingScreen(),
+      home: seenOnboarding ? BlockchainAuthentification(documentNumber: '407640657') : OnboardingScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

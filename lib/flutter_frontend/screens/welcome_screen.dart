@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:IntakhibDZ/flutter_frontend/screens/views/home_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/profile_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/settings_view.dart';
@@ -7,19 +9,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  final Uint8List? profileImage;
+
+
+  const WelcomeScreen({Key? key, this.profileImage}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 class _WelcomeScreenState extends State<WelcomeScreen> {
   int _selectedIndex = 0;
+
+  Uint8List? _persistentImage;
+
   final PageController _pageController = PageController();
-  bool _isShown = true; // Add this line
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    _loadImage;
+  }
+
+  Future<void> _saveImage(Uint8List image) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String base64Image = base64Encode(image);
+    await prefs.setString('profile_image', base64Image);
+  }
+  Future<void> _loadImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? base64Image = prefs.getString('profile_image');
+    if (base64Image != null) {
+      setState(() {
+        _persistentImage = base64Decode(base64Image);
+      });
+    } else if (widget.profileImage != null) {
+      _persistentImage = widget.profileImage;
+      await _saveImage(widget.profileImage!);
+    }
+  }
+
 
 
   @override
@@ -41,10 +75,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 icon: Container(
                   width: 60,
                   height: 60,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage("assets/abdo.jpg"),
+                      image: _persistentImage != null
+                          ? MemoryImage(_persistentImage!)
+                          : AssetImage("assets/abdou.jpg") as ImageProvider<Object>,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -56,14 +92,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 },
               ),
               actions: [
-              Container(
-              width: 40,
-              height: 50,
-              child: SvgPicture.asset(
-                "assets/flag.svg",
-                fit: BoxFit.contain,  // This ensures the SVG is scaled properly within the container
-              ),
-            )
+                Container(
+                  width: 40,
+                  height: 50,
+                  child: SvgPicture.asset(
+                    "assets/flag.svg",
+                    fit: BoxFit.contain,  // This ensures the SVG is scaled properly within the container
+                  ),
+                )
               ],
             ),
           ),
@@ -80,7 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Center(child: HomeView2()),
                 Center(child: Voteview()),
                 Center(child: ProfileView()),
-                 Center(child: SettingsView()),
+                Center(child: SettingsView()),
               ],
             ),
           ],
@@ -155,5 +191,4 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.dispose();
   }
 }
-
 

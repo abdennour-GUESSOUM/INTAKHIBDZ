@@ -163,7 +163,6 @@ contract Deputies {
         }
     }
     function auto_declare_results() public canCheckOutcome {
-        // Automatically declare results after the deadline
         if (voting_condition.open) {
             valid_candidate_check();
         }

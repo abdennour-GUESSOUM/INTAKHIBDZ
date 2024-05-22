@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:IntakhibDZ/blockchain_back/blockchain/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +12,10 @@ import '../../flutter_frontend/screens/welcome_screen.dart';
 
 class BlockchainAuthentification extends StatefulWidget {
   final String? documentNumber;
+  final Uint8List? profileImage;
 
-  BlockchainAuthentification({required this.documentNumber});
+
+  BlockchainAuthentification({ this.documentNumber , this.profileImage});
 
   @override
   _BlockchainAuthentificationState createState() => _BlockchainAuthentificationState();
@@ -17,9 +23,10 @@ class BlockchainAuthentification extends StatefulWidget {
 
 class _BlockchainAuthentificationState extends State<BlockchainAuthentification> {
 
+  Uint8List? _persistentImage;
 
-  final String smartContractAddress = "0x3F072216BeC7963fCd6fEdeDcB84323014466780";
-  final String secondSmartContractAddress = "0xCab14A3101de74327589000F3629724AF5413481"; // Replace with your actual second contract address
+  final String smartContractAddress = "0x996E74160F12A576D095A06e5C8974Bf516e4c4D";
+  final String secondSmartContractAddress = "0x2bdb9E2673AadACA085908c2FBfB7E1b72930000"; // Replace with your actual second contract address
 
 
 
@@ -29,6 +36,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
   @override
   void initState() {
     super.initState();
+    _loadImage;
     process(smartContractAddress, secondSmartContractAddress); // Pass both contract addresses here
   }
 
@@ -44,6 +52,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
   }
 
   Future<void> _login() async {
+
     print('Starting login process...');
 
     String key = keyController.text;
@@ -54,6 +63,16 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       _showAlert("Error in the Private key format");
       return;
     }
+    setState(() {
+      Navigator.pushAndRemoveUntil(
+        context,
+        SlideRightRoute(
+            page: WelcomeScreen()
+        ),
+            (Route<dynamic> route) => true,
+      );
+    });
+
 
     final response = await http.post(
       Uri.parse('http://192.168.1.2:3000/check-document'), // Update with your server address
@@ -75,8 +94,10 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
         setState(() {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                (Route<dynamic> route) => false,
+            SlideRightRoute(
+                page: WelcomeScreen()
+            ),
+                (Route<dynamic> route) => true,
           );
         });
       } else {
@@ -176,7 +197,8 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
               ),
             ),
           ),
-          onPressed: _login,
+          onPressed:
+          _login,
           child: const Text("Connect"),
         ),
       ),
@@ -190,8 +212,31 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
             child: AppBar(
+              leading: IconButton(
+                icon: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: _persistentImage != null
+                          ? MemoryImage(_persistentImage!)
+                          : AssetImage("assets/abdou.jpg") as ImageProvider<Object>,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  if (kDebugMode) {
+                    print('Rounded icon pressed');
+                  }
+                },
+              ),
               backgroundColor: Theme.of(context).colorScheme.background,
-              title: Text('CONNEXION ', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+              title: Text('CONNEXION',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary)),
               elevation: 0,
               centerTitle: true,
             ),
@@ -239,4 +284,22 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       ),
     );
   }
+  Future<void> _saveImage(Uint8List image) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String base64Image = base64Encode(image);
+    await prefs.setString('profile_image', base64Image);
+  }
+  Future<void> _loadImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? base64Image = prefs.getString('profile_image');
+    if (base64Image != null) {
+      setState(() {
+        _persistentImage = base64Decode(base64Image);
+      });
+    } else if (widget.profileImage != null) {
+      _persistentImage = widget.profileImage;
+      await _saveImage(widget.profileImage!);
+    }
+  }
+
 }

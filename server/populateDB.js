@@ -20,7 +20,7 @@ const Voter = mongoose.model('Voter', voterSchema);
 // Pre-populate with eligible voters
 const eligibleVoters = [
   {
-    documentNumber: '1234567890',
+    documentNumber: '407640657',
     firstName: 'Guessoum',
     lastName: 'Abdennour',
     dateOfBirth: '1998-10-12',

@@ -46,5 +46,6 @@ class Assets {
   static const String imagesWelcome3 = 'assets/images/welcome_3.jpg';
   static const String intakhibDZAssetsBlockchain = 'assets/blockchain.json';
   static const String intakhibDZAssetsFingerprint = 'assets/fingerprint.json';
+  static const String intakhibDZAssetsNoSignal = 'assets/no_signal.json';
 
 }

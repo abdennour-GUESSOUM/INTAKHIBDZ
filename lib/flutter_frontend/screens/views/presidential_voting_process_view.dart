@@ -597,30 +597,6 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.secondary,
-                          value: _timeRemaining.inSeconds > 0
-                              ? _timeRemaining.inSeconds.toDouble() /
-                              (_timeRemaining.inHours * 3600 +
-                                  _timeRemaining.inMinutes.remainder(60) * 60 +
-                                  _timeRemaining.inSeconds.remainder(60))
-                              : 1.0,
-                        ),
-                        trailing: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Theme.of(context).colorScheme.primary,
-                            backgroundColor: Theme.of(context).colorScheme.background,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              side: BorderSide(
-                                color: Theme.of(context).colorScheme.secondary,
-                                width: 1.0,
-                              ), // Border color and width
-                            ),
-                          ),
-                          onPressed: _updateTimeRemaining,
-                          child: Text("Update"),
-                        ),
                         title: Text(
                           textAlign: TextAlign.center,
                           timeRemainingText,

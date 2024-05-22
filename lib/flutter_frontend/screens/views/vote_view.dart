@@ -1,6 +1,6 @@
 import 'package:IntakhibDZ/flutter_frontend/screens/views/deputies_result_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/presidential_voting_process_view.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/presindential_result_view.dart';
+import 'package:IntakhibDZ/flutter_frontend/screens/views/presidential_result_view.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -268,7 +268,7 @@ class _VoteviewState extends State<Voteview> {
     try {
       // Get the current deadline
       print("Fetching deadline...");
-      final deadlineResult = await blockchain.queryView("get_deadline", []);
+      final deadlineResult = await blockchain.queryViewSecond("get_deadline", []);
       print("Deadline result: $deadlineResult");
 
       if (deadlineResult.isEmpty) {
@@ -282,7 +282,7 @@ class _VoteviewState extends State<Voteview> {
       if (currentTime > deadline.toInt()) {
         // Call the valid_candidate_check function in the contract if the deadline has passed
         print("Deadline has passed. Calling valid_candidate_check...");
-        await blockchain.query("auto_declare_results", []);
+        await blockchain.querySecond("auto_declare_results", []);
         print("auto_declare_results called successfully.");
       } else {
         throw Exception("Voting period has not ended yet.");
@@ -537,6 +537,56 @@ class _VoteviewState extends State<Voteview> {
                           width: 250,
                           decoration: BoxDecoration(
                             image: DecorationImage(
+                              image: AssetImage("assets/images/news_5.jpg"), // Specify your image path here
+                              fit: BoxFit.cover, // This will cover the entire container space
+                            ),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.25), // Semi-transparent black overlay
+                            ),
+                            child: GestureDetector(
+                              onTap: _ValidCandidateCheck,
+                              child: glassmorphicContainer(
+                                context: context,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 40),
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: const Text(
+                                      'Presidential Results',
+                                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white), // Ensuring text is white for better visibility
+                                    ),
+                                  ),
+                                ),
+                                height: 300,
+                                width: 250,
+                              ),
+                            ),
+                          ),
+
+                        ),
+                      ),
+                    ),
+
+
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust as needed
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: Container(
+                          height: 300,
+                          width: 250,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
                               image: AssetImage("assets/images/news_1.jpg"), // Specify your image path here
                               fit: BoxFit.cover, // This will cover the entire container space
                             ),
@@ -571,46 +621,6 @@ class _VoteviewState extends State<Voteview> {
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0),
-                        child: Container(
-                          height: 300,
-                          width: 250,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/news_5.jpg"), // Specify your image path here
-                              fit: BoxFit.cover, // This will cover the entire container space
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.25), // Semi-transparent black overlay
-                            ),
-                            child: GestureDetector(
-                              onTap: _ValidCandidateCheck,
-                              child: glassmorphicContainer(
-                                context: context,
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(40, 0, 0, 40),
-                                  child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: const Text(
-                                      'Presidential Results',
-                                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white), // Ensuring text is white for better visibility
-                                    ),
-                                  ),
-                                ),
-                                height: 300,
-                                width: 250,
-                              ),
-                            ),
-                          ),
-
                         ),
                       ),
                     ),
@@ -660,6 +670,7 @@ class _VoteviewState extends State<Voteview> {
                   ],
                 ),
               ),
+
 
 
 
