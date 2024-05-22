@@ -238,7 +238,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MRTDDataScreen(
+          builder: (context) => scannedDataScreen(
             mrtdData: mrtdData,
             rawImageData: rawImageData,
             rawHandSignatureData: rawHandSignatureData,

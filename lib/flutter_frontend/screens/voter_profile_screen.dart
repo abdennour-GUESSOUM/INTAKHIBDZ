@@ -133,6 +133,26 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
       child: Column(
         children: [
           SizedBox(height: 30),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  "Image",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.memory(
+                    widget.mrtdData.dg2!.imageData!,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           glassmorphicContainer(
             context: context,
             child: _detailsChip('firstName', widget.mrtdData.dg1!.mrz.firstName),

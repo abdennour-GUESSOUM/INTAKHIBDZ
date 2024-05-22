@@ -5,7 +5,7 @@ import '../utils/jpeg2000_converter.dart';
 import '../utils/mrtd_data.dart';
 
 
-class MRTDDataScreen extends StatefulWidget {
+class scannedDataScreen extends StatefulWidget {
   final MrtdData? mrtdData;
   final Uint8List? rawImageData;
   final Uint8List? rawHandSignatureData;
@@ -13,7 +13,7 @@ class MRTDDataScreen extends StatefulWidget {
   final bool isVotingStarted; // Add this line
 
 
-  MRTDDataScreen({
+  scannedDataScreen({
 
     this.mrtdData,
     this.rawImageData,
@@ -21,10 +21,10 @@ class MRTDDataScreen extends StatefulWidget {
     this.isVotingStarted = false,
   });
   @override
-  _MRTDDataScreenState createState() => _MRTDDataScreenState();
+  _scannedDataScreenState createState() => _scannedDataScreenState();
 }
 
-class _MRTDDataScreenState extends State<MRTDDataScreen> {
+class _scannedDataScreenState extends State<scannedDataScreen> {
   Uint8List? jpegImage;
   Uint8List? jp2000Image;
 
@@ -58,10 +58,6 @@ class _MRTDDataScreenState extends State<MRTDDataScreen> {
   List<Widget> _mrtdDataWidgets() {
     List<Widget> list = [];
 
-    if (widget.mrtdData?.com != null) {
-      list.add(_makeMrtdDataWidget(header: 'EF.COM',
-          dataText: formatEfCom(widget.mrtdData!.com!)));
-    }
 
     if (widget.mrtdData?.dg1 != null) {
       list.add(_makeMrtdDataWidget(
@@ -69,23 +65,6 @@ class _MRTDDataScreenState extends State<MRTDDataScreen> {
           dataText: formatMRZ(widget.mrtdData!.dg1!.mrz)));
     }
 
-    /**
-
-    if (widget.mrtdData?.dg7 != null) {
-      list.add(_makeMrtdDataWidget(header: 'EF.DG7', dataText: widget.mrtdData!.dg7!.toBytes().hex()));
-    }
-
-    if (widget.mrtdData?.dg11 != null) {
-      list.add(_makeMrtdDataWidget(header: 'EF.DG11', dataText: widget.mrtdData!.dg11!.toBytes().hex()));
-    }
-
-    if (widget.mrtdData?.dg12 != null) {
-      list.add(_makeMrtdDataWidget(header: 'EF.DG12', dataText: widget.mrtdData!.dg12!.toBytes().hex()));
-    }
-
-    if (widget.mrtdData?.dg15 != null) {
-      list.add(_makeMrtdDataWidget(header: 'EF.DG15', dataText: widget.mrtdData!.dg15!.toBytes().hex()));
-    } **/
 
     return list;
   }
@@ -125,7 +104,7 @@ class _MRTDDataScreenState extends State<MRTDDataScreen> {
               ),
               if (jpegImage != null || jp2000Image != null)
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     "Image",
                     style: TextStyle(
