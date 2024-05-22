@@ -634,6 +634,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Card(
+
                      color : Theme.of(context).colorScheme.background.withOpacity(1),
 
                   child: Padding(
@@ -675,6 +676,14 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                       });
                                     },
                                     child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        side: BorderSide(
+                                          color: Theme.of(context).colorScheme.secondary,
+                                          width: 1.0,
+                                        ),
+                                      ),
+
                                       color: (_selected == index)
                                           ? Theme.of(context).colorScheme.secondary.withOpacity(0.9)
                                           : Theme.of(context).colorScheme.background.withOpacity(1),

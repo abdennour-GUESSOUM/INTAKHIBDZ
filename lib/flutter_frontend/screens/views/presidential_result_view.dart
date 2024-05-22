@@ -300,7 +300,8 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                     ),
                   ),
                   Card(
-                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+
+                      color: Theme.of(context).colorScheme.background.withOpacity(1),
                     child: Row(
                       children: [
                         Padding(
@@ -309,38 +310,56 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                             height: 150,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(candidates[0].imageUrl!,fit: BoxFit.fill)
-
-
+                                child: Image.network(candidates[0].imageUrl!, fit: BoxFit.fill)
                             ),
                           ),
                         ),
                         SizedBox(width: 40),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              "${candidates[0].firstName}\n${candidates[0].lastName}",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                        Expanded(  // Use Expanded here
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,  // Ensure alignment at the start of the column
+                              children: <Widget>[
+                                Text(
+                                  "${candidates[0].firstName}\n${candidates[0].lastName}",
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "${candidates[0].votes} votes",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    " with ${candidates[0].percentage!.toStringAsFixed(0)}%",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-
-                              "${candidates[0].votes} votes  \n  ${candidates[0].percentage!.toStringAsFixed(0)}%",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
-                    ),
+                    )
+
                   ),
                   const SizedBox(height: 10),
                   Padding(
@@ -361,6 +380,14 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                       itemBuilder: (context, index) {
                         if (index < candidates.length) {
                           return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.secondary,
+                                width: 1.0,
+                              ),
+                            ),
+
                             color: Theme.of(context).colorScheme.background.withOpacity(1),
                             child: Padding(
                               padding: EdgeInsets.all(8.0),

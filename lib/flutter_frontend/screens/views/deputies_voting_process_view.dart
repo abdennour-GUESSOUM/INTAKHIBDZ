@@ -653,6 +653,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                         ),
                         const SizedBox(height: 10),
                         Container(
+
                           height: 300, // Fixed height for horizontal list
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -668,6 +669,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                   });
                                 },
                                 child: Card(
+
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -713,6 +715,14 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                               itemBuilder: (context, candidateIndex) {
                                                 int idx = candidates.indexOf(validCandidates[candidateIndex]);
                                                 return Card(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    side: BorderSide(
+                                                      color: Theme.of(context).colorScheme.secondary,
+                                                      width: 1.0,
+                                                    ),
+                                                  ),
+
                                                   color: Theme.of(context).colorScheme.background.withOpacity(0.9),
                                                   child: ListTile(
                                                     title: Text(

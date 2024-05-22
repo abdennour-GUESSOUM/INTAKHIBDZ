@@ -268,7 +268,7 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                         ),
                         Align(
 
-                          child: Text("took ${groups[0].votes} votes with a ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold , fontSize: 20)),
+                          child: Text("${groups[0].votes} votes with a ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold , fontSize: 20)),
                         ),
                       ],
                     ),
@@ -288,6 +288,14 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                 SizedBox(height: 10),
                 ...List<Widget>.generate(groups.length, (index) {
                   return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 1.0,
+                      ),
+                    ),
+
                     color: Theme.of(context).colorScheme.background.withOpacity(1),
                     child: Container(
                       child: ListTile(

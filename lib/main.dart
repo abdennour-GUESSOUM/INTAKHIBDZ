@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? WelcomeScreen() : OnboardingScreen(),
+      home: seenOnboarding ? BlockchainAuthentification(documentNumber: '407640657',) : BlockchainAuthentification(documentNumber: '407640657'),
       debugShowCheckedModeBanner: false,
     );
   }
