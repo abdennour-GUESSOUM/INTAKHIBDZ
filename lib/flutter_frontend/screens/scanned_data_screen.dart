@@ -77,7 +77,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
         child: AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           title: Text(
-            'INTAKHIBDZ',
+            'INTAKHIB',
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 24,

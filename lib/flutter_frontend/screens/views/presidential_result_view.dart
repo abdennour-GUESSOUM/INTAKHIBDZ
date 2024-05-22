@@ -25,13 +25,11 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
   @override
   void initState() {
     super.initState();
-    print("Initializing state...");
     _controllerCenter = ConfettiController(duration: const Duration(seconds: 5));
     WidgetsBinding.instance.addPostFrameCallback((_) => _updateCandidates());
   }
 
   Future<void> _updateCandidates() async {
-    print("Fetching candidates...");
     Alert(
       context: context,
       title: "Getting results...",
@@ -68,7 +66,6 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
     Future.delayed(const Duration(milliseconds: 500), () {
       blockchain.queryView("get_results", []).then((value) {
         Navigator.of(context).pop();
-        print("Results fetched successfully: $value");
 
         setState(() {
           candidates = [];
@@ -94,7 +91,6 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
           }
           candidates.sort((a, b) => b.votes!.compareTo(a.votes!));
           valid = true;
-          print("Candidates updated and sorted. 'valid' set to true.");
         });
 
         _controllerCenter.play(); // Play the confetti controller when candidates are updated
@@ -103,19 +99,17 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
         });
       }).catchError((error) {
         Navigator.of(context).pop();
-        print('Error fetching results: $error');
         String errorMessage = (error is RPCError) ? blockchain.translateError(error) : error.toString();
         if (error.toString().contains("invalid")) {
           errorMessage = "Invalid results!";
           setState(() {
             valid = false;
-            print("Election results invalid due to tie. 'valid' set to false.");
           });
         }
         Alert(
           context: context,
           title: "Error",
-          desc: "",
+          desc: errorMessage,
           style: AlertStyle(
             animationType: AnimationType.grow,
             isCloseButton: false,
@@ -144,7 +138,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
             alertPadding: EdgeInsets.all(20),
           ),
           content: Container(
-            height: 150, // Set your desired height
+            height: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -168,7 +162,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
           buttons: [
             DialogButton(
               child: Text(
-                "ok",
+                "Ok",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 18,
@@ -192,7 +186,6 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building UI with 'valid' status as: $valid");
     Widget body = const Center(
       child: Text(
         "Unknown state",
@@ -237,7 +230,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                         side: BorderSide(
                           color: Theme.of(context).colorScheme.secondary,
                           width: 1.0,
-                        ), // Border color and width
+                        ),
                       ),
                     ),
                     onPressed: () {
@@ -261,7 +254,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
     } else if (valid == true) {
       body = Column(
         children: [
-          Center(
+          Container(
             child: Container(
               child: Column(
                 children: <Widget>[
@@ -298,66 +291,69 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      "The new president is ",
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    width: 200,
-                    height: 226,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      image: DecorationImage(
-                        image: NetworkImage(candidates[0].imageUrl!),
-                        fit: BoxFit.cover,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Congrats ",
+                        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
                   Card(
                     color: Theme.of(context).colorScheme.background.withOpacity(1),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            height: 150,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(candidates[0].imageUrl!,fit: BoxFit.fill)
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              "Winner!",
-                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
+
                             ),
+                          ),
+                        ),
+                        SizedBox(width: 40),
+                        Column(
+                          children: <Widget>[
                             Text(
                               "${candidates[0].firstName}\n${candidates[0].lastName}",
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 40,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
+
                               "${candidates[0].votes} votes  \n  ${candidates[0].percentage!.toStringAsFixed(0)}%",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
+
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 40,
+                                fontSize: 18,
                               ),
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 8),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Candidates results",
+                        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Results",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
                   Container(
-                    margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: ListView.builder(
                       itemCount: candidates.length,
                       scrollDirection: Axis.vertical,
@@ -371,15 +367,11 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                               child: ListTile(
                                 contentPadding: EdgeInsets.all(8.0),
                                 leading: Container(
-                                  width: 60,
                                   height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                      image: NetworkImage(candidates[index].imageUrl!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+
+                                      child: Image.network(candidates[index].imageUrl!, fit: BoxFit.fill)),
                                 ),
                                 title: Text(
                                   "${candidates[index].firstName} ${candidates[index].lastName}",

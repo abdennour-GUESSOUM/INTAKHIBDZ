@@ -18,7 +18,7 @@ class introPage_1 extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             Text(
-              'Bienvenue sur IntakhibDZ',
+              'Welcome',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 28,
@@ -28,22 +28,20 @@ class introPage_1 extends StatelessWidget {
             ),
             const SizedBox(height: betweenElementsPadding),
             Text(
-              'IntakhibDZ est une application de vote presidentiel nationale pour les citoyens Algeriens.',
+              'INTAKHIB is an algerian E-voting Dapp.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
-            // Your Lottie asset
+            const SizedBox(height: edgePadding * 3),
             Center(
-              child: Lottie.network(
-                'https://lottie.host/f53e532c-ad89-47df-a701-bb122a5c84de/6qQTFxX9Y3.json',
-                height: 400,
-
+              child: Lottie.asset(
+                "assets/intro1.json",
+                height: 200,
               ),
             ),
-            // Add more padding at the bottom if needed
             const SizedBox(height: edgePadding * 2),
           ],
         ),

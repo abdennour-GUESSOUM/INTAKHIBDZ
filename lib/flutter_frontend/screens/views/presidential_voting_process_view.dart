@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -21,6 +23,8 @@ class PresidentialVotingProcessView extends StatefulWidget {
 class _PresidentialVotingProcessViewState extends State<PresidentialVotingProcessView> {
   final _formKey = GlobalKey<FormState>();
   final text_secret = TextEditingController();
+
+
 
   double timeRemainingCircle = 0.0;
   int step = -1;
@@ -49,6 +53,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => _updateCandidates());
     _loadDeadline();
     _startTimer();
@@ -575,7 +580,6 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                 Container(
                   margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Lottie.asset(
-
                     'assets/voting_animation.json',
                   ),
                 ),
@@ -589,117 +593,132 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         child: LiquidPullToRefresh(
           onRefresh: _handleRefresh,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: ListView(
               children: [
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(
-                          textAlign: TextAlign.center,
-                          timeRemainingText,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    height: 60,
+                    viewportFraction: 1.0,
+                  ),
+                  items: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$numberOfVoters total votes',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                    ],
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        timeRemainingText,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Card(
+                     color : Theme.of(context).colorScheme.background.withOpacity(1),
+
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 8, 0, 8),
+                    child: Text(
+                        'Select a candidate.\n'
+                            'Enter your secret code.\n'
+                            'Submit your vote.\n'
+                            'Confirm your selection.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                  ),
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
-                        const Text(
-                          'Vote The New President',
-                          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Card(
-                            child: FittedBox(
-                              child: Container(
-                                padding: EdgeInsets.all(8.0), // Adjust padding as needed
-                                child: Text(
-                                  '$numberOfVoters votes  ',
-                                  textAlign: TextAlign.end, // Ensure the text is aligned to the end
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 28,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          margin: const EdgeInsets.only(top: 0.0, bottom: 0.0),
-                          child: ListView.builder(
-                            itemCount: candidates.length,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selected = index;
-                                  });
-                                },
-                                child: Card(
-                                  color: (_selected == index)
-                                      ? Theme.of(context).colorScheme.secondary.withOpacity(0.9)
-                                      : Theme.of(context).colorScheme.background.withOpacity(1),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0), // Add padding to the card
-                                    child: Center( // Center the content horizontally and vertically
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 60,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: NetworkImage(imageUrls[index]),
-                                                fit: BoxFit.cover, // Use cover to maintain aspect ratio
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 20), // Add some space between image and text
-                                          Column(
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                          child: Container(
+                            child: ListView.builder(
+                              itemCount: candidates.length,
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selected = index;
+                                      });
+                                    },
+                                    child: Card(
+                                      color: (_selected == index)
+                                          ? Theme.of(context).colorScheme.secondary.withOpacity(0.9)
+                                          : Theme.of(context).colorScheme.background.withOpacity(1),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8), // Add padding to the card
+                                        child: Center( // Center the content horizontally and vertically
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                "${firstNames[index]} \n${lastNames[index]}",
-                                                style: TextStyle(
-                                                  color: (_selected == index)
-                                                      ? Colors.white
-                                                      : Theme.of(context).colorScheme.primary,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
+                                              Container(
+                                                height: 50,
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(100),
+                                                    child: Image.network(imageUrls[index],fit: BoxFit.fill)
+
+
                                                 ),
+                                              ),
+                                              SizedBox(width: 30), // Add some space between image and text
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    "${firstNames[index]} \n${lastNames[index]}",
+                                                    style: TextStyle(
+                                                      color: (_selected == index)
+                                                          ? Colors.white
+                                                          : Theme.of(context).colorScheme.primary,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 20),
                         Column(
                           children: [
                             Padding(
@@ -743,56 +762,70 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                 obscureText: _isTextObscured, // Add this line
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Theme.of(context).colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
-                                        side: BorderSide(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          width: 1.0,
-                                        ), // Border color and width
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+
+                              child: Column(
+                                children: [
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.send), // Add an icon for visual clarity
+                                            label: Text(_castVoteButtonText),
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                  color: Theme.of(context).colorScheme.secondary,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                            ),
+                                            onPressed: _isVotingPeriodEnded ? null : () => _sendVote(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: _isVotingPeriodEnded
-                                        ? null
-                                        : () {
-                                      _sendVote();
-                                    },
-                                    child: Text(_castVoteButtonText),
+
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(width: 10), // Add some space between the buttons
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Theme.of(context).colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
-                                        side: BorderSide(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          width: 1.0,
-                                        ), // Border color and width
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0), // Add padding around the button for better spacing
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.check_circle), // Add an icon for visual clarity
+                                            label: Text('Confirm Vote'),
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.primary, // Button background color
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                            ),
+                                            onPressed: _isConfirmButtonDisabled || _isVotingPeriodEnded ? null : () => _openVote(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: _isConfirmButtonDisabled || _isVotingPeriodEnded
-                                        ? null
-                                        : () {
-                                      _openVote();
-                                    },
-                                    child: const Text(
-                                      textAlign: TextAlign.center,
-                                      'Confirm Vote',
-                                    ),
+
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 20),
                           ],
                         ),
                       ],
@@ -807,4 +840,3 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     );
   }
 }
-

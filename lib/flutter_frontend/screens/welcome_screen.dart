@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:IntakhibDZ/flutter_frontend/screens/views/home_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/profile_view.dart';
+import 'package:IntakhibDZ/flutter_frontend/screens/views/results_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/settings_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/vote_view.dart';
 import 'package:flutter/foundation.dart';
@@ -68,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
             child: AppBar(
               backgroundColor: Theme.of(context).colorScheme.background,
-              title: Text('INTAKHIBDZ', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary)),
+              title: Text('INTAKHIB', style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary)),
               elevation: 0,
               centerTitle: true,
               leading: IconButton(
@@ -115,7 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children:   [
                 Center(child: HomeView2()),
                 Center(child: Voteview()),
-                Center(child: ProfileView()),
+                Center(child: ResultsView()),
                 Center(child: SettingsView()),
               ],
             ),
@@ -157,8 +158,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     text: 'Vote',
                   ),
                   GButton(
-                    icon: LineIcons.identificationCard,
-                    text: 'Profile',
+                    icon: LineIcons.voteYea,
+                    text: 'Results',
                   ),
                   GButton(
                     icon: Icons.settings,

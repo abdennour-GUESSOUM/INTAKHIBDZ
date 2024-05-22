@@ -17,7 +17,7 @@ class FaceIDScreen extends StatelessWidget {
         child: ClipRRect(
           child: AppBar(
             backgroundColor: Theme.of(context).colorScheme.background,
-            title: Text('INTAKHIBDZ', style: TextStyle(
+            title: Text('INTAKHIB', style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 24,
               fontWeight: FontWeight.bold,

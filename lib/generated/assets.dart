@@ -8,6 +8,7 @@ class Assets {
   static const String assetsBack = 'assets/back.png';
   static const String assetsBlockchain = 'assets/blockchain.png';
   static const String assetsBlockchainAuth = 'assets/blockchain_auth.json';
+  static const String assetsBlockchainIntro = 'assets/blockchain_intro.json';
   static const String assetsCrown = 'assets/crown.svg';
   static const String assetsDeputies = 'assets/deputies.json';
   static const String assetsFaceAuth = 'assets/face_auth.json';
@@ -17,8 +18,10 @@ class Assets {
   static const String assetsFlnLogo = 'assets/fln_logo.svg';
   static const String assetsFront = 'assets/front.png';
   static const String assetsIcon = 'assets/icon.png';
+  static const String assetsIntro1 = 'assets/intro1.json';
   static const String assetsInvalidElect = 'assets/invalid_elect.json';
   static const String assetsMrz = 'assets/mrz.json';
+  static const String assetsNfcDark = 'assets/nfc_dark.json';
   static const String assetsNfcIcon = 'assets/nfc_icon.png';
   static const String assetsNoSignal = 'assets/no-signal.png';
   static const String assetsPresident = 'assets/president.json';

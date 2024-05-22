@@ -18,7 +18,7 @@ class introPage_3 extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             Text(
-              'Technologie Blockchain',
+              'Blockchain technology',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 28,
@@ -28,21 +28,20 @@ class introPage_3 extends StatelessWidget {
             ),
             const SizedBox(height: betweenElementsPadding),
             Text(
-              'La Blockchain offre un systeme de transparence hautement fiable et sécurisé.',
+              'Blockchain offers a robust and secure system.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
-            // Your Lottie asset
+            const SizedBox(height: edgePadding * 3 ),
             Center(
-              child: Lottie.network(
-                'https://lottie.host/5f7f57b4-f05b-47d2-9eef-63a9d4c554c6/VqoYlfgfr0.json',
-                height: 400,
+              child: Lottie.asset(
+                "assets/blockchain_intro.json",
+                height: 200,
               ),
             ),
-            // Add more padding at the bottom if needed
             const SizedBox(height: edgePadding * 2),
           ],
         ),

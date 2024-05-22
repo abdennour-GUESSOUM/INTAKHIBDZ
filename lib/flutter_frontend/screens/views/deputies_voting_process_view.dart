@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -28,7 +27,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
 
   double timeRemainingCircle = 0.0;
   int step = -1;
-
   Blockchain blockchain = Blockchain();
   List<dynamic> candidates = [];
   List<dynamic> firstNames = [];
@@ -506,7 +504,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
     return await Future.delayed(const Duration(seconds: 2));
   }
 
-
   Future<void> _updateGroupsAndCandidates() async {
     Alert(
       context: context,
@@ -606,159 +603,152 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         child: LiquidPullToRefresh(
           onRefresh: _handleRefresh,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: ListView(
               children: [
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(
-                          textAlign: TextAlign.center,
-                          timeRemainingText,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    height: 60,
+                    viewportFraction: 1.0,
+                  ),
+                  items: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$numberOfVoters total votes',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        timeRemainingText,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
 
+                  ],
+                ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
                         const Text(
                           'Parliamentary groups voting',
-                          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 20),
-                        StaggeredGrid.count(
-                          crossAxisCount: 1,
-                          mainAxisSpacing: 4.0,
-                          crossAxisSpacing: 4.0,
-                          children: List.generate(groups.length, (int groupIndex) {
-                            var group = groups[groupIndex];
-                            var validCandidates = group['candidates'].where((candidate) => candidates.contains(candidate)).toList();
-                            validCandidates.remove(groupAddresses[groupIndex]); // Remove the group address
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedGroup = groupIndex;
-                                });
-                              },
-                              child: Card(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                color: (_selectedGroup == groupIndex) ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.background,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.25), // Semi-transparent black overlay
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: glassmorphicContainer(
-                                          context: context,
-                                          child: Column(
-                                            children: [
-                                              ListTile(
-                                                leading: Container(
-                                                  width: 40,
-                                                  height: 50,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(group['pictureUrl']),
-                                                      fit: BoxFit.cover,
-                                                      onError: (exception, stackTrace) {
-                                                        setState(() {
-                                                          group['pictureUrl'] = 'assets/placeholder.png';
-                                                        });
-                                                      },
+                        const SizedBox(height: 10),
+                        Container(
+                          height: 300, // Fixed height for horizontal list
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: groups.length,
+                            itemBuilder: (context, index) {
+                              var group = groups[index];
+                              var validCandidates = group['candidates'].where((candidate) => candidates.contains(candidate)).toList();
+                              validCandidates.remove(groupAddresses[index]); // Remove the group address
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedGroup = index;
+                                  });
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  color: (_selectedGroup == index) ? Theme.of(context).colorScheme.secondary.withOpacity(0.9) : Theme.of(context).colorScheme.background,
+                                  child: Container(
+                                    width: 300, // Fixed width for cards
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          ListTile(
+                                            leading: Container(
+                                              height: 50,
+                                              child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(100),
+                                                  child: Image.network(group['pictureUrl'])),
+                                            ),
+
+                                            title: Text(
+                                              group['name'],
+                                              style: TextStyle(
+                                                color: Theme.of(context).colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                            child: Text(
+                                              "Members list",
+                                              style: TextStyle(
+                                                color:Theme.of(context).colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: ListView.builder(
+                                              itemCount: validCandidates.length,
+                                              itemBuilder: (context, candidateIndex) {
+                                                int idx = candidates.indexOf(validCandidates[candidateIndex]);
+                                                return Card(
+                                                  color: Theme.of(context).colorScheme.background.withOpacity(0.9),
+                                                  child: ListTile(
+                                                    title: Text(
+                                                      "${firstNames[idx]} ${lastNames[idx]}",
+                                                      style: TextStyle(
+                                                        color: Theme.of(context).colorScheme.primary,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    leading: Container(
+                                                      height: 50,
+                                                      child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(100),
+                                                          child: Image.network(imageUrls[idx],fit: BoxFit.fill)
+
+
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                title: Text(
-                                                  group['name'],
-                                                  style: TextStyle(
-                                                    color: (_selectedGroup == groupIndex) ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.primary,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ),
-                                              CarouselSlider(
-                                                options: CarouselOptions(
-                                                  height: 180,
-                                                  enlargeCenterPage: true,
-                                                  autoPlay: false,
-                                                  aspectRatio: 16 / 9,
-                                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                                  enableInfiniteScroll: true,
-                                                  autoPlayAnimationDuration: Duration(milliseconds: 400),
-                                                  viewportFraction: 1,
-                                                ),
-                                                items: validCandidates.map<Widget>((candidate) {
-                                                  int candidateIndex = candidates.indexOf(candidate);
-                                                  return Builder(
-                                                    builder: (BuildContext context) {
-                                                      return Column(
-                                                        children: [
-                                                          Container(
-                                                            width: 100,
-                                                            height: 100,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(20),
-                                                              image: DecorationImage(
-                                                                image: NetworkImage(imageUrls[candidateIndex]),
-                                                                fit: BoxFit.cover,
-                                                                onError: (exception, stackTrace) {
-                                                                  setState(() {
-                                                                    imageUrls[candidateIndex] = 'assets/placeholder.png';
-                                                                  });
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            "${firstNames[candidateIndex]} ${lastNames[candidateIndex]}",
-                                                            style: TextStyle(
-                                                              color: (_selectedGroup == groupIndex) ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.primary,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }).toList(),
-                                              ),
-                                            ],
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            },
+                          ),
+
+
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Column(
                           children: [
                             Padding(
@@ -802,56 +792,68 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                 obscureText: _isTextObscured, // Add this line
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Theme.of(context).colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
-                                        side: BorderSide(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          width: 1.0,
-                                        ), // Border color and width
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.send), // Add an icon for visual clarity
+                                            label: Text(_castVoteButtonText),
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                  color: Theme.of(context).colorScheme.secondary,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                            ),
+                                            onPressed: _isVotingPeriodEnded ? null : () => _sendVote(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: _isVotingPeriodEnded
-                                        ? null
-                                        : () {
-                                      _sendVote();
-                                    },
-                                    child: Text(_castVoteButtonText),
+
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(width: 10), // Add some space between the buttons
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Theme.of(context).colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30.0),
-                                        side: BorderSide(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          width: 1.0,
-                                        ), // Border color and width
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0), // Add padding around the button for better spacing
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.check_circle), // Add an icon for visual clarity
+                                            label: Text('Confirm Vote'),
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.primary, // Button background color
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                            ),
+                                            onPressed: _isConfirmButtonDisabled || _isVotingPeriodEnded ? null : () => _openVote(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: _isConfirmButtonDisabled || _isVotingPeriodEnded
-                                        ? null
-                                        : () {
-                                      _openVote();
-                                    },
-                                    child: const Text(
-                                      textAlign: TextAlign.center,
-                                      'Confirm Vote',
-                                    ),
+
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 20),
                           ],
                         ),
                       ],
@@ -866,4 +868,3 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
     );
   }
 }
-

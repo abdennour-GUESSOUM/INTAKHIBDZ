@@ -231,15 +231,16 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: const Text(
-                    "The winning party is",
+                    "The majority winning group",
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Container(
-                  height: 140,
+                  height: 150,
                   child: Card(
-                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.9),
+                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -250,13 +251,16 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                               Align(
                                 child: Text("${groups[0].groupName}",
                                     style: TextStyle(fontSize: 40,
-                                        color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
+                                        color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
                               ),
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Container(
                                   height: 50,
-                                  child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+
+                                      child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill)),
                                 ),
                               ),
                             ],
@@ -264,30 +268,39 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                         ),
                         Align(
 
-                          child: Text("Collected ${groups[0].votes} votes    ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold , fontSize: 20)),
+                          child: Text("took ${groups[0].votes} votes with a ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold , fontSize: 20)),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
-                Text("Results ranking", style: TextStyle(fontSize: 40)),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+
+                  child: Text("Results ranking",
+                    style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
                 ...List<Widget>.generate(groups.length, (index) {
                   return Card(
                     color: Theme.of(context).colorScheme.background.withOpacity(1),
-                    child: ListTile(
-                      title: Text("${groups[index].groupName}", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-                      subtitle: Text(' Collected ${groups[index].votes} votes          ${groups[index].percentage!.toStringAsFixed(0)}%'),
-                      trailing: Container(
-                        width: 40,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          image: DecorationImage(
-                            image: NetworkImage(groups[index].pictureUrl!),
-                          ),
+                    child: Container(
+                      child: ListTile(
+                        title: Text("${groups[index].groupName}", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                        subtitle: Text(' total ${groups[index].votes} votes          ${groups[index].percentage!.toStringAsFixed(0)}%'),
+                        trailing:  Container(
+                          height: 60,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+
+                              child: Image.network(groups[index].pictureUrl!, fit: BoxFit.fill)),
                         ),
+
                       ),
                     ),
                   );

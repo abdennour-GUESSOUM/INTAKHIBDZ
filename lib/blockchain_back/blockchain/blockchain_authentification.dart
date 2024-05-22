@@ -63,15 +63,6 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       _showAlert("Error in the Private key format");
       return;
     }
-    setState(() {
-      Navigator.pushAndRemoveUntil(
-        context,
-        SlideRightRoute(
-            page: WelcomeScreen()
-        ),
-            (Route<dynamic> route) => true,
-      );
-    });
 
 
     final response = await http.post(

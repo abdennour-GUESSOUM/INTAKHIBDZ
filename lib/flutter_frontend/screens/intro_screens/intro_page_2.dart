@@ -18,7 +18,7 @@ class introPage_2 extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             Text(
-              'Authentification NFC',
+              'NFC Authentication ',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 28,
@@ -28,17 +28,18 @@ class introPage_2 extends StatelessWidget {
             ),
             const SizedBox(height: betweenElementsPadding),
             Text(
-              'Authentifier vous en toute sécurité grace a votre piece d\'identité nationale via la technologie NFC.',
+              'Auhtenticate securely using your NFC identity card.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
+            const SizedBox(height: edgePadding * 3),
             Center(
-              child: Lottie.network(
-                'https://lottie.host/8cffedea-5cd7-4d42-9f85-9f269264e6f8/l4eaaQE8Sp.json',
-                height: 400,
+              child: Lottie.asset(
+                "assets/nfc_dark.json",
+                height: 200,
               ),
             ),
             // Add more padding at the bottom if needed

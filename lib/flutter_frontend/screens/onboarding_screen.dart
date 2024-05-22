@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with SingleTickerPr
           child: AppBar(
             backgroundColor: Theme.of(context).colorScheme.background,
             title: Text(
-              'INTAKHIBDZ',
+              'INTAKHIB',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: 24,
