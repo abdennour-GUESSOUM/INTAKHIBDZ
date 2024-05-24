@@ -1,4 +1,5 @@
 import 'package:confetti/confetti.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
@@ -314,7 +315,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 40),
+                        SizedBox(width: 20),
                         Expanded(  // Use Expanded here
                           child: Container(
                             alignment: Alignment.centerLeft,
@@ -341,17 +342,39 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    " with ${candidates[0].percentage!.toStringAsFixed(0)}%",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text(
+                                          '${candidates[0].percentage!.toStringAsFixed(0)}%',  // Display percentage with one decimal
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Container(
+                                          height: 60,
+                                          width: 60,
+                                          child: CircularProgressIndicator(
+                                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                                            backgroundColor: Color(0xFFF1F3F3),
+                                            value: candidates[0].percentage,  // Convert to fraction
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -373,6 +396,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                     ),
                   ),
                   Container(
+                    height: 320,
                     child: ListView.builder(
                       itemCount: candidates.length,
                       scrollDirection: Axis.vertical,
@@ -389,9 +413,9 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                             ),
                             color: Theme.of(context).colorScheme.background.withOpacity(1),
                             child: Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                               child: ListTile(
-                                contentPadding: EdgeInsets.all(8.0),
+                                contentPadding: EdgeInsets.all(.0),
                                 leading: Container(
                                   height: 60,
                                   child: ClipRRect(
@@ -404,8 +428,31 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                                 ),
                                 subtitle: Text(
-                                  ' ${candidates[index].votes.toString()} Votes      ${candidates[index].percentage!.toStringAsFixed(0)}%',
+                                  ' ${candidates[index].votes.toString()} Votes',
                                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                ),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 25, 0),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Text(
+                                        '${candidates[index].percentage!.toStringAsFixed(0)}%',  // Display percentage with one decimal
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                      Container(
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                                          backgroundColor: Color(0xFFF1F3F3),
+                                          value: candidates[index].percentage,  // Convert to fraction
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

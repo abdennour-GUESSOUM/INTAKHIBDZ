@@ -15,8 +15,6 @@ import '../../../blockchain_back/blockchain/blockachain.dart';
 class PresidentialVotingProcessView extends StatefulWidget {
   final bool isConfirming;
 
-
-
   PresidentialVotingProcessView({Key? key, required this.isConfirming}) : super(key: key);
 
   @override
@@ -28,10 +26,12 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   final text_secret = TextEditingController();
 
   bool _voteConfirmed = false;
-
-
   double timeRemainingCircle = 0.0;
   int step = -1;
+
+  int voters_count = 5;
+
+  double total_vote_percentage = 0.0;
 
   Blockchain blockchain = Blockchain();
   List<dynamic> candidates = [];
@@ -52,7 +52,8 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   bool _isTextObscured = true;
 
-  int numberOfVoters = 0; // New state variable for number of voters
+  int numberOfVoters = 0;
+  int totalVoters = 10; // New state variable for total voters
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     _loadDeadline();
     _startTimer();
     _startVoterCountTimer(); // Start the voter count timer
+    _fetchTotalVoters(); // Fetch the total number of voters
   }
 
   @override
@@ -70,6 +72,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     text_secret.dispose();
     super.dispose();
   }
+
   Future<void> _fetchNumberOfVoters() async {
     try {
       final result = await blockchain.queryView("get_vote_count", []);
@@ -78,11 +81,39 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
       if (result.isNotEmpty) {
         setState(() {
           numberOfVoters = int.tryParse(result[0].toString()) ?? 0;
+          _updateVotePercentage(); // Update vote percentage
         });
       }
     } catch (error) {
       print("Error fetching number of voters: $error"); // Add logging
     }
+  }
+
+  Future<void> _fetchTotalVoters() async {
+    try {
+      final result = await blockchain.queryView("get_total_voters", []);
+      print("Result from get_total_voters: $result"); // Add logging
+
+      if (result.isNotEmpty) {
+        setState(() {
+          totalVoters = int.tryParse(result[0].toString()) ?? 100;
+          _updateVotePercentage(); // Update vote percentage
+        });
+      }
+    } catch (error) {
+      print("Error fetching total voters: $error"); // Add logging
+    }
+  }
+
+  void _updateVotePercentage() {
+    setState(() {
+      if (totalVoters > 0) {  // Ensure there are voters to divide by
+        double percentage = (numberOfVoters / totalVoters) * 100;
+        total_vote_percentage = percentage.clamp(0.0, 100.0);
+      } else {
+        total_vote_percentage = 0.0;  // Set to 0 if no voters
+      }
+    });
   }
 
   void _startVoterCountTimer() {
@@ -330,7 +361,6 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     setState(() {
       _isConfirmButtonDisabled = true;
       _voteConfirmed = true; // Set vote as confirmed
-
     });
 
     List<dynamic> args = [BigInt.parse(text_secret.text), candidates[_selected]];
@@ -607,20 +637,25 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                   options: CarouselOptions(
                     autoPlay: true,
                     autoPlayInterval: Duration(seconds: 3),
-                    height: 60,
+                    height: 100, // Adjust the height to give more space
                     viewportFraction: 1.0,
                   ),
                   items: [
                     Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        '$numberOfVoters total votes',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            '$numberOfVoters total votes',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Align(
@@ -635,216 +670,245 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                         ),
                       ),
                     ),
-
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Card(
-
-                     color : Theme.of(context).colorScheme.background.withOpacity(1),
-
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 8, 0, 8),
-                    child: Text(
-                        'Select a candidate.\n'
-                            'Enter your secret code.\n'
-                            'Submit your vote.\n'
-                            'Confirm your selection.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 8, 0, 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Select a candidate.\n'
+                                'Enter your secret code.\n'
+                                'Submit / Edit your vote.\n'
+                                'Confirm your selection.',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Text(
+                                '${total_vote_percentage.toStringAsFixed(1)}%',  // Display percentage with one decimal
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Container(
+                                height: 70,
+                                width: 70,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                                  backgroundColor: Color(0xFFF1F3F3),
+                                  value: total_vote_percentage / 100,  // Convert to fraction
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                  ),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                          child: Container(
-                            child: ListView.builder(
-                              itemCount: candidates.length,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _selected = index;
-                                      });
-                                    },
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        side: BorderSide(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          width: 1.0,
-                                        ),
-                                      ),
-
-                                      color: (_selected == index)
-                                          ? Theme.of(context).colorScheme.secondary.withOpacity(0.9)
-                                          : Theme.of(context).colorScheme.background.withOpacity(1),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8), // Add padding to the card
-                                        child: Center( // Center the content horizontally and vertically
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                height: 50,
-                                                child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(100),
-                                                    child: Image.network(imageUrls[index],fit: BoxFit.fill)
-
-
-                                                ),
-                                              ),
-                                              SizedBox(width: 30), // Add some space between image and text
-                                              Column(
+                  child: Container(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              color: Theme.of(context).colorScheme.background,
+                              child: Container(
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: candidates.length,
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _selected = index;
+                                          });
+                                        },
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            side: BorderSide(
+                                              color: Theme.of(context).colorScheme.secondary,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          color: (_selected == index)
+                                              ? Theme.of(context).colorScheme.secondary.withOpacity(0.9)
+                                              : Theme.of(context).colorScheme.background.withOpacity(1),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8), // Add padding to the card
+                                            child: Center( // Center the content horizontally and vertically
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    "${firstNames[index]} \n${lastNames[index]}",
-                                                    style: TextStyle(
-                                                      color: (_selected == index)
-                                                          ? Colors.white
-                                                          : Theme.of(context).colorScheme.primary,
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 20,
+                                                  Container(
+                                                    height: 50,
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(100),
+                                                      child: Image.network(imageUrls[index], fit: BoxFit.fill),
                                                     ),
                                                   ),
+                                                  SizedBox(width: 30), // Add some space between image and text
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        "${firstNames[index]} \n${lastNames[index]}",
+                                                        style: TextStyle(
+                                                          color: (_selected == index)
+                                                              ? Colors.white
+                                                              : Theme.of(context).colorScheme.primary,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
                                                 ],
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Enter a secret code',
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary), // Change color here
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary), // Change color here
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 2.0), // Change color and width here
-                                  ),
-                                  contentPadding: EdgeInsets.all(16.0),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isTextObscured ? Icons.visibility : Icons.visibility_off,
-                                      color: Theme.of(context).colorScheme.primary,
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Enter a secret code',
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary), // Change color here
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isTextObscured = !_isTextObscured;
-                                      });
-                                    },
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary), // Change color here
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 2.0), // Change color and width here
+                                    ),
+                                    contentPadding: EdgeInsets.all(16.0),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _isTextObscured ? Icons.visibility : Icons.visibility_off,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isTextObscured = !_isTextObscured;
+                                        });
+                                      },
+                                    ),
                                   ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a secret code';
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  controller: text_secret,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  obscureText: _isTextObscured, // Add this line
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a secret code';
-                                  }
-                                  return null;
-                                },
-                                keyboardType: TextInputType.number,
-                                controller: text_secret,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                obscureText: _isTextObscured, // Add this line
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-
-                              child: Column(
-                                children: [
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
-                                          child: ElevatedButton.icon(
-                                            icon: Icon(Icons.send), // Add an icon for visual clarity
-                                            label: Text(_submitVoteButtonText),
-                                            style: ElevatedButton.styleFrom(
-                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                                side: BorderSide(
-                                                  color: Theme.of(context).colorScheme.secondary,
-                                                  width: 1.0,
+                              const SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
+                                            child: ElevatedButton.icon(
+                                              icon: Icon(Icons.send), // Add an icon for visual clarity
+                                              label: Text(_submitVoteButtonText),
+                                              style: ElevatedButton.styleFrom(
+                                                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                                backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                  side: BorderSide(
+                                                    color: Theme.of(context).colorScheme.secondary,
+                                                    width: 1.0,
+                                                  ),
                                                 ),
+                                                padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
                                               ),
-                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                              onPressed: (_isVotingPeriodEnded || _voteConfirmed) ? null : () => _sendVote(),
                                             ),
-                                            onPressed: (_isVotingPeriodEnded || _voteConfirmed) ? null : () => _sendVote(),
                                           ),
                                         ),
-                                      ),
-
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0), // Add padding around the button for better spacing
-                                          child: ElevatedButton.icon(
-                                            icon: Icon(Icons.check_circle), // Add an icon for visual clarity
-                                            label: Text('Confirm Vote'),
-                                            style: ElevatedButton.styleFrom(
-                                              foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.primary, // Button background color
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                                side: BorderSide(
-                                                  color: Theme.of(context).colorScheme.primary,
-                                                  width: 1.0,
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Use spaceEvenly for even spacing
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0), // Add padding around the button for better spacing
+                                            child: ElevatedButton.icon(
+                                              icon: Icon(Icons.check_circle), // Add an icon for visual clarity
+                                              label: Text('Confirm Vote'),
+                                              style: ElevatedButton.styleFrom(
+                                                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                                backgroundColor: Theme.of(context).colorScheme.primary, // Button background color
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                  side: BorderSide(
+                                                    color: Theme.of(context).colorScheme.primary,
+                                                    width: 1.0,
+                                                  ),
                                                 ),
+                                                padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
                                               ),
-                                              padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
+                                              onPressed: (_isConfirmButtonDisabled || _isVotingPeriodEnded || _voteConfirmed) ? null : () => _openVote(),
                                             ),
-                                            onPressed: (_isConfirmButtonDisabled || _isVotingPeriodEnded || _voteConfirmed) ? null : () => _openVote(),
                                           ),
                                         ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

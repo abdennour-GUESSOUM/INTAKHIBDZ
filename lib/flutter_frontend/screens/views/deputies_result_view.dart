@@ -250,7 +250,6 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                               child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill)),
                         ),
                       ),
-                      SizedBox(width: 10),
                       Expanded(  // Use Expanded here
                         child: Container(
                           alignment: Alignment.centerLeft,

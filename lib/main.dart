@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase/firebase_options.dart';
+import 'firebase/register_user/enter_password_page.dart';
+import 'firebase/register_user/register_user_page.dart';
 import 'flutter_frontend/screens/onboarding_screen.dart';
 import 'flutter_frontend/themes/dark_theme.dart';
 import 'flutter_frontend/themes/light_theme.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? BlockchainAuthentification() : BlockchainAuthentification(),
+      home: seenOnboarding ? EnterPasswordPage() : EnterPasswordPage(),
       debugShowCheckedModeBanner: false,
     );
   }
