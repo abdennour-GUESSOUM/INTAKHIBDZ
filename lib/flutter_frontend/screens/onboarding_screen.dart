@@ -7,6 +7,7 @@ import 'intro_screens/intro_page_1.dart';
 import 'intro_screens/intro_page_2.dart';
 import 'intro_screens/intro_page_3.dart';
 import 'facial_screen.dart';
+import 'mrz_nfc_scan_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -99,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with SingleTickerPr
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return FaceIDScreen();
+                              return MRZNFCScan.MRZNFCScanScreen();
                             },
                           ),
                         );

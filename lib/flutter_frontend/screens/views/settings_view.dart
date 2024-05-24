@@ -42,32 +42,6 @@ class _SettingsViewState extends State<SettingsView> {
                 glassmorphicContainer(
                   context: context,
                   child: SettingsTile(
-                    icon: Icons.language,
-                    title: 'Language',
-                    onTap: () => navigateToSettingsDetail(context, 'Language'),
-                  ),
-                ),
-                glassmorphicContainer(
-                  context: context,
-                  child: SettingsTile(
-                    icon: Icons.dark_mode,
-                    title: 'Dark mode',
-                    onTap: () {}, // Adjust onTap according to your needs, or leave it empty if the toggle itself handles the logic.
-                    trailingWidget: Switch(
-                      value: _isDarkMode,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _isDarkMode = value;
-                        });
-                        // Implement logic to update the theme based on _isDarkMode
-                        // Example:
-                        // updateTheme(_isDarkMode);
-                      },                    ),
-                  ),
-                ),
-                glassmorphicContainer(
-                  context: context,
-                  child: SettingsTile(
                     icon: Icons.support,
                     title: 'Help',
                     onTap: () => navigateToSettingsDetail(context, 'Help'),
@@ -153,10 +127,10 @@ class _SettingsViewState extends State<SettingsView> {
   }
 }
 
-  void navigateToSettingsDetail(BuildContext context, String settingsName) {
-    // Navigate to the corresponding settings detail page
-    // For now, just print the settings name
-  }
+void navigateToSettingsDetail(BuildContext context, String settingsName) {
+  // Navigate to the corresponding settings detail page
+  // For now, just print the settings name
+}
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -186,4 +160,3 @@ class SettingsTile extends StatelessWidget {
     );
   }
 }
-

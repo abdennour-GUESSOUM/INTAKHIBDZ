@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/com/com_provider.dart';
+import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/extension/int_apis.dart';
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/lds/tlv.dart';
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/utils.dart';
 import 'package:logging/logging.dart';

@@ -1,9 +1,16 @@
-import 'package:IntakhibDZ/flutter_frontend/screens/biometric_screen.dart';
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../firebase/authenticate_user/authenticate_user_page.dart';
+
 class FaceIDScreen extends StatelessWidget {
-  const FaceIDScreen({Key? key}) : super(key: key);
+  final String? documentNumber;
+  final Uint8List? profileImage;
+
+  FaceIDScreen({this.documentNumber, this.profileImage});
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +72,13 @@ class FaceIDScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: edgePadding * 2),
-                  Center(
-                    child: Lottie.asset(
-                      "assets/face_auth.json",
-                      height: 200,
+                  GestureDetector(
+
+                    child: Center(
+                      child: Lottie.asset(
+                        "assets/face_auth.json",
+                        height: 200,
+                      ),
                     ),
                   ),
                 ],
@@ -84,13 +94,14 @@ class FaceIDScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) {
-                          return BiometricScreen();
-                        },
+                        builder: (context) => AuthenticateUserPage(
+                          documentNumber: '0987654321',
+                        ),
                       ),
                     );
+
                   },
-                  child: Text('Next Step'),
+                  child: Text('Authenticate'),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.primary,
                     backgroundColor: Theme.of(context).colorScheme.background,
@@ -104,6 +115,7 @@ class FaceIDScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
                   ),
                 ),
+
               ),
             ),
             SizedBox(height: edgePadding), // Optional padding at the bottom

@@ -4,6 +4,7 @@
 import 'dart:typed_data';
 
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
+import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/extension/int_apis.dart';
 
 
 import 'dg.dart';

@@ -55,6 +55,7 @@
 import 'dart:core';
 import 'dart:typed_data';
 import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
+import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/extension/int_apis.dart';
 import '../ef.dart';
 import '../tlv.dart';
 import 'dg.dart';

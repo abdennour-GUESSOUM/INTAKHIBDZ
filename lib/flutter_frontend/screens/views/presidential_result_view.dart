@@ -387,7 +387,6 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                 width: 1.0,
                               ),
                             ),
-
                             color: Theme.of(context).colorScheme.background.withOpacity(1),
                             child: Padding(
                               padding: EdgeInsets.all(8.0),

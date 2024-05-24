@@ -236,42 +236,42 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Container(
-                  height: 150,
-                  child: Card(
-                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+                Card(
+                  color: Theme.of(context).colorScheme.background.withOpacity(1),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
 
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Stack(
-                            children: [
-                              Align(
+                              child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill)),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(  // Use Expanded here
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,  // Ensure alignment at the start of the column
+                            children: <Widget>[
+                              Container(
+                                alignment: Alignment.centerLeft,
                                 child: Text("${groups[0].groupName}",
-                                    style: TextStyle(fontSize: 40,
+                                    style: TextStyle(fontSize: 20,
                                         color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
                               ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Container(
-                                  height: 50,
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-
-                                      child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill)),
-                                ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text("${groups[0].votes} votes with a ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold , fontSize: 20)),
                               ),
                             ],
                           ),
                         ),
-                        Align(
-
-                          child: Text("${groups[0].votes} votes with a ${groups[0].percentage!.toStringAsFixed(0)}%", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold , fontSize: 20)),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 10),

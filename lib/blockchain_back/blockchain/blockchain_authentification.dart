@@ -25,8 +25,8 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
 
   Uint8List? _persistentImage;
 
-  final String smartContractAddress = "0x996E74160F12A576D095A06e5C8974Bf516e4c4D";
-  final String secondSmartContractAddress = "0x2bdb9E2673AadACA085908c2FBfB7E1b72930000"; // Replace with your actual second contract address
+  final String president_contract_address = "0x8Bb0699dBB3faE961050782DF223C57CA185Fa2c";
+  final String deputies_contract_address = "0x25B19f2C72E01FC945555a86fd5b137DA470311b"; // Replace with your actual second contract address
 
 
 
@@ -37,7 +37,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
   void initState() {
     super.initState();
     _loadImage;
-    process(smartContractAddress, secondSmartContractAddress); // Pass both contract addresses here
+    process(president_contract_address, deputies_contract_address); // Pass both contract addresses here
   }
 
   void process(String addr, String secondAddr) {
@@ -68,7 +68,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
     final response = await http.post(
       Uri.parse('http://192.168.1.2:3000/check-document'), // Update with your server address
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'documentNumber': widget.documentNumber}),
+      body: jsonEncode({'documentNumber': '0987654s321'}),
     );
 
     print('HTTP POST request sent to server...');

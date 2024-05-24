@@ -8,9 +8,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/json_rpc.dart';
-
 import '../../../blockchain_back/blockchain/blockachain.dart';
-import '../../utils/glassmorphismContainer.dart';
 
 class DeputiesVotingProcessView extends StatefulWidget {
   final bool isConfirming;
@@ -25,6 +23,8 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   final _formKey = GlobalKey<FormState>();
   final text_secret = TextEditingController();
 
+
+
   double timeRemainingCircle = 0.0;
   int step = -1;
   Blockchain blockchain = Blockchain();
@@ -34,7 +34,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   List<dynamic> imageUrls = [];
   bool _isConfirmButtonDisabled = true;
   bool _isVotingPeriodEnded = false;
-  String _castVoteButtonText = 'Cast Vote';
+  String _submitVoteButtonText = 'Submit Vote';
 
   Timer? _timer;
   Timer? _voterCountTimer;
@@ -114,7 +114,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
           timeRemainingText = "Voting period has ended";
           timeRemainingCircle = 1.0;
           _isVotingPeriodEnded = true;
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         }
       });
@@ -151,7 +151,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
           timeRemainingText = "Voting period has ended";
           timeRemainingCircle = 1.0;
           _isVotingPeriodEnded = true;
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         }
       });
@@ -222,8 +222,8 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         type: AlertType.error,
         title: "Error",
         desc: (widget.isConfirming)
-            ? "Please select the president you voted"
-            : "Please select the president you want to vote",
+            ? "Please select the group you voted for"
+            : "Please select the group you want to vote for",
         style: AlertStyle(
           animationType: AnimationType.grow,
           isCloseButton: false,
@@ -354,7 +354,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         ).show();
 
         setState(() {
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         });
       } catch (error) {
@@ -445,7 +445,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
           context: context,
           type: AlertType.success,
           title: "OK",
-          desc: "Your vote has been casted!",
+          desc: "Your vote has been submitted!",
           style: AlertStyle(
             animationType: AnimationType.grow,
             isCloseButton: false,
@@ -476,7 +476,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         ).show();
 
         setState(() {
-          _castVoteButtonText = 'Edit Vote';
+          _submitVoteButtonText = 'Edit Vote';
           _isConfirmButtonDisabled = false;
         });
       } catch (error) {
@@ -669,9 +669,8 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                   });
                                 },
                                 child: Card(
-
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   color: (_selectedGroup == index) ? Theme.of(context).colorScheme.secondary.withOpacity(0.9) : Theme.of(context).colorScheme.background,
                                   child: Container(
@@ -681,20 +680,23 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          ListTile(
-                                            leading: Container(
-                                              height: 50,
-                                              child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(100),
-                                                  child: Image.network(group['pictureUrl'])),
-                                            ),
+                                          Card(
+                                            color: Theme.of(context).colorScheme.background.withOpacity(1),
+                                            child: ListTile(
+                                              leading: Container(
+                                                height: 50,
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(100),
+                                                    child: Image.network(group['pictureUrl'])),
+                                              ),
 
-                                            title: Text(
-                                              group['name'],
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.primary,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
+                                              title: Text(
+                                                group['name'],
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -722,7 +724,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                                       width: 1.0,
                                                     ),
                                                   ),
-
                                                   color: Theme.of(context).colorScheme.background.withOpacity(0.9),
                                                   child: ListTile(
                                                     title: Text(
@@ -815,7 +816,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                           padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
                                           child: ElevatedButton.icon(
                                             icon: Icon(Icons.send), // Add an icon for visual clarity
-                                            label: Text(_castVoteButtonText),
+                                            label: Text(_submitVoteButtonText),
                                             style: ElevatedButton.styleFrom(
                                               foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
                                               shape: RoundedRectangleBorder(

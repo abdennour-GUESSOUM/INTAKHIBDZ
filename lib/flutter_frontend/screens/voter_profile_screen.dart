@@ -1,3 +1,4 @@
+import 'package:IntakhibDZ/flutter_frontend/screens/facial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
@@ -50,16 +51,6 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(_isVisible ? Icons.visibility : Icons.visibility_off),
-            onPressed: () {
-              setState(() {
-                _isVisible = !_isVisible;
-              });
-            },
-          )
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -78,13 +69,13 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => BlockchainAuthentification(
+                      builder: (context) => FaceIDScreen(
                         documentNumber: widget.mrtdData.dg1!.mrz.documentNumber,
                       ),
                     ),
                   );
                 },
-                child: Text('Blockchain Auth'),
+                child: Text('Face id check'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.background,

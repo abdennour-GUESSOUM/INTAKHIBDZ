@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../utils/glassmorphismContainer.dart';
 
 class HomeView2 extends StatelessWidget {
-  const HomeView2({super.key});
+  const HomeView2.HomeView({super.key});
 
   Future<void> _handleRefresh() async {
     return await Future.delayed(const Duration(seconds: 2));

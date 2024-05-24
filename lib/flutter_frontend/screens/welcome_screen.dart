@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/home_view.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/profile_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/results_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/settings_view.dart';
 import 'package:IntakhibDZ/flutter_frontend/screens/views/vote_view.dart';
@@ -112,7 +111,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             PageView(
               controller: _pageController,
               children:   [
-                Center(child: HomeView2()),
+                Center(child: HomeView2.HomeView()),
                 Center(child: Voteview()),
                 Center(child: ResultsView()),
                 Center(child: SettingsView()),

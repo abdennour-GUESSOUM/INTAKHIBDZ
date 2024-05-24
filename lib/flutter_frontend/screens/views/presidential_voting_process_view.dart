@@ -7,12 +7,15 @@ import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/json_rpc.dart';
 
 import '../../../blockchain_back/blockchain/blockachain.dart';
 
 class PresidentialVotingProcessView extends StatefulWidget {
   final bool isConfirming;
+
+
 
   PresidentialVotingProcessView({Key? key, required this.isConfirming}) : super(key: key);
 
@@ -24,6 +27,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   final _formKey = GlobalKey<FormState>();
   final text_secret = TextEditingController();
 
+  bool _voteConfirmed = false;
 
 
   double timeRemainingCircle = 0.0;
@@ -38,7 +42,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   bool _isConfirmButtonDisabled = true;
   bool _isVotingPeriodEnded = false;
-  String _castVoteButtonText = 'Cast Vote';
+  String _submitVoteButtonText = 'Submit Vote';
 
   Timer? _timer;
   Timer? _voterCountTimer;
@@ -53,7 +57,6 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) => _updateCandidates());
     _loadDeadline();
     _startTimer();
@@ -67,7 +70,6 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     text_secret.dispose();
     super.dispose();
   }
-
   Future<void> _fetchNumberOfVoters() async {
     try {
       final result = await blockchain.queryView("get_vote_count", []);
@@ -112,7 +114,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           timeRemainingText = "Voting period has ended";
           timeRemainingCircle = 1.0;
           _isVotingPeriodEnded = true;
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         }
       });
@@ -149,7 +151,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           timeRemainingText = "Voting period has ended";
           timeRemainingCircle = 1.0;
           _isVotingPeriodEnded = true;
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         }
       });
@@ -322,8 +324,13 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   Future<void> _openVote() async {
     if (!checkSelection()) return;
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('voteConfirmed', true);
+
     setState(() {
       _isConfirmButtonDisabled = true;
+      _voteConfirmed = true; // Set vote as confirmed
+
     });
 
     List<dynamic> args = [BigInt.parse(text_secret.text), candidates[_selected]];
@@ -414,7 +421,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         ).show();
 
         setState(() {
-          _castVoteButtonText = 'Cast Vote';
+          _submitVoteButtonText = 'Submit Vote';
           _isConfirmButtonDisabled = true;
         });
       } catch (error) {
@@ -503,7 +510,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           context: context,
           type: AlertType.success,
           title: "OK",
-          desc: "Your vote has been casted!",
+          desc: "Your vote has been submited!",
           style: AlertStyle(
             animationType: AnimationType.grow,
             isCloseButton: false,
@@ -534,7 +541,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         ).show();
 
         setState(() {
-          _castVoteButtonText = 'Edit Vote';
+          _submitVoteButtonText = 'Edit Vote';
           _isConfirmButtonDisabled = false;
         });
       } catch (error) {
@@ -734,7 +741,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                               child: TextFormField(
                                 decoration: InputDecoration(
-                                  labelText: 'Secret code',
+                                  labelText: 'Enter a secret code',
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary), // Change color here
                                   ),
@@ -786,7 +793,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                           padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
                                           child: ElevatedButton.icon(
                                             icon: Icon(Icons.send), // Add an icon for visual clarity
-                                            label: Text(_castVoteButtonText),
+                                            label: Text(_submitVoteButtonText),
                                             style: ElevatedButton.styleFrom(
                                               foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
                                               shape: RoundedRectangleBorder(
@@ -798,7 +805,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                               ),
                                               padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
                                             ),
-                                            onPressed: _isVotingPeriodEnded ? null : () => _sendVote(),
+                                            onPressed: (_isVotingPeriodEnded || _voteConfirmed) ? null : () => _sendVote(),
                                           ),
                                         ),
                                       ),
@@ -825,7 +832,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                               ),
                                               padding: EdgeInsets.symmetric(vertical: 12.0), // Vertical padding for taller buttons
                                             ),
-                                            onPressed: _isConfirmButtonDisabled || _isVotingPeriodEnded ? null : () => _openVote(),
+                                            onPressed: (_isConfirmButtonDisabled || _isVotingPeriodEnded || _voteConfirmed) ? null : () => _openVote(),
                                           ),
                                         ),
                                       ),

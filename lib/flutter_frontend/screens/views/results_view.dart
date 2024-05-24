@@ -7,7 +7,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
-import '../../utils/glassmorphismContainer.dart';
 import 'deputies_voting_process_view.dart';
 import 'main_view.dart';
 
