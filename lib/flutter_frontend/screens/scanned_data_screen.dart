@@ -1,38 +1,76 @@
-import 'package:IntakhibDZ/flutter_frontend/screens/voter_profile_screen.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../firebase/common/snack_bars.dart';
 import '../utils/jpeg2000_converter.dart';
 import '../utils/mrtd_data.dart';
+import 'voter_profile_screen.dart';
 
-
-class scannedDataScreen extends StatefulWidget {
+class ScannedDataScreen extends StatefulWidget {
   final MrtdData? mrtdData;
   final Uint8List? rawImageData;
   final Uint8List? rawHandSignatureData;
+  final bool isVotingStarted;
 
-  final bool isVotingStarted; // Add this line
-
-
-  scannedDataScreen({
-
+  ScannedDataScreen({
     this.mrtdData,
     this.rawImageData,
     this.rawHandSignatureData,
     this.isVotingStarted = false,
   });
+
   @override
-  _scannedDataScreenState createState() => _scannedDataScreenState();
+  _ScannedDataScreenState createState() => _ScannedDataScreenState();
 }
 
-class _scannedDataScreenState extends State<scannedDataScreen> {
+class _ScannedDataScreenState extends State<ScannedDataScreen> {
   Uint8List? jpegImage;
   Uint8List? jp2000Image;
-
 
   @override
   void initState() {
     super.initState();
     tryDisplayingJpg();
+    if (widget.rawImageData != null) {
+      verifyUser(widget.rawImageData!);
+    }
+  }
+
+  void verifyUser(Uint8List imageData) async {
+    String base64Image = base64Encode(imageData);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('eligible_electors').get();
+      bool userFound = false;
+
+      for (var doc in snapshot.docs) {
+        var userData = doc.data() as Map<String, dynamic>;
+        if (userData['image'] == base64Image) {
+          userFound = true;
+          break;
+        }
+      }
+
+      Navigator.of(context).pop();
+
+      if (userFound) {
+        successSnackBar(context, 'User verified successfully, eligible for voting!');
+      } else {
+        errorSnackBar(context, 'User not eligible!');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      errorSnackBar(context, 'An error occurred: $e');
+    }
   }
 
   Widget _makeMrtdDataWidget({
@@ -48,8 +86,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
         icon: const Icon(Icons.copy),
         onPressed: () {
           Clipboard.setData(ClipboardData(text: dataText ?? "Null"));
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Copied")));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Copied")));
         },
       ),
     );
@@ -58,13 +95,11 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
   List<Widget> _mrtdDataWidgets() {
     List<Widget> list = [];
 
-
     if (widget.mrtdData?.dg1 != null) {
       list.add(_makeMrtdDataWidget(
           header: null,
           dataText: formatMRZ(widget.mrtdData!.dg1!.mrz)));
     }
-
 
     return list;
   }
@@ -107,8 +142,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
                   alignment: Alignment.center,
                   child: Text(
                     "Image",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
               if (jpegImage != null)
@@ -145,8 +179,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
                     SizedBox(height: 20),
                     Text(
                       "Signature",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     SizedBox(height: 10),
                     ClipRRect(
@@ -173,12 +206,12 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
                       MaterialPageRoute(
                         builder: (context) => VoterProfileScreen(
                           mrtdData: widget.mrtdData!,
-                          rawHandSignatureData: widget.rawHandSignatureData, // Ensure this is not null
+                          rawHandSignatureData: widget.rawHandSignatureData,
                         ),
                       ),
                     );
                   },
-                  child: Text('Confirm'), // overflow pixel error
+                  child: Text('Confirm'),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.primary,
                     backgroundColor: Theme.of(context).colorScheme.background,
@@ -189,8 +222,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
                         width: 2.0,
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 32.0, vertical: 12.0),
+                    padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
                   ),
                 ),
               ),
@@ -201,7 +233,6 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
     );
   }
 
-
   void tryDisplayingJpg() {
     try {
       jpegImage = widget.rawImageData;
@@ -209,8 +240,7 @@ class _scannedDataScreenState extends State<scannedDataScreen> {
     } catch (e) {
       jpegImage = null;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              "Image is not in jpg format, trying jpeg2000")));
+          content: Text("Image is not in jpg format, trying jpeg2000")));
     }
   }
 

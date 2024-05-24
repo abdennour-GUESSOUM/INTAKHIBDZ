@@ -1,13 +1,14 @@
-import 'package:IntakhibDZ/flutter_frontend/screens/facial_screen.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../blockchain_back/blockchain/blockchain_authentification.dart';
 import '../utils/data_save.dart';
 import '../utils/glassmorphismContainer.dart';
 import '../utils/mrtd_data.dart';
+import '../../firebase/common/snack_bars.dart';
+import 'facial_screen.dart';
 
 class VoterProfileScreen extends StatefulWidget {
   final MrtdData mrtdData;
@@ -26,6 +27,50 @@ class VoterProfileScreen extends StatefulWidget {
 
 class _VoterProfileScreenState extends State<VoterProfileScreen> {
   bool _isVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.mrtdData.dg2?.imageData != null) {
+      verifyUser(widget.mrtdData.dg2!.imageData!);
+    }
+  }
+
+  void verifyUser(Uint8List imageData) async {
+    String base64Image = base64Encode(imageData);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+      bool userFound = false;
+
+      for (var doc in snapshot.docs) {
+        var userData = doc.data() as Map<String, dynamic>;
+        if (userData['image'] == base64Image) {
+          userFound = true;
+          break;
+        }
+      }
+
+      Navigator.of(context).pop();
+
+      if (userFound) {
+        successSnackBar(context, 'User verified successfully, eligible for voting!');
+      } else {
+        errorSnackBar(context, 'User not eligible!');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      errorSnackBar(context, 'An error occurred: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +120,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
                     ),
                   );
                 },
-                child: Text('Face id check'),
+                child: Text('Face ID Check'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.background,
@@ -130,8 +175,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
               children: [
                 Text(
                   "Image",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -143,15 +187,14 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
               ],
             ),
           ),
-
           glassmorphicContainer(
             context: context,
-            child: _detailsChip('firstName', widget.mrtdData.dg1!.mrz.firstName),
+            child: _detailsChip('First Name', widget.mrtdData.dg1!.mrz.firstName),
             height: 50,
           ),
           glassmorphicContainer(
             context: context,
-            child: _detailsChip('lastName', widget.mrtdData.dg1!.mrz.lastName),
+            child: _detailsChip('Last Name', widget.mrtdData.dg1!.mrz.lastName),
             height: 50,
           ),
           glassmorphicContainer(
