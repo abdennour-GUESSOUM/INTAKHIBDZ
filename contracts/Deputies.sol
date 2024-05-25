@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 
-
 pragma solidity ^0.8.1;
 
 contract Deputies {
@@ -13,12 +12,15 @@ contract Deputies {
         bool valid_results;
     }
 
-
     struct Candidate {
-
         string firstName;
         string lastName;
         string imageUrl;
+        string gender;
+        string jobPosition;
+        string electoralDistrict;
+        string politicalAffiliation;
+        uint32 age;
     }
 
     struct Group {
@@ -27,8 +29,6 @@ contract Deputies {
         uint32 votes;
         address[] candidateAddresses;
     }
-
-
 
     event NewMayor(address indexed _group);
     event InvalidElections(address indexed _escrow);
@@ -62,10 +62,8 @@ contract Deputies {
         _;
     }
 
-
     Group[] public groups;
     address payable public escrow;
-
 
     mapping(address => bytes32) envelopes;
     Conditions voting_condition;
@@ -74,14 +72,12 @@ contract Deputies {
     mapping(address => bool) public hasConfirmed;
     address[] voters;
 
-
-
     constructor(
         address payable _escrow,
         uint256 _duration,
         string[] memory _groupNames,
         string[] memory _groupPictures,
-        address[] memory _groupAddresses // Add imageUrls as a parameter
+        address[] memory _groupAddresses
     ) {
         require(_groupNames.length == _groupPictures.length && _groupNames.length == _groupAddresses.length, "Mismatched input arrays");
 
@@ -115,13 +111,9 @@ contract Deputies {
         emit EnvelopeCast(msg.sender);
     }
 
-
-
-
     function confirm_envelope(uint _sigil, address _group) public canConfirm {
         bytes32 _casted_envelope = envelopes[msg.sender];
         bytes32 _sent_envelope = compute_envelope(_sigil, _group);
-
 
         require(_casted_envelope == _sent_envelope, "Sent envelope does not correspond to the one cast");
 
@@ -138,6 +130,7 @@ contract Deputies {
 
         emit EnvelopeOpen(msg.sender, _group);
     }
+
     function valid_candidate_check() canCheckOutcome public {
         voting_condition.open = false;
 
@@ -162,11 +155,13 @@ contract Deputies {
             emit NewMayor(electedGroup);
         }
     }
+
     function auto_declare_results() public canCheckOutcome {
         if (voting_condition.open) {
             valid_candidate_check();
         }
     }
+
     function get_status(address addr) public view returns (uint32, uint32, bool, bool, bool) {
         return (
             voting_condition.envelopes_opened,
@@ -177,16 +172,28 @@ contract Deputies {
         );
     }
 
-
-
-
-
-    function addCandidateToGroup(address groupAddress, address candidateAddress, string memory firstName, string memory lastName, string memory imageUrl) public {
+    function addCandidateToGroup(
+        address groupAddress,
+        address candidateAddress,
+        string memory firstName,
+        string memory lastName,
+        string memory imageUrl,
+        string memory gender,
+        string memory jobPosition,
+        string memory electoralDistrict,
+        string memory politicalAffiliation,
+        uint32 age
+    ) public {
         require(isGroupAddress(groupAddress), "Group does not exist");
         candidates[candidateAddress] = Candidate({
             firstName: firstName,
             lastName: lastName,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            gender: gender,
+            jobPosition: jobPosition,
+            electoralDistrict: electoralDistrict,
+            politicalAffiliation: politicalAffiliation,
+            age: age
         });
         for (uint i = 0; i < groups.length; i++) {
             if (groups[i].candidateAddresses[0] == groupAddress) {
@@ -196,61 +203,83 @@ contract Deputies {
         }
     }
 
-
-
-    function getAllDetails() public view returns (
+    function getGroupDetails() public view returns (
         string[] memory groupNames,
         string[] memory groupPictures,
-        address[][] memory groupCandidatesArray,
-        address[] memory candidateAddresses,
-        string[] memory candidateFirstNames,
-        string[] memory candidateLastNames,
-        string[] memory candidateImageUrls
+        address[][] memory groupCandidatesArray
     ) {
         uint groupCount = groups.length;
-        uint candidateCount = 0;
-
-        for (uint i = 0; i < groupCount; i++) {
-            candidateCount += groups[i].candidateAddresses.length;
-        }
 
         groupNames = new string[](groupCount);
         groupPictures = new string[](groupCount);
         groupCandidatesArray = new address[][](groupCount);
-        candidateAddresses = new address[](candidateCount);
-        candidateFirstNames = new string[](candidateCount);
-        candidateLastNames = new string[](candidateCount);
-        candidateImageUrls = new string[](candidateCount);
 
-        uint k = 0;
         for (uint i = 0; i < groupCount; i++) {
             Group storage group = groups[i];
             groupNames[i] = group.name;
             groupPictures[i] = group.pictureUrl;
-            groupCandidatesArray[i] = new address[](group.candidateAddresses.length);
+            groupCandidatesArray[i] = group.candidateAddresses;
+        }
 
-            for (uint j = 0; j < group.candidateAddresses.length; j++) {
-                address candidateAddr = group.candidateAddresses[j];
-                groupCandidatesArray[i][j] = candidateAddr;
+        return (groupNames, groupPictures, groupCandidatesArray);
+    }
+
+    function getCandidateDetails() public view returns (
+        address[] memory candidateAddresses,
+        string[] memory candidateFirstNames,
+        string[] memory candidateLastNames,
+        string[] memory candidateImageUrls,
+        string[] memory candidateGenders,
+        string[] memory candidateJobPositions,
+        string[] memory candidateElectoralDistricts,
+        string[] memory candidatePoliticalAffiliations,
+        uint32[] memory candidateAges
+    ) {
+        uint candidateCount = 0;
+
+        for (uint i = 0; i < groups.length; i++) {
+            candidateCount += groups[i].candidateAddresses.length;
+        }
+
+        candidateAddresses = new address[](candidateCount);
+        candidateFirstNames = new string[](candidateCount);
+        candidateLastNames = new string[](candidateCount);
+        candidateImageUrls = new string[](candidateCount);
+        candidateGenders = new string[](candidateCount);
+        candidateJobPositions = new string[](candidateCount);
+        candidateElectoralDistricts = new string[](candidateCount);
+        candidatePoliticalAffiliations = new string[](candidateCount);
+        candidateAges = new uint32[](candidateCount);
+
+        uint k = 0;
+        for (uint i = 0; i < groups.length; i++) {
+            for (uint j = 0; j < groups[i].candidateAddresses.length; j++) {
+                address candidateAddr = groups[i].candidateAddresses[j];
                 candidateAddresses[k] = candidateAddr;
                 candidateFirstNames[k] = candidates[candidateAddr].firstName;
                 candidateLastNames[k] = candidates[candidateAddr].lastName;
                 candidateImageUrls[k] = candidates[candidateAddr].imageUrl;
+                candidateGenders[k] = candidates[candidateAddr].gender;
+                candidateJobPositions[k] = candidates[candidateAddr].jobPosition;
+                candidateElectoralDistricts[k] = candidates[candidateAddr].electoralDistrict;
+                candidatePoliticalAffiliations[k] = candidates[candidateAddr].politicalAffiliation;
+                candidateAges[k] = candidates[candidateAddr].age;
                 k++;
             }
         }
 
         return (
-            groupNames,
-            groupPictures,
-            groupCandidatesArray,
             candidateAddresses,
             candidateFirstNames,
             candidateLastNames,
-            candidateImageUrls
+            candidateImageUrls,
+            candidateGenders,
+            candidateJobPositions,
+            candidateElectoralDistricts,
+            candidatePoliticalAffiliations,
+            candidateAges
         );
     }
-
 
     function get_results() public view canGetResults returns (
         address[] memory groupAddresses,

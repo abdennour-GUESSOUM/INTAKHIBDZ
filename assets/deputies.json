@@ -105,7 +105,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -118,7 +119,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -147,7 +149,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -166,7 +169,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -250,7 +254,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -278,6 +283,31 @@
         "internalType": "string",
         "name": "imageUrl",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "gender",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "jobPosition",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "electoralDistrict",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "politicalAffiliation",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "age",
+        "type": "uint32"
       }
     ],
     "name": "addCandidateToGroup",
@@ -287,7 +317,7 @@
   },
   {
     "inputs": [],
-    "name": "getAllDetails",
+    "name": "getGroupDetails",
     "outputs": [
       {
         "internalType": "string[]",
@@ -303,7 +333,16 @@
         "internalType": "address[][]",
         "name": "groupCandidatesArray",
         "type": "address[][]"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "getCandidateDetails",
+    "outputs": [
       {
         "internalType": "address[]",
         "name": "candidateAddresses",
@@ -323,10 +362,36 @@
         "internalType": "string[]",
         "name": "candidateImageUrls",
         "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "candidateGenders",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "candidateJobPositions",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "candidateElectoralDistricts",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "candidatePoliticalAffiliations",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint32[]",
+        "name": "candidateAges",
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -354,7 +419,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -367,7 +433,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -380,6 +447,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   }
 ]

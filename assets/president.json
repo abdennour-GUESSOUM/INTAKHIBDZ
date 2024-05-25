@@ -30,6 +30,31 @@
         "internalType": "string[]",
         "name": "_imageUrls",
         "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_genders",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_jobPositions",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_electoralDistricts",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_politicalAffiliations",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint32[]",
+        "name": "_ages",
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "nonpayable",
@@ -65,6 +90,19 @@
       }
     ],
     "name": "EnvelopeOpen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_voter",
+        "type": "address"
+      }
+    ],
+    "name": "EnvelopeWithdrawn",
     "type": "event"
   },
   {
@@ -270,6 +308,31 @@
         "internalType": "string[]",
         "name": "imageUrls",
         "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "genders",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "jobPositions",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "electoralDistricts",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "politicalAffiliations",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint32[]",
+        "name": "ages",
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "view",
@@ -303,6 +366,31 @@
         "internalType": "string[]",
         "name": "imageUrls",
         "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "genders",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "jobPositions",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "electoralDistricts",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "politicalAffiliations",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint32[]",
+        "name": "ages",
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "view",

@@ -38,6 +38,12 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   List<dynamic> firstNames = [];
   List<dynamic> lastNames = [];
   List<dynamic> imageUrls = [];
+  List<dynamic> genders = [];
+  List<dynamic> jobPositions = [];
+  List<dynamic> electoralDistricts = [];
+  List<dynamic> politicalAffiliations = [];
+  List<dynamic> ages = [];
+
   int _selected = -1;
 
   bool _isConfirmButtonDisabled = true;
@@ -330,6 +336,11 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           firstNames = value[1];
           lastNames = value[2];
           imageUrls = value[3];
+          genders = value[4];
+          jobPositions = value[5];
+          electoralDistricts = value[6];
+          politicalAffiliations = value[7];
+          ages = value[8];  // Add ages here
         });
       } catch (error) {
         Navigator.of(context).pop();
@@ -540,7 +551,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           context: context,
           type: AlertType.success,
           title: "OK",
-          desc: "Your vote has been submited!",
+          desc: "Your vote has been submitted!",
           style: AlertStyle(
             animationType: AnimationType.grow,
             isCloseButton: false,
@@ -597,6 +608,99 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   Future<void> _handleRefresh() async {
     return await Future.delayed(const Duration(seconds: 2));
+  }
+
+  void _showCandidateInfo(int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(16),
+            child: Text(
+              '${firstNames[index]} ${lastNames[index]}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(imageUrls[index]),
+              ),
+              Spacer(),
+              Column(
+                children: [
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text(
+                        '${genders[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.cake),
+                      title: Text(
+                        '${ages[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.work),
+                      title: Text(
+                        '${jobPositions[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.location_on),
+                      title: Text(
+                        '${electoralDistricts[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.account_balance),
+                      title: Text(
+                        '${politicalAffiliations[index]}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [],
+        );
+      },
+    );
   }
 
   @override
@@ -773,21 +877,29 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                                     ),
                                                   ),
                                                   SizedBox(width: 30), // Add some space between image and text
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        "${firstNames[index]} \n${lastNames[index]}",
-                                                        style: TextStyle(
-                                                          color: (_selected == index)
-                                                              ? Colors.white
-                                                              : Theme.of(context).colorScheme.primary,
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 20,
+                                                  Expanded(  // Wrap Column in Expanded
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "${firstNames[index]} \n${lastNames[index]}",
+                                                          style: TextStyle(
+                                                            color: (_selected == index)
+                                                                ? Colors.white
+                                                                : Theme.of(context).colorScheme.primary,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-
+                                                  IconButton(
+                                                    icon: Icon(Icons.more_vert, color: (_selected == index)
+                                                        ? Theme.of(context).colorScheme.background
+                                                        : Theme.of(context).colorScheme.primary),
+                                                    onPressed: () => _showCandidateInfo(index),
+                                                  ),
                                                 ],
                                               ),
                                             ),

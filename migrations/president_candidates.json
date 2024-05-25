@@ -1,0 +1,61 @@
+{
+  "candidates": [
+    {
+      "address": "0x1Cd056Cac37130b26cD517528b4d12308EfBDB98",
+      "firstName": "Guessoum",
+      "lastName": "Abdennour",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmTQUaLfG1HhdMzE1NiYzsNzd2tNR715qmG7CV3SuP5vrc",
+      "gender": "Male",
+      "jobPosition": "Software Engineer",
+      "electoralDistrict": "District 1",
+      "politicalAffiliation": "Party A",
+      "age": 35
+    },
+    {
+      "address": "0x01E88CDbCF874377d31449EB759651665a2c0cf8",
+      "firstName": "Lesbat",
+      "lastName": "Haithem",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmWj2QXJPPvzC7THHq2L6AjbA5XxA2ZvmiauvfLBk8T1xk",
+      "gender": "Male",
+      "jobPosition": "Teacher",
+      "electoralDistrict": "District 2",
+      "politicalAffiliation": "Party B",
+      "age": 42
+    },
+    {
+      "address": "0x40424eD954c75fB4Ac529Acfb0ab34397FE35905",
+      "firstName": "Daoud",
+      "lastName": "Yasser",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmWYHMbn1TyXK6psjzHCkwKcyUsfF7URYzn7uTF6ZmsmNG",
+      "gender": "Male",
+      "jobPosition": "Doctor",
+      "electoralDistrict": "District 3",
+      "politicalAffiliation": "Party C",
+      "age": 50
+    },
+    {
+      "address": "0x9dfA729Dcdf8Bf4B3895eEFE58A8efdA2c79d529",
+      "firstName": "Bourougua",
+      "lastName": "Anis",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmUVninMPzYo9fs3v45XadwE3biu591Dej4WhvxGnjmMLq",
+      "gender": "Male",
+      "jobPosition": "Lawyer",
+      "electoralDistrict": "District 4",
+      "politicalAffiliation": "Party D",
+      "age": 45
+    },
+    {
+      "address": "0xAb1E1A2fB55b172A0f47E55fb0996B9ACB6bC2F7",
+      "firstName": "Toumi",
+      "lastName": "Hassina",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmcKpMSai13rpr6fiM9tkNLbg8C9uWgCJfjSiT2SHq2sp5",
+      "gender": "Female",
+      "jobPosition": "Engineer",
+      "electoralDistrict": "District 5",
+      "politicalAffiliation": "Party E",
+      "age": 39
+    }
+  ],
+  "escrow": "0x6633C662ed5ef9ACf6f4D8f38dA263467C31360e",
+  "duration": 1800
+}

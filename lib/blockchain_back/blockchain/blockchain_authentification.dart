@@ -22,8 +22,8 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
 
   Uint8List? _persistentImage;
 
-  final String president_contract_address = "0x6941f490815a00BaE48A230413d4BB2002D0d530";
-  final String deputies_contract_address = "0x6D843F0eAA022fd647aFe20dfcd62DF40929F1D6"; // Replace with your actual second contract address
+  final String president_contract_address = "0x08a2DE58afCef45AD94C8F810738110Cab1dC8Eb";
+  final String deputies_contract_address = "0x3599bC2C367dF3F2Ac4f8100BE711063fb5ee692"; // Replace with your actual second contract address
 
 
 

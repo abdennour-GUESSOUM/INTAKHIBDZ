@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-
 pragma solidity ^0.8.1;
 
 contract President {
-
 
     struct Conditions {
         uint256 deadline;
@@ -19,14 +17,18 @@ contract President {
         string firstName;
         string lastName;
         string imageUrl;
+        string gender;
+        string jobPosition;
+        string electoralDistrict;
+        string politicalAffiliation;
+        uint32 age;  // Added age property
     }
 
     event NewPresident(address indexed _candidate);
     event InvalidElections(address indexed _escrow);
     event EnvelopeCast(address indexed _voter);
     event EnvelopeOpen(address indexed _voter, address indexed _sign);
-
-
+    event EnvelopeWithdrawn(address indexed _voter);
 
     modifier canVote() {
         require(block.timestamp <= voting_condition.deadline, "Voting period has ended");
@@ -71,9 +73,24 @@ contract President {
         uint256 _duration,
         string[] memory _firstNames,
         string[] memory _lastNames,
-        string[] memory _imageUrls // Add imageUrls as a parameter
+        string[] memory _imageUrls,
+        string[] memory _genders,
+        string[] memory _jobPositions,
+        string[] memory _electoralDistricts,
+        string[] memory _politicalAffiliations,
+        uint32[] memory _ages  // Added ages parameter
     ) {
-        require(_candidates.length == _firstNames.length && _candidates.length == _lastNames.length && _candidates.length == _imageUrls.length, "Mismatched input arrays");
+        require(
+            _candidates.length == _firstNames.length &&
+            _candidates.length == _lastNames.length &&
+            _candidates.length == _imageUrls.length &&
+            _candidates.length == _genders.length &&
+            _candidates.length == _jobPositions.length &&
+            _candidates.length == _electoralDistricts.length &&
+            _candidates.length == _politicalAffiliations.length &&
+            _candidates.length == _ages.length,  // Added age length check
+            "Mismatched input arrays"
+        );
 
         for (uint i = 0; i < _candidates.length; i++) {
             address key = _candidates[i];
@@ -82,7 +99,12 @@ contract President {
                 votes: 0,
                 firstName: _firstNames[i],
                 lastName: _lastNames[i],
-                imageUrl: _imageUrls[i]
+                imageUrl: _imageUrls[i],
+                gender: _genders[i],
+                jobPosition: _jobPositions[i],
+                electoralDistrict: _electoralDistricts[i],
+                politicalAffiliation: _politicalAffiliations[i],
+                age: _ages[i]  // Set age
             });
         }
 
@@ -163,36 +185,68 @@ contract President {
         );
     }
 
-    function get_candidate_names() public view returns (address[] memory addresses, string[] memory firstNames, string[] memory lastNames, string[] memory imageUrls) {
+    function get_candidate_names() public view returns (
+        address[] memory addresses,
+        string[] memory firstNames,
+        string[] memory lastNames,
+        string[] memory imageUrls,
+        string[] memory genders,
+        string[] memory jobPositions,
+        string[] memory electoralDistricts,
+        string[] memory politicalAffiliations,
+        uint32[] memory ages  // Added ages to return values
+    ) {
         addresses = new address[](candidate.length);
         firstNames = new string[](candidate.length);
         lastNames = new string[](candidate.length);
         imageUrls = new string[](candidate.length);
+        genders = new string[](candidate.length);
+        jobPositions = new string[](candidate.length);
+        electoralDistricts = new string[](candidate.length);
+        politicalAffiliations = new string[](candidate.length);
+        ages = new uint32[](candidate.length);  // Initialized ages array
 
         for (uint i = 0; i < candidate.length; i++) {
             addresses[i] = candidate[i];
             firstNames[i] = candidates[candidate[i]].firstName;
             lastNames[i] = candidates[candidate[i]].lastName;
             imageUrls[i] = candidates[candidate[i]].imageUrl;
+            genders[i] = candidates[candidate[i]].gender;
+            jobPositions[i] = candidates[candidate[i]].jobPosition;
+            electoralDistricts[i] = candidates[candidate[i]].electoralDistrict;
+            politicalAffiliations[i] = candidates[candidate[i]].politicalAffiliation;
+            ages[i] = candidates[candidate[i]].age;  // Set age
         }
 
-        return (addresses, firstNames, lastNames, imageUrls);
+        return (addresses, firstNames, lastNames, imageUrls, genders, jobPositions, electoralDistricts, politicalAffiliations, ages);
     }
 
-    function get_results() public view canGetResults returns (address[] memory, uint[] memory, string[] memory firstNames, string[] memory lastNames, string[] memory imageUrls) {
+    function get_results() public view canGetResults returns (
+        address[] memory, uint[] memory, string[] memory firstNames, string[] memory lastNames, string[] memory imageUrls, string[] memory genders, string[] memory jobPositions, string[] memory electoralDistricts, string[] memory politicalAffiliations, uint32[] memory ages  // Added ages to return values
+    ) {
         uint[] memory all_votes = new uint[](candidate.length);
         firstNames = new string[](candidate.length);
         lastNames = new string[](candidate.length);
         imageUrls = new string[](candidate.length);
+        genders = new string[](candidate.length);
+        jobPositions = new string[](candidate.length);
+        electoralDistricts = new string[](candidate.length);
+        politicalAffiliations = new string[](candidate.length);
+        ages = new uint32[](candidate.length);  // Initialized ages array
 
         for (uint i = 0; i < candidate.length; i++) {
             all_votes[i] = candidates[candidate[i]].votes;
             firstNames[i] = candidates[candidate[i]].firstName;
             lastNames[i] = candidates[candidate[i]].lastName;
             imageUrls[i] = candidates[candidate[i]].imageUrl;
+            genders[i] = candidates[candidate[i]].gender;
+            jobPositions[i] = candidates[candidate[i]].jobPosition;
+            electoralDistricts[i] = candidates[candidate[i]].electoralDistrict;
+            politicalAffiliations[i] = candidates[candidate[i]].politicalAffiliation;
+            ages[i] = candidates[candidate[i]].age;  // Set age
         }
 
-        return (candidate, all_votes, firstNames, lastNames, imageUrls);
+        return (candidate, all_votes, firstNames, lastNames, imageUrls, genders, jobPositions, electoralDistricts, politicalAffiliations, ages);
     }
 
     function compute_envelope(uint _sigil, address _sign) private pure returns (bytes32) {
@@ -215,5 +269,4 @@ contract President {
     function get_vote_count() public view returns (uint256) {
         return voters.length;
     }
-
 }
