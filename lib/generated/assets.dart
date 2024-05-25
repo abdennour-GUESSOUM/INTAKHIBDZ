@@ -2,15 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String assetsAbdou = 'assets/abdou.jpg';
   static const String assetsAbi = 'assets/abi.json';
   static const String assetsAppLogo = 'assets/app_logo.png';
   static const String assetsBack = 'assets/back.png';
   static const String assetsBlockchain = 'assets/blockchain.png';
   static const String assetsBlockchainAuth = 'assets/blockchain_auth.json';
   static const String assetsBlockchainIntro = 'assets/blockchain_intro.json';
-  static const String assetsCandidateeeee = 'assets/abdou.jpg';
   static const String assetsCrown = 'assets/crown.svg';
   static const String assetsDeputies = 'assets/deputies.json';
+  static const String assetsDz = 'assets/dz.json';
   static const String assetsFaceAuth = 'assets/face_auth.json';
   static const String assetsFaceid = 'assets/faceid.png';
   static const String assetsFingerprint = 'assets/fingerprint.png';

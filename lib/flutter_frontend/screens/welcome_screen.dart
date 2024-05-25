@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -62,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromRadius(40),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16 , 0,16,0),
+          padding: const EdgeInsets.fromLTRB(16 , 0,0,0),
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
             child: AppBar(
@@ -92,11 +93,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               actions: [
                 Container(
-                  width: 40,
                   height: 50,
-                  child: SvgPicture.asset(
-                    "assets/flag.svg",
-                    fit: BoxFit.contain,  // This ensures the SVG is scaled properly within the container
+                  child: Lottie.asset(
+                    "assets/dz.json",
                   ),
                 )
               ],
@@ -105,7 +104,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(10.0),
         child: Stack(
           children: [
             PageView(

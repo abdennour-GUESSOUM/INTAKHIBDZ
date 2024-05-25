@@ -540,7 +540,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
         child: LiquidPullToRefresh(
           onRefresh: _handleRefresh,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Stack(
               children: [
                 ListView(
@@ -591,7 +591,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
   Color getColor(int index) {
     switch (index % 5) {
       case 0:
-        return Color(0xFF3BFF49);
+        return Color(0xFF0C5143); //0xFF3BFF49
       case 1:
         return Color(0xFFFFC300);
       case 2:
