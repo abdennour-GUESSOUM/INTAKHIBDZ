@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../firebase/authenticate_user/authenticate_user_page.dart';
 import '../utils/data_save.dart';
 import '../utils/glassmorphismContainer.dart';
 import '../utils/mrtd_data.dart';
@@ -242,20 +246,21 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
 
   Future<void> _saveProfile() async {
     var profileData = {
-      'documentNumber': widget.mrtdData.dg1!.mrz.documentNumber,
       'firstName': widget.mrtdData.dg1!.mrz.firstName,
       'lastName': widget.mrtdData.dg1!.mrz.lastName,
-      'dateOfBirth': DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth),
-      'nationality': widget.mrtdData.dg1!.mrz.nationality,
-      'dateOfExpiry': DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry),
-      'imageData': widget.mrtdData.dg2!.imageData,
-      'signatureData': widget.rawHandSignatureData
+      'image': base64Encode(widget.mrtdData.dg2!.imageData!), // Encoding image to base64 string
     };
 
-    final dbHelper = DatabaseHelper.instance;
-    int id = await dbHelper.insertProfile(profileData);
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('profileSaved', true);
+    // Save to Firestore
+    FirebaseFirestore.instance.collection('users').add(profileData).then((docRef) {
+      print("User data saved to Firestore with ID: ${docRef.id}");
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AuthenticateUserPage(),
+        ),
+      );
+    }).catchError((error) {
+      print("Failed to save user data: $error");
+    });
   }
 }

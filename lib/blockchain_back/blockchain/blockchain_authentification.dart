@@ -62,41 +62,17 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       return;
     }
 
-
-    final response = await http.post(
-      Uri.parse('http://192.168.1.2:3000/check-document'), // Update with your server address
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'documentNumber': '0987654s321'}),
-    );
-
-    print('HTTP POST request sent to server...');
-
-    if (response.statusCode == 200) {
-      print('Server response received with status code 200.');
-
-      final responseBody = jsonDecode(response.body);
-      if (responseBody['exists']) {
-        print('Document number exists. Proceeding to welcome screen...');
-
-        SharedPreferences sp = await SharedPreferences.getInstance();
-        sp.setString("key", key);
-        setState(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            SlideRightRoute(
-                page: WelcomeScreen()
-            ),
-                (Route<dynamic> route) => true,
-          );
-        });
-      } else {
-        print('Document number not found. Showing alert...');
-        _showAlert("Not eligible for voting. Please try again.");
-      }
-    } else {
-      print('Error: Server response received with status code ${response.statusCode}.');
-      _showAlert("Server error. Please try again later.");
-    }
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString("key", key);
+    setState(() {
+      Navigator.pushAndRemoveUntil(
+        context,
+        SlideRightRoute(
+            page: WelcomeScreen()
+        ),
+            (Route<dynamic> route) => true,
+      );
+    });
   }
 
   void _showAlert(String message) {

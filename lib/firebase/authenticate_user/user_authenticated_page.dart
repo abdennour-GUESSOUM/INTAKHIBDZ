@@ -15,20 +15,20 @@ class UserAuthenticatedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
-        child: ClipRRect(
-          child: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            title: Text('ElectDz', style: TextStyle(
+        child: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          title: Text(
+            'INTAKHIB',
+            style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 24,
               fontWeight: FontWeight.bold,
-            )),
-            elevation: 0,
-            centerTitle: true,
+            ),
           ),
+          elevation: 0,
+          centerTitle: true,
         ),
       ),
       body: Padding(

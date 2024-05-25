@@ -31,20 +31,18 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
-        child: ClipRRect(
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(
-              'ElectDZ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+        child: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          title: Text(
+            'INTAKHIB',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            elevation: 0,
-            centerTitle: true,
           ),
+          elevation: 0,
+          centerTitle: true,
         ),
       ),
       body: Padding(
