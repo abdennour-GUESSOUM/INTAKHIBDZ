@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/json_rpc.dart';
 
@@ -238,94 +238,18 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   bool checkSelection() {
     if (_selected == -1) {
-      Alert(
-        buttons: [
-          DialogButton(
-            child: Text(
-              "Retry",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () => Navigator.pop(context),
-            color: Theme.of(context).colorScheme.secondary,
-            radius: BorderRadius.circular(10.0),
-            width: 120,
-          ),
-        ],
-        context: context,
-        type: AlertType.error,
-        title: "Error",
-        desc: (widget.isConfirming)
-            ? "Please select the president you voted"
-            : "Please select the president you want to vote",
-        style: AlertStyle(
-          animationType: AnimationType.grow,
-          isCloseButton: false,
-          isOverlayTapDismiss: false,
-          overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-          alertBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.secondary,
-              width: 1,
-            ),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.background,
-          titleStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-          descStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          animationDuration: const Duration(milliseconds: 500),
-          alertElevation: 0,
-        ),
-      ).show();
+      _showErrorDialog(
+          (widget.isConfirming)
+              ? "Please select the president you voted"
+              : "Please select the president you want to vote"
+      );
       return false;
     }
     return true;
   }
 
   Future<void> _updateCandidates() async {
-    Alert(
-      context: context,
-      title: "Getting candidates...",
-      desc: "Please wait while we fetch the candidate details.",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: EdgeInsets.all(20),
-        alertPadding: EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Getting candidates...", "Please wait while we fetch the candidate details.");
 
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
@@ -344,21 +268,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         });
       } catch (error) {
         Navigator.of(context).pop();
-        if (error is RPCError) {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: blockchain.translateError(error),
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: error.toString(),
-          ).show();
-        }
+        _showErrorDialog(error.toString());
       }
     });
   }
@@ -375,91 +285,13 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
     });
 
     List<dynamic> args = [BigInt.parse(text_secret.text), candidates[_selected]];
-    Alert(
-      context: context,
-      title: "Confirming your vote...",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: const Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: const EdgeInsets.all(20),
-        alertPadding: const EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Confirming your vote...", "");
+
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         await blockchain.query("confirm_envelope", args);
         Navigator.of(context).pop();
-        Alert(
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Go back",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
-          context: context,
-          type: AlertType.success,
-          title: "OK",
-          desc: "Your vote has been confirmed!",
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: const Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: const EdgeInsets.all(20),
-            alertPadding: const EdgeInsets.all(20),
-          ),
-        ).show();
+        _showSuccessDialog("OK", "Your vote has been confirmed!");
 
         setState(() {
           _submitVoteButtonText = 'Submit Vote';
@@ -467,21 +299,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         });
       } catch (error) {
         Navigator.of(context).pop();
-        if (error is RPCError) {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: blockchain.translateError(error),
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: error.toString(),
-          ).show();
-        }
+        _showErrorDialog(error.toString());
       } finally {
         setState(() {
           _isConfirmButtonDisabled = false;
@@ -495,91 +313,13 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
     List<dynamic> args = [blockchain.encodeVote(BigInt.parse(text_secret.text), candidates[_selected])];
 
-    Alert(
-      context: context,
-      title: "Sending your vote...",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: const Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: const EdgeInsets.all(20),
-        alertPadding: const EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Sending your vote...", "");
+
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         await blockchain.query("cast_envelope", args);
         Navigator.of(context).pop();
-        Alert(
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Go back",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
-          context: context,
-          type: AlertType.success,
-          title: "OK",
-          desc: "Your vote has been submitted!",
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: const Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: const EdgeInsets.all(20),
-            alertPadding: const EdgeInsets.all(20),
-          ),
-        ).show();
+        _showSuccessDialog("OK", "Your vote has been submitted!");
 
         setState(() {
           _submitVoteButtonText = 'Edit Vote';
@@ -587,21 +327,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         });
       } catch (error) {
         Navigator.of(context).pop();
-        if (error is RPCError) {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: blockchain.translateError(error),
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: error.toString(),
-          ).show();
-        }
+        _showErrorDialog(error.toString());
       }
     });
   }
@@ -618,13 +344,12 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           titlePadding: EdgeInsets.all(0),
           title: Container(
             width: double.infinity,
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Text(
               '${firstNames[index]} ${lastNames[index]}',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
               ),
             ),
           ),
@@ -635,7 +360,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(imageUrls[index]),
               ),
-              Spacer(),
+              SizedBox(height:10),
               Column(
                 children: [
                   Card(
@@ -701,6 +426,64 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
         );
       },
     );
+  }
+
+  void _showLoadingDialog(String title, String description) {
+    AwesomeDialog(
+      context: context,
+      customHeader: CircularProgressIndicator(),
+      dialogType: DialogType.noHeader,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
+      title: title,
+      desc: description,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(description , textAlign: TextAlign.center,),
+          ],
+        ),
+      ),
+    ).show();
+  }
+
+  void _showErrorDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      customHeader: Icon(
+        Icons.error,
+        size: 50,
+        color: Theme.of(context).colorScheme.error,
+      ),
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
+      title: "Error",
+      desc: message,
+      btnOkOnPress: () {},
+    ).show();
+  }
+
+  void _showSuccessDialog(String title, String message) {
+    AwesomeDialog(
+      context: context,
+      customHeader: Icon(
+        Icons.check_circle,
+        size: 50,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
+      title: title,
+      desc: message,
+      btnOkOnPress: () {},
+    ).show();
   }
 
   @override
@@ -970,7 +753,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                               icon: Icon(Icons.send), // Add an icon for visual clarity
                                               label: Text(_submitVoteButtonText),
                                               style: ElevatedButton.styleFrom(
-                                                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                                foregroundColor: Colors.white,
                                                 backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(30.0),

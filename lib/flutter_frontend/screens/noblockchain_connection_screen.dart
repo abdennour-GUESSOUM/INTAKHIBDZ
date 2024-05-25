@@ -1,8 +1,6 @@
 import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
-import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blockchain_back/blockchain/blockachain.dart';
 
@@ -45,7 +43,7 @@ class _NoBlockChainScreenState extends State<NoBlockChainScreen> with SingleTick
             child: AppBar(
 
               backgroundColor: Theme.of(context).colorScheme.background,
-              title: Text('Bad connection', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+              title: Text('Exception', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
               elevation: 0,
               centerTitle: true,
             ),

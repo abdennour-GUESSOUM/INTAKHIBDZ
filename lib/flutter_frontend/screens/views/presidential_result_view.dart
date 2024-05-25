@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:web3dart/json_rpc.dart';
 
 import '../../../blockchain_back/blockchain/blockachain.dart';
@@ -33,38 +33,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
   }
 
   Future<void> _updateCandidates() async {
-    Alert(
-      context: context,
-      title: "Getting results...",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 0,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: EdgeInsets.all(20),
-        alertPadding: EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Getting results...", "");
 
     Future.delayed(const Duration(milliseconds: 500), () {
       blockchain.queryView("get_results", []).then((value) {
@@ -109,76 +78,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
             valid = false;
           });
         }
-        Alert(
-          context: context,
-          title: "Error",
-          desc: errorMessage,
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-          content: Container(
-            height: 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Lottie.asset(
-                  'assets/invalid_elect.json',
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.contain,
-                ),
-                Text(
-                  errorMessage,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Ok",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
-        ).show();
+        _showErrorDialog(errorMessage);
       });
     });
   }
@@ -603,6 +503,35 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
       default:
         return Color(0xFF50E4FF);
     }
+  }
+
+  void _showLoadingDialog(String title, String description) {
+    AwesomeDialog(
+      context: context,
+      customHeader: CircularProgressIndicator(),
+
+
+      dialogType: DialogType.noHeader,
+      animType: AnimType.bottomSlide,
+      title: title,
+      desc: description,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      showCloseIcon: false,
+    ).show();
+  }
+
+  void _showErrorDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: "Error",
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkColor: Theme.of(context).colorScheme.secondary,
+    ).show();
   }
 }
 

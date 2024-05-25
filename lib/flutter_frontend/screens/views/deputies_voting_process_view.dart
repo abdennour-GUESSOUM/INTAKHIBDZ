@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:web3dart/json_rpc.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
 
@@ -69,7 +69,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -84,7 +84,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
               Column(
                 children: [
                   Card(
-
                     child: ListTile(
                       leading: Icon(Icons.person),
                       title: Text(
@@ -96,7 +95,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                     ),
                   ),
                   Card(
-
                     child: ListTile(
                       leading: Icon(Icons.cake),
                       title: Text(
@@ -108,7 +106,6 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                     ),
                   ),
                   Card(
-
                     child:ListTile(
                       leading: Icon(Icons.work),
                       title: Text(
@@ -118,10 +115,8 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                         ),
                       ),
                     ),
-
                   ),
                   Card(
-
                     child:ListTile(
                       leading: Icon(Icons.location_on),
                       title: Text(
@@ -131,10 +126,8 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                         ),
                       ),
                     ),
-
                   ),
                   Card(
-
                     child: ListTile(
                       leading: Icon(Icons.account_balance),
                       title: Text(
@@ -144,14 +137,12 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                         ),
                       ),
                     ),
-
                   ),
                 ],
               ),
             ],
           ),
-          actions: [
-          ],
+          actions: [],
         );
       },
     );
@@ -307,54 +298,23 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
 
   bool checkSelection() {
     if (_selectedGroup == -1) {
-      Alert(
-        buttons: [
-          DialogButton(
-            child: Text(
-              "Retry",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () => Navigator.pop(context),
-            color: Theme.of(context).colorScheme.secondary,
-            radius: BorderRadius.circular(10.0),
-            width: 120,
-          ),
-        ],
+      AwesomeDialog(
         context: context,
-        type: AlertType.error,
+        customHeader: Icon(
+          Icons.warning,
+          size: 70,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+
+        dialogType: DialogType.error,
+        headerAnimationLoop: false,
+        animType: AnimType.topSlide,
         title: "Error",
         desc: (widget.isConfirming)
             ? "Please select the group you voted for"
             : "Please select the group you want to vote for",
-        style: AlertStyle(
-          animationType: AnimationType.grow,
-          isCloseButton: false,
-          isOverlayTapDismiss: false,
-          overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-          alertBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.secondary,
-              width: 1,
-            ),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.background,
-          titleStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-          descStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          animationDuration: const Duration(milliseconds: 500),
-          alertElevation: 0,
-        ),
+
+        btnOkOnPress: () {},
       ).show();
       return false;
     }
@@ -372,90 +332,32 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
       BigInt.parse(text_secret.text), // Secret as BigInt
       groupAddresses[_selectedGroup] // Group address
     ];
-    Alert(
+    AwesomeDialog(
       context: context,
+      dialogType: DialogType.noHeader,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
       title: "Confirming your vote...",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: const Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: const EdgeInsets.all(20),
-        alertPadding: const EdgeInsets.all(20),
-      ),
+      desc: "",
     ).show();
+
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         await blockchain.querySecond("confirm_envelope", args);
         Navigator.of(context).pop();
-        Alert(
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Go back",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
+        AwesomeDialog(
           context: context,
-          type: AlertType.success,
-          title: "OK",
-          desc: "Your vote has been confirmed!",
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: const Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: const EdgeInsets.all(20),
-            alertPadding: const EdgeInsets.all(20),
+          customHeader: Icon(
+            Icons.check_circle,
+            size: 50,
+            color: Theme.of(context).colorScheme.secondary,
           ),
+          dialogType: DialogType.success,
+          headerAnimationLoop: false,
+          animType: AnimType.topSlide,
+          title: "Success",
+          desc: "Your vote has been confirmed!",
+          btnOkOnPress: (){},
         ).show();
 
         setState(() {
@@ -464,21 +366,15 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         });
       } catch (error) {
         Navigator.of(context).pop();
-        if (error is RPCError) {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: blockchain.translateError(error),
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: error.toString(),
-          ).show();
-        }
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          headerAnimationLoop: false,
+          animType: AnimType.topSlide,
+          title: "Error",
+          desc: error.toString(),
+          btnOkOnPress: () {},
+        ).show();
       } finally {
         setState(() {
           _isConfirmButtonDisabled = false;
@@ -494,90 +390,33 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
       blockchain.encodeVoteDeputies(BigInt.parse(text_secret.text), groupAddresses[_selectedGroup]) // Use group address
     ];
 
-    Alert(
+    AwesomeDialog(
       context: context,
+      dialogType: DialogType.noHeader,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
       title: "Sending your vote...",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: const Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: const EdgeInsets.all(20),
-        alertPadding: const EdgeInsets.all(20),
-      ),
+      desc: "",
     ).show();
+
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         await blockchain.querySecond("cast_envelope", args);
         Navigator.of(context).pop();
-        Alert(
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Go back",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
+        AwesomeDialog(
           context: context,
-          type: AlertType.success,
+          customHeader: Icon(
+            Icons.check_circle,
+            size: 50,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+
+          dialogType: DialogType.success,
+          headerAnimationLoop: false,
+          animType: AnimType.topSlide,
           title: "OK",
           desc: "Your vote has been submitted!",
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: const Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: const EdgeInsets.all(20),
-            alertPadding: const EdgeInsets.all(20),
-          ),
+          btnOkOnPress: () {},
         ).show();
 
         setState(() {
@@ -586,21 +425,15 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         });
       } catch (error) {
         Navigator.of(context).pop();
-        if (error is RPCError) {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: blockchain.translateError(error),
-          ).show();
-        } else {
-          Alert(
-            context: context,
-            type: AlertType.error,
-            title: "Error",
-            desc: error.toString(),
-          ).show();
-        }
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          headerAnimationLoop: false,
+          animType: AnimType.topSlide,
+          title: "Error",
+          desc: error.toString(),
+          btnOkOnPress: () {},
+        ).show();
       }
     });
   }
@@ -610,37 +443,25 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
   }
 
   Future<void> _updateGroupsAndCandidates() async {
-    Alert(
+    AwesomeDialog(
       context: context,
+      customHeader: CircularProgressIndicator(),
+      dialogType: DialogType.info,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
       title: "Getting groups and candidates...",
       desc: "Please wait while we fetch the group and candidate details.",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 16),
+            Text("Please wait while we fetch the group and candidate details.",                        textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: EdgeInsets.all(20),
-        alertPadding: EdgeInsets.all(20),
       ),
     ).show();
 
@@ -672,16 +493,23 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
         });
       } catch (error) {
         Navigator.of(context).pop();
-        Alert(
+        AwesomeDialog(
           context: context,
-          type: AlertType.error,
+          customHeader: Icon(
+            Icons.error,
+            size: 50,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          dialogType: DialogType.error,
+          headerAnimationLoop: false,
+          animType: AnimType.topSlide,
           title: "Error",
           desc: error.toString(),
+          btnOkOnPress: () {},
         ).show();
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -930,7 +758,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                                             icon: Icon(Icons.send), // Add an icon for visual clarity
                                             label: Text(_submitVoteButtonText),
                                             style: ElevatedButton.styleFrom(
-                                              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                              foregroundColor: Colors.white,
                                               backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(30.0),

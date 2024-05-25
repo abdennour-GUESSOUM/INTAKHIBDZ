@@ -120,6 +120,7 @@ class HomeView2 extends StatelessWidget {
                       height: 40,
                       width: 40,
                       child: FloatingActionButton(
+                        foregroundColor: Colors.white,
                         splashColor: Theme.of(context).colorScheme.primary,
                         backgroundColor: Theme.of(context).colorScheme.secondary,
                         hoverColor: Theme.of(context).colorScheme.primary,

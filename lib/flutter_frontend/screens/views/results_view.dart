@@ -1,14 +1,14 @@
 import 'package:INTAKHIB/flutter_frontend/screens/views/deputies_result_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_voting_process_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_result_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
 import 'deputies_voting_process_view.dart';
-import 'main_view.dart';
 
 class ResultsView extends StatefulWidget {
   @override
@@ -17,7 +17,6 @@ class ResultsView extends StatefulWidget {
 
 class _ResultsViewState extends State<ResultsView> {
   Blockchain blockchain = Blockchain();
-  AlertStyle animation = AlertStyle(animationType: AnimationType.grow);
   String quorum_text = "Loading Quorum...";
   double quorum_circle = 0.0;
   int step = -1;
@@ -28,39 +27,7 @@ class _ResultsViewState extends State<ResultsView> {
   }
 
   Future<void> _ValidCandidateCheck() async {
-    Alert(
-      context: context,
-      title: "Checking the winner...",
-      desc: "Please wait while we fetch the vote results.",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: EdgeInsets.all(20),
-        alertPadding: EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Checking the winner...", "Please wait while we fetch the vote results.");
 
     try {
       // Get the current deadline
@@ -101,7 +68,7 @@ class _ResultsViewState extends State<ResultsView> {
         print("Results have already been checked. Navigating to home...");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainView()),
+          MaterialPageRoute(builder: (context) => WelcomeScreen()),
         );
         return;
       }
@@ -110,158 +77,18 @@ class _ResultsViewState extends State<ResultsView> {
 
       // Handle specific RPCError type
       if (error is RPCError) {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: blockchain.translateError(error),
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog(blockchain.translateError(error));
       } else if (error.toString().contains("Voting period has not ended yet")) {
         // Handle specific error for voting period not ended
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: "Voting period has not ended yet.",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Retry",
-                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog("Voting period has not ended yet.");
       } else {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: error.toString(),
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog(error.toString());
       }
     }
   }
 
   Future<void> _ValidGroupCheck() async {
-    Alert(
-      context: context,
-      title: "Checking the winner...",
-      desc: "Please wait while we fetch the vote results.",
-      buttons: [],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: Duration(milliseconds: 500),
-        alertElevation: 0,
-        buttonAreaPadding: EdgeInsets.all(20),
-        alertPadding: EdgeInsets.all(20),
-      ),
-    ).show();
+    _showLoadingDialog("Checking the winner...", "Please wait while we fetch the vote results.");
 
     try {
       // Get the current deadline
@@ -302,7 +129,7 @@ class _ResultsViewState extends State<ResultsView> {
         print("Results have already been checked. Navigating to MainView...");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainView()),
+          MaterialPageRoute(builder: (context) => WelcomeScreen()),
         );
         return;
       }
@@ -311,121 +138,12 @@ class _ResultsViewState extends State<ResultsView> {
 
       // Handle specific RPCError type
       if (error is RPCError) {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: blockchain.translateError(error),
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog(blockchain.translateError(error));
       } else if (error.toString().contains("Voting period has not ended yet")) {
         // Handle specific error for voting period not ended
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: "Voting period has not ended yet.",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Retry",
-                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).colorScheme.secondary,
-              radius: BorderRadius.circular(10.0),
-              width: 120,
-            ),
-          ],
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog("Voting period has not ended yet.");
       } else {
-        // Handle generic error
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Error",
-          desc: error.toString(),
-          style: AlertStyle(
-            animationType: AnimationType.grow,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            overlayColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
-                width: 1,
-              ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            titleStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            descStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            animationDuration: Duration(milliseconds: 500),
-            alertElevation: 0,
-            buttonAreaPadding: EdgeInsets.all(20),
-            alertPadding: EdgeInsets.all(20),
-          ),
-        ).show();
+        _showErrorDialog(error.toString());
       }
     }
   }
@@ -606,4 +324,37 @@ class _ResultsViewState extends State<ResultsView> {
     );
   }
 
+  void _showLoadingDialog(String title, String description) {
+    AwesomeDialog(
+      context: context,
+      customHeader: CircularProgressIndicator(),
+      dialogType: DialogType.info,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: title,
+      desc: description,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      showCloseIcon: false,
+    ).show();
+  }
+
+  void _showErrorDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      customHeader: Icon(
+        Icons.error,
+        size: 50,
+        color: Theme.of(context).colorScheme.error,
+      ),
+
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: "Error",
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkColor: Theme.of(context).colorScheme.secondary,
+    ).show();
+  }
 }

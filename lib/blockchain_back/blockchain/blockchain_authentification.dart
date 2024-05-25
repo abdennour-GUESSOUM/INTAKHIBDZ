@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'dart:convert';
 import '../../flutter_frontend/screens/welcome_screen.dart';
 
@@ -11,29 +11,24 @@ class BlockchainAuthentification extends StatefulWidget {
   final String? documentNumber;
   final Uint8List? profileImage;
 
-
-  BlockchainAuthentification({ this.documentNumber , this.profileImage});
+  BlockchainAuthentification({this.documentNumber, this.profileImage});
 
   @override
   _BlockchainAuthentificationState createState() => _BlockchainAuthentificationState();
 }
 
 class _BlockchainAuthentificationState extends State<BlockchainAuthentification> {
-
   Uint8List? _persistentImage;
 
-  final String president_contract_address = "0x08a2DE58afCef45AD94C8F810738110Cab1dC8Eb";
-  final String deputies_contract_address = "0x3599bC2C367dF3F2Ac4f8100BE711063fb5ee692"; // Replace with your actual second contract address
-
-
+  final String president_contract_address = "0x1B37A127324f579b8176aB5cF3F649843f57628e";
+  final String deputies_contract_address = "0x3d8b8412C5a9Ae60592fB8ef55Dc25bF46Fa2AF7"; // Replace with your actual second contract address
 
   final keyController = TextEditingController();
 
   @override
-  @override
   void initState() {
     super.initState();
-    _loadImage;
+    _loadImage();
     process(president_contract_address, deputies_contract_address); // Pass both contract addresses here
   }
 
@@ -49,7 +44,6 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
   }
 
   Future<void> _login() async {
-
     print('Starting login process...');
 
     String key = keyController.text;
@@ -66,61 +60,23 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
     setState(() {
       Navigator.pushAndRemoveUntil(
         context,
-        SlideRightRoute(
-            page: WelcomeScreen()
-        ),
+        SlideRightRoute(page: WelcomeScreen()),
             (Route<dynamic> route) => true,
       );
     });
   }
 
   void _showAlert(String message) {
-    Alert(
+    AwesomeDialog(
       context: context,
-      type: AlertType.error,
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.topSlide,
       title: message,
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        alertPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 1,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        titleStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        descStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        animationDuration: const Duration(milliseconds: 500),
-        alertElevation: 5,
-        overlayColor: Colors.black54,
-      ),
-      buttons: [
-        DialogButton(
-          child: Text(
-            "Retry",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onPressed: () => Navigator.pop(context),
-          color: Theme.of(context).colorScheme.secondary,
-          radius: BorderRadius.circular(10.0),
-          width: 120,
-        ),
-      ],
+      btnOkOnPress: () {},
+      btnOkText: "Retry",
+      btnOkColor: Theme.of(context).colorScheme.secondary,
+      customHeader: Icon(Icons.error, size: 50, color: Theme.of(context).colorScheme.primary),
     ).show();
   }
 
@@ -161,8 +117,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
               ),
             ),
           ),
-          onPressed:
-          _login,
+          onPressed: _login,
           child: const Text("Connect"),
         ),
       ),
@@ -248,11 +203,13 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       ),
     );
   }
+
   Future<void> _saveImage(Uint8List image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String base64Image = base64Encode(image);
     await prefs.setString('profile_image', base64Image);
   }
+
   Future<void> _loadImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? base64Image = prefs.getString('profile_image');
@@ -265,5 +222,4 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       await _saveImage(widget.profileImage!);
     }
   }
-
 }
