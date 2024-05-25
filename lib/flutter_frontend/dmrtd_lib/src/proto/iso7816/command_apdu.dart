@@ -1,7 +1,7 @@
 // Created by Crt Vavros, copyright © 2022 ZeroPass. All rights reserved.
 import 'dart:typed_data';
-import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
-import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/src/extension/int_apis.dart';
+import 'package:INTAKHIB/flutter_frontend/dmrtd_lib/src/extension/int_apis.dart';
+import 'package:INTAKHIB/flutter_frontend/dmrtd_lib/extensions.dart';
 
 // Class defines ISO/IEC 7816-4 command APDU
 class CommandAPDU {

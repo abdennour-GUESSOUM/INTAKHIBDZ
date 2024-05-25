@@ -1,6 +1,6 @@
 //  Created by Crt Vavros, copyright © 2022 ZeroPass. All rights reserved.
 // Class contains information eMRTD application applet (DF1)
-import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
+import 'package:INTAKHIB/flutter_frontend/dmrtd_lib/extensions.dart';
 
 
 class DF1 {

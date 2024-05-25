@@ -95,7 +95,6 @@ class FaceIDScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AuthenticateUserPage(
-                          documentNumber: '0987654321',
                         ),
                       ),
                     );

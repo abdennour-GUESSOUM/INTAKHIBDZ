@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/home_view.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/results_view.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/settings_view.dart';
-import 'package:IntakhibDZ/flutter_frontend/screens/views/vote_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/views/home_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/views/results_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/views/settings_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/views/vote_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

@@ -1,14 +1,13 @@
-import 'package:IntakhibDZ/blockchain_back/blockchain/blockchain_authentification.dart';
+import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:flutter/material.dart';
-
-import '../../flutter_frontend/screens/biometric_screen.dart';
 import '../constants/colors.dart';
 
+
 class UserAuthenticatedPage extends StatelessWidget {
-  final String name;
+  final String Firstname;
 
   const UserAuthenticatedPage({
-    required this.name,
+    required this.Firstname,
     super.key,
   });
 
@@ -22,7 +21,7 @@ class UserAuthenticatedPage extends StatelessWidget {
         child: ClipRRect(
           child: AppBar(
             backgroundColor: Theme.of(context).colorScheme.background,
-            title: Text('INTAKHIB', style: TextStyle(
+            title: Text('ElectDz', style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -65,7 +64,7 @@ class UserAuthenticatedPage extends StatelessWidget {
               ),
             ),
             Text(
-                  'hey ${name}!',
+                  'hey ${Firstname} !',
               textAlign: TextAlign.center,
               style:  TextStyle(
 
@@ -74,7 +73,7 @@ class UserAuthenticatedPage extends StatelessWidget {
               ),
             ),
             Text(
-              'You have been successfully Authenticated!',
+              'You have been successfully Authenticated !',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
@@ -94,7 +93,7 @@ class UserAuthenticatedPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return BlockchainAuthentification(documentNumber: '0987654s321');
+                          return BlockchainAuthentification();
                         },
                       ),
                     );

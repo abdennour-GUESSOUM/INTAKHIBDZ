@@ -3,7 +3,7 @@
 
 import 'dart:typed_data';
 
-import 'package:IntakhibDZ/flutter_frontend/dmrtd_lib/extensions.dart';
+import 'package:INTAKHIB/flutter_frontend/dmrtd_lib/extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';

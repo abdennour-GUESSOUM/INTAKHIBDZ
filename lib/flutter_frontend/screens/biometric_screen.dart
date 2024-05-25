@@ -1,4 +1,4 @@
-import 'package:IntakhibDZ/flutter_frontend/screens/mrz_nfc_scan_screen.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/mrz_nfc_scan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';

@@ -1,4 +1,4 @@
-import 'package:IntakhibDZ/flutter_frontend/screens/views/presidential_voting_process_view.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_voting_process_view.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';

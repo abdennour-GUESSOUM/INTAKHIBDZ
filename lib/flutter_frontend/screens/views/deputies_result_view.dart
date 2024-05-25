@@ -1,4 +1,4 @@
-import 'package:IntakhibDZ/blockchain_back/blockchain/blockchain_authentification.dart';
+import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
