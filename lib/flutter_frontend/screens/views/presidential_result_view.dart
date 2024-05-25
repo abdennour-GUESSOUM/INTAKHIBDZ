@@ -1,4 +1,5 @@
 import 'package:confetti/confetti.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -22,6 +23,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
 
   late ConfettiController _controllerCenter;
   List<PresidentWinnerModel> candidates = [PresidentWinnerModel("Loading", BigInt.zero, "Loading", "Loading", "Loading", 0.0)];
+  int touchedIndex = -1;
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
           borderRadius: BorderRadius.circular(30.0),
           side: BorderSide(
             color: Theme.of(context).colorScheme.secondary,
-            width: 1,
+            width: 0,
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -301,88 +303,133 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                     ),
                   ),
                   Card(
-
                       color: Theme.of(context).colorScheme.background.withOpacity(1),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            height: 150,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(candidates[0].imageUrl!, fit: BoxFit.fill)
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              height: 150,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(candidates[0].imageUrl!, fit: BoxFit.fill)
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(  // Use Expanded here
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,  // Ensure alignment at the start of the column
-                              children: <Widget>[
-                                Text(
-                                  "${candidates[0].firstName}\n${candidates[0].lastName}",
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "${candidates[0].votes} votes",
-                                    textAlign: TextAlign.left,
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "${candidates[0].firstName}\n${candidates[0].lastName}",
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
                                     ),
                                   ),
-                                ),
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Text(
-                                          '${candidates[0].percentage!.toStringAsFixed(0)}%',  // Display percentage with one decimal
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "${candidates[0].votes} votes",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Text(
+                                            '${candidates[0].percentage!.toStringAsFixed(0)}%',
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.primary,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                          height: 60,
-                                          width: 60,
-                                          child: CircularProgressIndicator(
-                                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
-                                            backgroundColor: Color(0xFFF1F3F3),
-                                            value: candidates[0].percentage,  // Convert to fraction
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Container(
+                                            height: 60,
+                                            width: 60,
+                                            child: CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                                              backgroundColor: Color(0xFFF1F3F3),
+                                              value: candidates[0].percentage! / 100,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
+                        ],
+                      )
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 8),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Statistics",
+                        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
 
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 1.0,
+                      ),
+                    ),
+                    color: Theme.of(context).colorScheme.background.withOpacity(1),
+                    child: Container(
+                      height: 350,
+                      child: PieChart(
+                        PieChartData(
+                          pieTouchData: PieTouchData(
+                            touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                              setState(() {
+                                if (!event.isInterestedForInteractions ||
+                                    pieTouchResponse == null ||
+                                    pieTouchResponse.touchedSection == null) {
+                                  touchedIndex = -1;
+                                  return;
+                                }
+                                touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                              });
+                            },
+                          ),
+
+                          borderData: FlBorderData(show: false),
+                          sectionsSpace: 0,
+                          centerSpaceRadius: 0,
+                          sections: showingSections(),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Padding(
@@ -395,6 +442,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                       ),
                     ),
                   ),
+
                   Container(
                     height: 320,
                     child: ListView.builder(
@@ -420,8 +468,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                   height: 60,
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
-
-                                      child: Image.network(candidates[index].imageUrl!, fit: BoxFit.fill)),
+                                      child: Image.network(candidates[index].imageUrl!, fit: BoxFit.cover)),
                                 ),
                                 title: Text(
                                   "${candidates[index].firstName} ${candidates[index].lastName}",
@@ -437,7 +484,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                     alignment: Alignment.center,
                                     children: [
                                       Text(
-                                        '${candidates[index].percentage!.toStringAsFixed(0)}%',  // Display percentage with one decimal
+                                        '${candidates[index].percentage!.toStringAsFixed(0)}%',
                                         style: TextStyle(
                                           color: Theme.of(context).colorScheme.primary,
                                           fontWeight: FontWeight.bold,
@@ -448,7 +495,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                                         child: CircularProgressIndicator(
                                           valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
                                           backgroundColor: Color(0xFFF1F3F3),
-                                          value: candidates[index].percentage,  // Convert to fraction
+                                          value: candidates[index].percentage! / 100,
                                         ),
                                       ),
                                     ],
@@ -493,18 +540,93 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
         child: LiquidPullToRefresh(
           onRefresh: _handleRefresh,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Stack(
               children: [
                 ListView(
                   children: <Widget>[
-                    body
+                    body,
                   ],
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return candidates.asMap().entries.map((entry) {
+      int index = entry.key;
+      PresidentWinnerModel candidate = entry.value;
+      final isTouched = index == touchedIndex;
+      final fontSize = isTouched ? 20.0 : 16.0;
+      final radius = isTouched ? 130.0 : 120.0;
+      final widgetSize = isTouched ? 75.0 : 50.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+
+      return PieChartSectionData(
+        color: getColor(index),
+        value: candidate.percentage,
+        title: '${candidate.percentage!.toStringAsFixed(1)}%',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+          shadows: shadows,
+        ),
+        titlePositionPercentageOffset: 0.5,
+        badgeWidget: _Badge(
+          candidate.imageUrl!,
+          size: widgetSize,
+          borderColor: Theme.of(context).colorScheme.background,
+        ),
+        badgePositionPercentageOffset: 1,
+      );
+    }).toList();
+  }
+
+  Color getColor(int index) {
+    switch (index % 5) {
+      case 0:
+        return Color(0xFF3BFF49);
+      case 1:
+        return Color(0xFFFFC300);
+      case 2:
+        return Color(0xFF6E1BFF);
+      case 3:
+        return Color(0xFF2196F3);
+      case 4:
+        return Color(0xFFE80054);
+      default:
+        return Color(0xFF50E4FF);
+    }
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final String imageUrl;
+  final double size;
+  final Color borderColor;
+
+  const _Badge(
+      this.imageUrl, {
+        Key? key,
+        required this.size,
+        required this.borderColor,
+      }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: (size / 2),
+      backgroundColor: borderColor,
+      child: CircleAvatar(
+        radius: (size / 2) - 3,
+        backgroundImage: NetworkImage(imageUrl),
+        backgroundColor: Colors.transparent,
       ),
     );
   }

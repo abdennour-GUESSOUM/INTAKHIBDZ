@@ -617,7 +617,7 @@ class _DeputiesVotingProcessViewState extends State<DeputiesVotingProcessView> {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        '$numberOfVoters total votes',
+                        '$numberOfVoters already voted !',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,

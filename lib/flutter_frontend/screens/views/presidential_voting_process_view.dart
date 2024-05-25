@@ -647,7 +647,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                         alignment: Alignment.center,
                         children: [
                           Text(
-                            '$numberOfVoters total votes',
+                            '$numberOfVoters already voted !',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,

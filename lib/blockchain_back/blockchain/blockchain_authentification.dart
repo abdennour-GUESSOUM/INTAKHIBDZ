@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../flutter_frontend/screens/welcome_screen.dart';
 
@@ -23,8 +22,8 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
 
   Uint8List? _persistentImage;
 
-  final String president_contract_address = "0x03ae42E194E3c03a3Df1FBed6216367aa3268249";
-  final String deputies_contract_address = "0xEAa10bef23a619E94E12E1B8955013AcCa32b626"; // Replace with your actual second contract address
+  final String president_contract_address = "0x6941f490815a00BaE48A230413d4BB2002D0d530";
+  final String deputies_contract_address = "0x6D843F0eAA022fd647aFe20dfcd62DF40929F1D6"; // Replace with your actual second contract address
 
 
 
