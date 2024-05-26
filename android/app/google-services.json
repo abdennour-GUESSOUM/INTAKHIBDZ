@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "153355664606",
-    "project_id": "faceauth-aboud",
-    "storage_bucket": "faceauth-aboud.appspot.com"
+    "project_number": "288972406645",
+    "project_id": "intakhib-b3a02",
+    "storage_bucket": "intakhib-b3a02.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:153355664606:android:fdf93419c8f01e024b164f",
+        "mobilesdk_app_id": "1:288972406645:android:85bacac8675cb267f79d3c",
         "android_client_info": {
           "package_name": "com.example.IntakhibDZ"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBx4yw_4FQvRK-FBwaGq5N2T8PYhhYiYGE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:153355664606:android:ef80e687871faaf64b164f",
-        "android_client_info": {
-          "package_name": "com.example.face_auth"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBx4yw_4FQvRK-FBwaGq5N2T8PYhhYiYGE"
+          "current_key": "AIzaSyCvQCoV6nIQQEIp3my4sM42N4IqyGJL-9U"
         }
       ],
       "services": {

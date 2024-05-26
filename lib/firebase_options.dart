@@ -17,19 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -53,10 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBx4yw_4FQvRK-FBwaGq5N2T8PYhhYiYGE',
-    appId: '1:153355664606:android:fdf93419c8f01e024b164f',
-    messagingSenderId: '153355664606',
-    projectId: 'faceauth-aboud',
-    storageBucket: 'faceauth-aboud.appspot.com',
+    apiKey: 'AIzaSyCvQCoV6nIQQEIp3my4sM42N4IqyGJL-9U',
+    appId: '1:288972406645:android:85bacac8675cb267f79d3c',
+    messagingSenderId: '288972406645',
+    projectId: 'intakhib-b3a02',
+    storageBucket: 'intakhib-b3a02.appspot.com',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDX3ZS9UIusz3dH-pU9Ux70vyAFsPdrmi4',
+    appId: '1:288972406645:web:b94d890549319f4cf79d3c',
+    messagingSenderId: '288972406645',
+    projectId: 'intakhib-b3a02',
+    authDomain: 'intakhib-b3a02.firebaseapp.com',
+    storageBucket: 'intakhib-b3a02.appspot.com',
+    measurementId: 'G-Z833DX89JD',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAFWFQgCZ93XdZN4qzGxjhw7sFJzUpO14Q',
+    appId: '1:288972406645:ios:13f2a8a67295120ff79d3c',
+    messagingSenderId: '288972406645',
+    projectId: 'intakhib-b3a02',
+    storageBucket: 'intakhib-b3a02.appspot.com',
+    iosBundleId: 'org.example.mrtdeg',
+  );
+
 }
