@@ -1,11 +1,11 @@
 import 'package:INTAKHIB/blockchain_back/blockchain/utils.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'dart:convert';
-import '../../flutter_frontend/screens/welcome_screen.dart';
 
 class BlockchainAuthentification extends StatefulWidget {
   final String? documentNumber;
@@ -20,8 +20,8 @@ class BlockchainAuthentification extends StatefulWidget {
 class _BlockchainAuthentificationState extends State<BlockchainAuthentification> {
   Uint8List? _persistentImage;
 
-  final String president_contract_address = "0x1B37A127324f579b8176aB5cF3F649843f57628e";
-  final String deputies_contract_address = "0x3d8b8412C5a9Ae60592fB8ef55Dc25bF46Fa2AF7"; // Replace with your actual second contract address
+  final String president_contract_address = "0x2ff32a0BAcbC11d8B77fcd5C6A3C0D47c09de657";
+  final String deputies_contract_address = "0x996f46d1f80d922E49cF76ded5492693d5588500"; // Replace with your actual second contract address
 
   final keyController = TextEditingController();
 

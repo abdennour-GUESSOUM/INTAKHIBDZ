@@ -2,7 +2,7 @@
   "groups": [
     {
       "name": "Front de Libération Nationale (FLN)",
-      "picture": "https://white-high-quokka-246.mypinata.cloud/ipfs/QmQ6LtHJhCiwvkrtd22Tx9FNnYufsztxEfT1RCrk9vSS2f",
+      "picture": "https://amethyst-accused-gibbon-748.mypinata.cloud/ipfs/QmR3afA3HzaR62RFNbPfSMczTSX1DZH7ckTb1i2CaYh9Jj",
       "address": "0x172DD14CE59eff5a812f0ceeCD8ff517524b85B5"
     },
     {
@@ -12,9 +12,15 @@
     },
     {
       "name": "Mouvement de la Société pour la Paix (MSP)",
-      "picture": "https://white-high-quokka-246.mypinata.cloud/ipfs/QmQ6LtHJhCiwvkrtd22Tx9FNnYufsztxEfT1RCrk9vSS2f",
+      "picture": "https://amethyst-accused-gibbon-748.mypinata.cloud/ipfs/QmThkA8hnbHcmyLSpWeNgujyWtgZCHENKK5FcHkRtsSPYW",
       "address": "0x20ee5B08a56aAA9Df01B5BE9F7F55d4ed286F3f1"
+    },
+    {
+      "name": "Mouvement El Islah (El Islah)",
+      "picture": "https://amethyst-accused-gibbon-748.mypinata.cloud/ipfs/QmZjXXGz3nJaH84NS2B7RXZuBgwX3wqgSWqdhPJeqvFD2y",
+      "address": "0x4C111D506D022f4E65F18BB7CDC3Aee38Fe34C36"
     }
+
   ],
   "escrow": "0xb464b12c9AdE127a17d96012BE4e3bc3eC220857",
   "duration": 1800,
@@ -26,10 +32,10 @@
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmPY9P4AHXawJ9cMZmrSCJnbAwcKQYFuraF6h27RxPBfjR",
       "groupAddress": "0x172DD14CE59eff5a812f0ceeCD8ff517524b85B5",
       "gender": "Male",
-      "jobPosition": "Politician",
-      "electoralDistrict": "District 1",
+      "jobPosition": "Member of the Commission",
+      "electoralDistrict": "Blida",
       "politicalAffiliation": "FLN",
-      "age": 45
+      "age": 38
     },
     {
       "address": "0xdFa64e3a03910188836A45E27906489F53541E70",
@@ -38,8 +44,8 @@
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmTaiB83PWnVjwr6tPegq3wQBvMBS9imUnnHyayB14C4zs",
       "groupAddress": "0x5CcE2B9B8ec42DA09A981efFD41c07f6Ea6c746d",
       "gender": "Male",
-      "jobPosition": "Teacher",
-      "electoralDistrict": "District 2",
+      "jobPosition": "Vice Chairman of the Committee",
+      "electoralDistrict": "Annaba",
       "politicalAffiliation": "RND",
       "age": 40
     },
@@ -50,9 +56,9 @@
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmcGiUfCnC54XwmyFGF6z1Y4g7hHSex7xPCYgsy5HkHpdm",
       "groupAddress": "0x172DD14CE59eff5a812f0ceeCD8ff517524b85B5",
       "gender": "Female",
-      "jobPosition": "Engineer",
-      "electoralDistrict": "District 3",
-      "politicalAffiliation": "MSP",
+      "jobPosition": "Member of the Commission",
+      "electoralDistrict": "Algiers",
+      "politicalAffiliation": "FLN",
       "age": 35
     },
     {
@@ -62,22 +68,60 @@
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmYyUKQ5QvunSxdnJ8sHbbqajzpVxZMiDSwPWf25f94UKS",
       "groupAddress": "0x20ee5B08a56aAA9Df01B5BE9F7F55d4ed286F3f1",
       "gender": "Male",
-      "jobPosition": "Doctor",
-      "electoralDistrict": "District 4",
-      "politicalAffiliation": "FLN",
+      "jobPosition": "Member of the Commission",
+      "electoralDistrict": "Adrar",
+      "politicalAffiliation": "MSP",
       "age": 50
     },
     {
       "address": "0x8C030fF34e95E85f0A11B284921415f8f06B8983",
-      "firstName": "Hamdi",
-      "lastName": "Oussama",
+      "firstName": "Chadli",
+      "lastName": "Abdelkader",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmeCwxntzQbvBctywpjWNyShSgA7WmgtK9mwwMbYi4qNcr",
       "groupAddress": "0x20ee5B08a56aAA9Df01B5BE9F7F55d4ed286F3f1",
       "gender": "Male",
-      "jobPosition": "Lawyer",
-      "electoralDistrict": "District 5",
-      "politicalAffiliation": "RND",
-      "age": 42
+      "jobPosition": "Head of committee",
+      "electoralDistrict": "Constantine",
+      "politicalAffiliation": "MSP",
+      "age": 60
+    },
+
+    {
+      "address": "0x4C146d6cECbfaDDce00E49c46725b72a56BE9D21",
+      "firstName": "Smaali",
+      "lastName": "Nourredine",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmQP2TYjU9UYLC8qPhozaTohEXdWif7ejbWJJJSF7YS2iX",
+      "groupAddress": "0x4C111D506D022f4E65F18BB7CDC3Aee38Fe34C36",
+      "gender": "Male",
+      "jobPosition": "Head of committee",
+      "electoralDistrict": "Bouira",
+      "politicalAffiliation": "El Islah",
+      "age": 63
+    },
+    {
+      "address": "0x06e2dA3D7496bA8DA71F18B8eA2310fb6A1Bf72e",
+      "firstName": "Merabet",
+      "lastName": "Abderraouf",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmRTBXBeToNtZ31gGGoGPkwXa82nZZRRjcYT5sBHutUz9b",
+      "groupAddress": "0x4C111D506D022f4E65F18BB7CDC3Aee38Fe34C36",
+      "gender": "Male",
+      "jobPosition": "Member of the Commission",
+      "electoralDistrict": "Jijel",
+      "politicalAffiliation": "El Islah",
+      "age": 51
+    },
+    {
+      "address": "0x1991130066e5832cd4D78f375265B16B4692f7EF",
+      "firstName": "Boussouf",
+      "lastName": "Salima",
+      "imageUrl": "https://gateway.pinata.cloud/ipfs/QmSa4i3XJ9cRzGpamc8N76372QvfHbjXBLMzcZSdzYLe6E",
+      "groupAddress": "0x4C111D506D022f4E65F18BB7CDC3Aee38Fe34C36",
+      "gender": "Female",
+      "jobPosition": "Member of the Commission",
+      "electoralDistrict": "Tlemcen",
+      "politicalAffiliation": "El Islah",
+      "age": 34
     }
+
   ]
 }

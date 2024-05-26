@@ -6,9 +6,9 @@
       "lastName": "Abdennour",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmTQUaLfG1HhdMzE1NiYzsNzd2tNR715qmG7CV3SuP5vrc",
       "gender": "Male",
-      "jobPosition": "Software Engineer",
-      "electoralDistrict": "District 1",
-      "politicalAffiliation": "Party A",
+      "jobPosition": "former Minister of Technology",
+      "electoralDistrict": "Annaba",
+      "politicalAffiliation": "Independent",
       "age": 35
     },
     {
@@ -17,9 +17,9 @@
       "lastName": "Haithem",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmWj2QXJPPvzC7THHq2L6AjbA5XxA2ZvmiauvfLBk8T1xk",
       "gender": "Male",
-      "jobPosition": "Teacher",
-      "electoralDistrict": "District 2",
-      "politicalAffiliation": "Party B",
+      "jobPosition": "former head of government",
+      "electoralDistrict": "Oran",
+      "politicalAffiliation": "RND",
       "age": 42
     },
     {
@@ -28,9 +28,9 @@
       "lastName": "Yasser",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmWYHMbn1TyXK6psjzHCkwKcyUsfF7URYzn7uTF6ZmsmNG",
       "gender": "Male",
-      "jobPosition": "Doctor",
-      "electoralDistrict": "District 3",
-      "politicalAffiliation": "Party C",
+      "jobPosition": "General Secretary of the FLN",
+      "electoralDistrict": "Algiers",
+      "politicalAffiliation": "FLN",
       "age": 50
     },
     {
@@ -39,10 +39,10 @@
       "lastName": "Anis",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmUVninMPzYo9fs3v45XadwE3biu591Dej4WhvxGnjmMLq",
       "gender": "Male",
-      "jobPosition": "Lawyer",
-      "electoralDistrict": "District 4",
-      "politicalAffiliation": "Party D",
-      "age": 45
+      "jobPosition": "Minister of Culture",
+      "electoralDistrict": "Batna",
+      "politicalAffiliation": "RND",
+      "age": 39
     },
     {
       "address": "0xAb1E1A2fB55b172A0f47E55fb0996B9ACB6bC2F7",
@@ -50,10 +50,10 @@
       "lastName": "Hassina",
       "imageUrl": "https://gateway.pinata.cloud/ipfs/QmcKpMSai13rpr6fiM9tkNLbg8C9uWgCJfjSiT2SHq2sp5",
       "gender": "Female",
-      "jobPosition": "Engineer",
-      "electoralDistrict": "District 5",
-      "politicalAffiliation": "Party E",
-      "age": 39
+      "jobPosition": "former Minister of Tourism",
+      "electoralDistrict": "Ouargla",
+      "politicalAffiliation": "MSP",
+      "age": 60
     }
   ],
   "escrow": "0x6633C662ed5ef9ACf6f4D8f38dA263467C31360e",

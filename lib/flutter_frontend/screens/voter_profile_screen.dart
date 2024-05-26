@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../firebase/authenticate_user/authenticate_user_page.dart';
-import '../utils/data_save.dart';
 import '../utils/glassmorphismContainer.dart';
 import '../utils/mrtd_data.dart';
 import 'facial_screen.dart';
@@ -56,6 +53,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20),
             _isVisible ? _profileDetails() : Container(),
@@ -71,13 +69,11 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FaceIDScreen(
-                        documentNumber: widget.mrtdData.dg1!.mrz.documentNumber,
-                      ),
+                      builder: (context) => FaceIDScreen(),
                     ),
                   );
                 },
-                child: Text('Face id check'),
+                child: Text('Proceed'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.background,
@@ -113,7 +109,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
               fit: BoxFit.contain,
             ),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: Colors.white, width: 1),
           ),
         ),
       ),
@@ -124,6 +120,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 30),
           Align(
@@ -148,12 +145,12 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
 
           glassmorphicContainer(
             context: context,
-            child: _detailsChip('firstName', widget.mrtdData.dg1!.mrz.firstName),
+            child: _detailsChip('First Name', widget.mrtdData.dg1!.mrz.firstName),
             height: 50,
           ),
           glassmorphicContainer(
             context: context,
-            child: _detailsChip('lastName', widget.mrtdData.dg1!.mrz.lastName),
+            child: _detailsChip('Last Name', widget.mrtdData.dg1!.mrz.lastName),
             height: 50,
           ),
           glassmorphicContainer(
@@ -182,18 +179,17 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
   }
 
   Widget _signatureSection() {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              textAlign: TextAlign.start,
-              'Signature',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+          Text(
+            'Signature',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -233,7 +229,6 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
           SizedBox(width: 8),
           Text(
             '$label: $value',
-            textAlign: TextAlign.start,
             style: TextStyle(
               fontSize: 14,
               color: Theme.of(context).colorScheme.primary,
@@ -248,6 +243,10 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
     var profileData = {
       'firstName': widget.mrtdData.dg1!.mrz.firstName,
       'lastName': widget.mrtdData.dg1!.mrz.lastName,
+      'documentNumber': widget.mrtdData.dg1!.mrz.documentNumber,
+      'dateOfBirth': DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth),
+      'nationality': widget.mrtdData.dg1!.mrz.nationality,
+      'expiryDate': DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry),
       'image': base64Encode(widget.mrtdData.dg2!.imageData!), // Encoding image to base64 string
     };
 

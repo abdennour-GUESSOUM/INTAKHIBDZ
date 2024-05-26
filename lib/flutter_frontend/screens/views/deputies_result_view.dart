@@ -1,13 +1,14 @@
-import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
+import 'dart:math' as math;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:web3dart/json_rpc.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
+import '../../../blockchain_back/blockchain/blockchain_authentification.dart';
 import '../../../blockchain_back/blockchain/deputies_winner_model.dart';
 import '../../../blockchain_back/blockchain/utils.dart';
 
@@ -18,10 +19,10 @@ class DeputiesResultView extends StatefulWidget {
 
 class _DeputiesResultViewState extends State<DeputiesResultView> {
   Blockchain blockchain = Blockchain();
-
   late ConfettiController _controllerCenter;
   List<DeputiesWinnerModel> groups = [DeputiesWinnerModel("Loading", BigInt.zero, "Loading", "", 0.0)];
   bool? valid;
+  int touchedIndex = -1;
 
   @override
   void initState() {
@@ -149,11 +150,11 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                               child: Image.network(groups[0].pictureUrl!, fit: BoxFit.fill)),
                         ),
                       ),
-                      Expanded(  // Use Expanded here
+                      Expanded(
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,  // Ensure alignment at the start of the column
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 alignment: Alignment.centerLeft,
@@ -173,13 +174,192 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                   ),
                 ),
                 SizedBox(height: 10),
+                CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 5),
+                    height: 350, // Adjust the height to give more space
+                    viewportFraction: 1.0,
+                  ),
+                  items: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1.0,
+                        ),
+                      ),
+                      color: Theme.of(context).colorScheme.background.withOpacity(1),
+                      child: Container(
+                        height: 350,
+                        child: PieChart(
+                          PieChartData(
+                            pieTouchData: PieTouchData(
+                              touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                                setState(() {
+                                  if (!event.isInterestedForInteractions ||
+                                      pieTouchResponse == null ||
+                                      pieTouchResponse.touchedSection == null) {
+                                    touchedIndex = -1;
+                                    return;
+                                  }
+                                  touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                                });
+                              },
+                            ),
+                            borderData: FlBorderData(show: false),
+                            sectionsSpace: 0,
+                            centerSpaceRadius: 0,
+                            sections: showingSections(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1.0,
+                        ),
+                      ),
+                      color: Theme.of(context).colorScheme.background.withOpacity(1),
+                      child: Container(
+                        height: 350,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: BarChart(
+                            BarChartData(
+                              borderData: FlBorderData(
+                                show: true,
+                                border: Border.symmetric(
+                                  horizontal: BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                  ),
+                                ),
+                              ),
+                              titlesData: FlTitlesData(
+                                show: true,
+                                leftTitles: AxisTitles(
+                                  drawBelowEverything: true,
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 30,
+                                    getTitlesWidget: (value, meta) {
+                                      // Show only integer values
+                                      if (value % 1 == 0) {
+                                        return Text(
+                                          value.toInt().toString(),
+                                          textAlign: TextAlign.left,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 36,
+                                    getTitlesWidget: (value, meta) {
+                                      final index = value.toInt();
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        height: 50,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: Image.network(
+                                            groups[index].pictureUrl!,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                rightTitles: const AxisTitles(),
+                                topTitles: const AxisTitles(),
+                              ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawVerticalLine: false,
+                                getDrawingHorizontalLine: (value) => FlLine(
+                                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                  strokeWidth: 1,
+                                ),
+                              ),
+                              barGroups: groups.asMap().entries.map((entry) {
+                                int index = entry.key;
+                                DeputiesWinnerModel candidate = entry.value;
+                                return BarChartGroupData(
+                                  x: index,
+                                  barRods: [
+                                    BarChartRodData(
+                                      toY: candidate.votes!.toDouble(),
+                                      color: getColor(index),
+                                      width: 6,
+                                    ),
+                                  ],
+                                  showingTooltipIndicators: touchedIndex == index ? [0] : [],
+                                );
+                              }).toList(),
+                              barTouchData: BarTouchData(
+                                enabled: true,
+                                handleBuiltInTouches: false,
+                                touchTooltipData: BarTouchTooltipData(
+                                  getTooltipItem: (
+                                      BarChartGroupData group,
+                                      int groupIndex,
+                                      BarChartRodData rod,
+                                      int rodIndex,
+                                      ) {
+                                    return BarTooltipItem(
+                                      rod.toY.toStringAsFixed(0) + ' votes',
+                                      TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: rod.color,
+                                        fontSize: 18,
+                                        shadows: const [
+                                          Shadow(
+                                            color: Colors.black26,
+                                            blurRadius: 12,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                                touchCallback: (event, response) {
+                                  if (event.isInterestedForInteractions &&
+                                      response != null &&
+                                      response.spot != null) {
+                                    setState(() {
+                                      touchedIndex = response.spot!.touchedBarGroupIndex;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      touchedIndex = -1;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.centerLeft,
-
-                  child: Text("Results ranking",
+                  child: Text(
+                    "Results ranking",
                     style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -193,30 +373,26 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                         width: 1.0,
                       ),
                     ),
-
                     color: Theme.of(context).colorScheme.background.withOpacity(1),
                     child: Container(
                       child: ListTile(
                         title: Text("${groups[index].groupName}", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                         subtitle: Text(' total ${groups[index].votes} votes          ${groups[index].percentage!.toStringAsFixed(0)}%'),
-                        trailing:  Container(
+                        trailing: Container(
                           height: 60,
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-
-                              child: Image.network(groups[index].pictureUrl!, fit: BoxFit.fill)),
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(groups[index].pictureUrl!, fit: BoxFit.fill),
+                          ),
                         ),
-
                       ),
                     ),
                   );
                 }),
               ],
             ),
-
           ],
         ),
-
       ];
     }
 
@@ -256,7 +432,6 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
                 },
               ),
             ),
-
             Center(
               child: Container(
                 margin: const EdgeInsets.only(top: 30.0),
@@ -318,15 +493,17 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
     } else if (valid == true) {
       content = buildValidContent();
     } else {
-      content = [ Center(
-        child: Text(
+      content = [
+        Center(
+          child: Text(
             "Unknown state",
             style: TextStyle(
               fontSize: 40,
               color: Theme.of(context).colorScheme.background,
-            )
+            ),
+          ),
         ),
-      )];
+      ];
     }
 
     return Scaffold(
@@ -361,6 +538,55 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
     );
   }
 
+  List<PieChartSectionData> showingSections() {
+    return groups.asMap().entries.map((entry) {
+      int index = entry.key;
+      DeputiesWinnerModel candidate = entry.value;
+      final isTouched = index == touchedIndex;
+      final fontSize = isTouched ? 20.0 : 16.0;
+      final radius = isTouched ? 130.0 : 120.0;
+      final widgetSize = isTouched ? 75.0 : 50.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+
+      return PieChartSectionData(
+        color: getColor(index),
+        value: candidate.percentage,
+        title: '${candidate.percentage!.toStringAsFixed(1)}%',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+          shadows: shadows,
+        ),
+        titlePositionPercentageOffset: 0.5,
+        badgeWidget: _Badge(
+          candidate.pictureUrl!,
+          size: widgetSize,
+          borderColor: Theme.of(context).colorScheme.background,
+        ),
+        badgePositionPercentageOffset: 1,
+      );
+    }).toList();
+  }
+
+  Color getColor(int index) {
+    switch (index % 5) {
+      case 0:
+        return Color(0xFF0C5143);
+      case 1:
+        return Color(0xFFFFC300);
+      case 2:
+        return Color(0xFF6E1BFF);
+      case 3:
+        return Color(0xFF2196F3);
+      case 4:
+        return Color(0xFFE80054);
+      default:
+        return Color(0xFF50E4FF);
+    }
+  }
+
   void _showLoadingDialog(String title, String description) {
     AwesomeDialog(
       context: context,
@@ -388,4 +614,321 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
       btnOkColor: Theme.of(context).colorScheme.secondary,
     ).show();
   }
+}
+
+class _Badge extends StatelessWidget {
+  final String imageUrl;
+  final double size;
+  final Color borderColor;
+
+  const _Badge(
+      this.imageUrl, {
+        Key? key,
+        required this.size,
+        required this.borderColor,
+      }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: (size / 2),
+      backgroundColor: borderColor,
+      child: CircleAvatar(
+        radius: (size / 2) - 3,
+        backgroundImage: NetworkImage(imageUrl),
+        backgroundColor: Colors.transparent,
+      ),
+    );
+  }
+}
+
+class LineChartSample5 extends StatefulWidget {
+  const LineChartSample5({
+    super.key,
+    Color? gradientColor1,
+    Color? gradientColor2,
+    Color? gradientColor3,
+    Color? indicatorStrokeColor,
+  })  : gradientColor1 = gradientColor1 ?? Colors.blue,
+        gradientColor2 = gradientColor2 ?? Colors.green,
+        gradientColor3 = gradientColor3 ?? Colors.red,
+        indicatorStrokeColor = indicatorStrokeColor ?? Colors.black;
+
+  final Color gradientColor1;
+  final Color gradientColor2;
+  final Color gradientColor3;
+  final Color indicatorStrokeColor;
+
+  @override
+  State<LineChartSample5> createState() => _LineChartSample5State();
+}
+
+class _LineChartSample5State extends State<LineChartSample5> {
+  List<int> showingTooltipOnSpots = [1, 3, 5];
+
+  List<FlSpot> get allSpots => const [
+    FlSpot(0, 1),
+    FlSpot(1, 2),
+    FlSpot(2, 1.5),
+    FlSpot(3, 3),
+    FlSpot(4, 3.5),
+    FlSpot(5, 5),
+    FlSpot(6, 8),
+  ];
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+    final style = TextStyle(
+      fontWeight: FontWeight.bold,
+      color: Colors.pink,
+      fontFamily: 'Digital',
+      fontSize: 18 * chartWidth / 500,
+    );
+    String text;
+    switch (value.toInt()) {
+      case 0:
+        text = '00:00';
+        break;
+      case 1:
+        text = '04:00';
+        break;
+      case 2:
+        text = '08:00';
+        break;
+      case 3:
+        text = '12:00';
+        break;
+      case 4:
+        text = '16:00';
+        break;
+      case 5:
+        text = '20:00';
+        break;
+      case 6:
+        text = '23:59';
+        break;
+      default:
+        return Container();
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(text, style: style),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lineBarsData = [
+      LineChartBarData(
+        showingIndicators: showingTooltipOnSpots,
+        spots: allSpots,
+        isCurved: true,
+        barWidth: 4,
+        shadow: const Shadow(
+          blurRadius: 8,
+        ),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            colors: [
+              widget.gradientColor1.withOpacity(0.4),
+              widget.gradientColor2.withOpacity(0.4),
+              widget.gradientColor3.withOpacity(0.4),
+            ],
+          ),
+        ),
+        dotData: const FlDotData(show: false),
+        gradient: LinearGradient(
+          colors: [
+            widget.gradientColor1,
+            widget.gradientColor2,
+            widget.gradientColor3,
+          ],
+          stops: const [0.1, 0.4, 0.9],
+        ),
+      ),
+    ];
+
+    final tooltipsOnBar = lineBarsData[0];
+
+    return AspectRatio(
+      aspectRatio: 2.5,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24.0,
+          vertical: 10,
+        ),
+        child: LayoutBuilder(builder: (context, constraints) {
+          return LineChart(
+            LineChartData(
+              showingTooltipIndicators: showingTooltipOnSpots.map((index) {
+                return ShowingTooltipIndicators([
+                  LineBarSpot(
+                    tooltipsOnBar,
+                    lineBarsData.indexOf(tooltipsOnBar),
+                    tooltipsOnBar.spots[index],
+                  ),
+                ]);
+              }).toList(),
+              lineTouchData: LineTouchData(
+                enabled: true,
+                handleBuiltInTouches: false,
+                touchCallback:
+                    (FlTouchEvent event, LineTouchResponse? response) {
+                  if (response == null || response.lineBarSpots == null) {
+                    return;
+                  }
+                  if (event is FlTapUpEvent) {
+                    final spotIndex = response.lineBarSpots!.first.spotIndex;
+                    setState(() {
+                      if (showingTooltipOnSpots.contains(spotIndex)) {
+                        showingTooltipOnSpots.remove(spotIndex);
+                      } else {
+                        showingTooltipOnSpots.add(spotIndex);
+                      }
+                    });
+                  }
+                },
+                mouseCursorResolver:
+                    (FlTouchEvent event, LineTouchResponse? response) {
+                  if (response == null || response.lineBarSpots == null) {
+                    return SystemMouseCursors.basic;
+                  }
+                  return SystemMouseCursors.click;
+                },
+                getTouchedSpotIndicator:
+                    (LineChartBarData barData, List<int> spotIndexes) {
+                  return spotIndexes.map((index) {
+                    return TouchedSpotIndicatorData(
+                      const FlLine(
+                        color: Colors.pink,
+                      ),
+                      FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) =>
+                            FlDotCirclePainter(
+                              radius: 8,
+                              color: lerpGradient(
+                                barData.gradient!.colors,
+                                barData.gradient!.stops!,
+                                percent / 100,
+                              ),
+                              strokeWidth: 2,
+                              strokeColor: widget.indicatorStrokeColor,
+                            ),
+                      ),
+                    );
+                  }).toList();
+                },
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipColor: (touchedSpot) => Colors.pink,
+                  tooltipRoundedRadius: 8,
+                  getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
+                    return lineBarsSpot.map((lineBarSpot) {
+                      return LineTooltipItem(
+                        lineBarSpot.y.toString(),
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
+              lineBarsData: lineBarsData,
+              minY: 0,
+              titlesData: FlTitlesData(
+                leftTitles: const AxisTitles(
+                  axisNameWidget: Text('count'),
+                  axisNameSize: 24,
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                    interval: 1,
+                    reservedSize: 0,
+                  ),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 1,
+                    getTitlesWidget: (value, meta) {
+                      return bottomTitleWidgets(
+                        value,
+                        meta,
+                        constraints.maxWidth,
+                      );
+                    },
+                    reservedSize: 30,
+                  ),
+                ),
+                rightTitles: const AxisTitles(
+                  axisNameWidget: Text('count'),
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                    reservedSize: 0,
+                  ),
+                ),
+                topTitles: const AxisTitles(
+                  axisNameWidget: Text(
+                    'Wall clock',
+                    textAlign: TextAlign.left,
+                  ),
+                  axisNameSize: 24,
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 0,
+                  ),
+                ),
+              ),
+              gridData: const FlGridData(show: false),
+              borderData: FlBorderData(
+                show: true,
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+/// Lerps between a [LinearGradient] colors, based on [t]
+Color lerpGradient(List<Color> colors, List<double> stops, double t) {
+  if (colors.isEmpty) {
+    throw ArgumentError('"colors" is empty.');
+  } else if (colors.length == 1) {
+    return colors[0];
+  }
+
+  if (stops.length != colors.length) {
+    stops = [];
+
+    /// provided gradientColorStops is invalid and we calculate it here
+    colors.asMap().forEach((index, color) {
+      final percent = 1.0 / (colors.length - 1);
+      stops.add(percent * index);
+    });
+  }
+
+
+
+
+
+  for (var s = 0; s < stops.length - 1; s++) {
+    final leftStop = stops[s];
+    final rightStop = stops[s + 1];
+    final leftColor = colors[s];
+    final rightColor = colors[s + 1];
+    if (t <= leftStop) {
+      return leftColor;
+    } else if (t < rightStop) {
+      final sectionT = (t - leftStop) / (rightStop - leftStop);
+      return Color.lerp(leftColor, rightColor, sectionT)!;
+    }
+  }
+  return colors.last;
 }

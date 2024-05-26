@@ -59,7 +59,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   bool _isTextObscured = true;
 
   int numberOfVoters = 0;
-  int totalVoters = 10; // New state variable for total voters
+  int totalVoters = 48; // New state variable for total voters
 
   @override
   void initState() {

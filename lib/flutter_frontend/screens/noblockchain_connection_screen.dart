@@ -1,4 +1,5 @@
 import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
+import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -30,6 +31,23 @@ class _NoBlockChainScreenState extends State<NoBlockChainScreen> with SingleTick
     super.dispose();
   }
 
+  void _checkConnection() async {
+    _controller.forward();
+    Future.delayed(Duration(seconds: 3), () async {
+      if (await blockchain.check() == true) {
+        setState(() {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                (Route<dynamic> route) => false,
+          );
+        });
+      } else {
+        print("No Connection");
+        _controller.reset();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +90,7 @@ class _NoBlockChainScreenState extends State<NoBlockChainScreen> with SingleTick
                 Container(
                   width: 250,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => BlockchainAuthentification(documentNumber: '')),
-                            (Route<dynamic> route) => false,
-                      );
-                      },
+                    onPressed: _checkConnection,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(

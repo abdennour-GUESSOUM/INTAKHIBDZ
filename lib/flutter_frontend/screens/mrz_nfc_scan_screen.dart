@@ -234,7 +234,6 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
       _scrollController.animateTo(300.0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
 
       setState(() {});
-      // Navigate to the new screen with the MRTD data
       Navigator.push(
         context,
         MaterialPageRoute(

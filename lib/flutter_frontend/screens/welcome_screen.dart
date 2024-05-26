@@ -5,12 +5,10 @@ import 'package:INTAKHIB/flutter_frontend/screens/views/settings_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/views/vote_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../blockchain_back/blockchain/blockachain.dart';
 import '../../blockchain_back/blockchain/blockchain_authentification.dart';
 import 'noblockchain_connection_screen.dart';
@@ -27,6 +25,7 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
   int _selectedIndex = 0;
 
   Uint8List? _persistentImage;
@@ -38,51 +37,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
     _loadImage;
-  }
-  void _checkKey(BuildContext context) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? key = prefs.getString('key');
-    String? contract = prefs.getString('contract');
-    String? second_contract = prefs.getString('second_contract');
-
-    print([key,contract]);
-
-    Future.delayed(Duration(seconds: 2), () async {
-      if (contract == null || second_contract == null){
-        setState(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => BlockchainAuthentification(documentNumber: '')),
-                (Route<dynamic> route) => false,
-          );
-        });
-      } else if (key == null){
-        setState(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => BlockchainAuthentification(documentNumber: '')),
-                (Route<dynamic> route) => false,
-          );
-        });
-      } else if (await Blockchain().check() == false) {
-        setState(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => NoBlockChainScreen()),
-                (Route<dynamic> route) => true,
-          );
-        });
-      } else {
-        setState(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                (Route<dynamic> route) => false,
-          );
-        });
-      }
-    });
-
   }
 
   Future<void> _saveImage(Uint8List image) async {

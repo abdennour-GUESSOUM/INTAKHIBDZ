@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -295,42 +296,188 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
                       ),
                     ),
                   ),
+                  CarouselSlider(
 
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.secondary,
-                        width: 1.0,
-                      ),
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 5),
+                      height: 350, // Adjust the height to give more space
+                      viewportFraction: 1.0,
                     ),
-                    color: Theme.of(context).colorScheme.background.withOpacity(1),
-                    child: Container(
-                      height: 350,
-                      child: PieChart(
-                        PieChartData(
-                          pieTouchData: PieTouchData(
-                            touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                              setState(() {
-                                if (!event.isInterestedForInteractions ||
-                                    pieTouchResponse == null ||
-                                    pieTouchResponse.touchedSection == null) {
-                                  touchedIndex = -1;
-                                  return;
-                                }
-                                touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                              });
-                            },
+                    items: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 1.0,
                           ),
+                        ),
+                        color: Theme.of(context).colorScheme.background.withOpacity(1),
+                        child: Container(
+                          height: 350,
+                          child: PieChart(
+                            PieChartData(
+                              pieTouchData: PieTouchData(
+                                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                                  setState(() {
+                                    if (!event.isInterestedForInteractions ||
+                                        pieTouchResponse == null ||
+                                        pieTouchResponse.touchedSection == null) {
+                                      touchedIndex = -1;
+                                      return;
+                                    }
+                                    touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                                  });
+                                },
+                              ),
 
-                          borderData: FlBorderData(show: false),
-                          sectionsSpace: 0,
-                          centerSpaceRadius: 0,
-                          sections: showingSections(),
+                              borderData: FlBorderData(show: false),
+                              sectionsSpace: 0,
+                              centerSpaceRadius: 0,
+                              sections: showingSections(),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 1.0,
+                          ),
+                        ),
+                        color: Theme.of(context).colorScheme.background.withOpacity(1),
+                        child: Container(
+                          height: 350,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: BarChart(
+                              BarChartData(
+                                borderData: FlBorderData(
+                                  show: true,
+                                  border: Border.symmetric(
+                                    horizontal: BorderSide(
+                                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                    ),
+                                  ),
+                                ),
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  leftTitles: AxisTitles(
+                                    drawBelowEverything: true,
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 30,
+                                      getTitlesWidget: (value, meta) {
+                                        if (value % 1 == 0) {
+                                          return Text(
+                                            value.toInt().toString(),
+                                            textAlign: TextAlign.left,
+                                          );
+                                        } else {
+                                          return Container();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 36,
+                                      getTitlesWidget: (value, meta) {
+                                        final index = value.toInt();
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                          height: 50,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(100),
+                                            child: Image.network(
+                                              candidates[index].imageUrl!,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  rightTitles: const AxisTitles(),
+                                  topTitles: const AxisTitles(),
+                                ),
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  getDrawingHorizontalLine: (value) => FlLine(
+                                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                                barGroups: candidates.asMap().entries.map((entry) {
+                                  int index = entry.key;
+                                  PresidentWinnerModel candidate = entry.value;
+                                  return BarChartGroupData(
+                                    x: index,
+                                    barRods: [
+                                      BarChartRodData(
+                                        toY: candidate.votes!.toDouble(),
+                                        color: getColor(index),
+                                        width: 6,
+                                      ),
+                                    ],
+                                    showingTooltipIndicators: touchedIndex == index ? [0] : [],
+                                  );
+                                }).toList(),
+                                barTouchData: BarTouchData(
+                                  enabled: true,
+                                  handleBuiltInTouches: false,
+                                  touchTooltipData: BarTouchTooltipData(
+                                    getTooltipItem: (
+                                        BarChartGroupData group,
+                                        int groupIndex,
+                                        BarChartRodData rod,
+                                        int rodIndex,
+                                        ) {
+                                      return BarTooltipItem(
+                                        rod.toY.toStringAsFixed(0) + ' votes',
+                                        TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: rod.color,
+                                          fontSize: 18,
+                                          shadows: const [
+                                            Shadow(
+                                              color: Colors.black26,
+                                              blurRadius: 12,
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  touchCallback: (event, response) {
+                                    if (event.isInterestedForInteractions &&
+                                        response != null &&
+                                        response.spot != null) {
+                                      setState(() {
+                                        touchedIndex = response.spot!.touchedBarGroupIndex;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        touchedIndex = -1;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
                   ),
+
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 8),
