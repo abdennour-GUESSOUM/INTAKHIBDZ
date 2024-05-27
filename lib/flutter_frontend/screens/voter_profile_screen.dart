@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import '../../firebase/authenticate_user/authenticate_user_page.dart';
 import '../utils/glassmorphismContainer.dart';
 import '../utils/mrtd_data.dart';
-import 'facial_screen.dart';
 
 class VoterProfileScreen extends StatefulWidget {
   final MrtdData mrtdData;
@@ -53,7 +52,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 20),
             _isVisible ? _profileDetails() : Container(),
@@ -69,7 +68,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FaceIDScreen(),
+                      builder: (context) => AuthenticateUserPage(),
                     ),
                   );
                 },
@@ -127,14 +126,17 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
             alignment: Alignment.center,
             child: Column(
               children: [
+                SizedBox(height: 20),
                 Text(
                   "Image",
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
+                SizedBox(height: 20),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.memory(
+                    height: 200,
                     widget.mrtdData.dg2!.imageData!,
                     fit: BoxFit.contain,
                   ),
@@ -182,7 +184,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'Signature',
@@ -228,6 +230,7 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
         children: [
           SizedBox(width: 8),
           Text(
+            textAlign: TextAlign.left,
             '$label: $value',
             style: TextStyle(
               fontSize: 14,

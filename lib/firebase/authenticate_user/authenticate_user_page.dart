@@ -68,7 +68,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                   const Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 110),
+                      padding: EdgeInsets.only(top: 240),
                       child: AnimatedView(),
                     ),
                   ),
@@ -76,7 +76,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
             ),
             if (canAuthenticate)
               Padding(
-                padding: const EdgeInsets.only(top: 20), // Added top padding
+                padding: const EdgeInsets.only(top: 40), // Added top padding
                 child: SizedBox(
                   width: 300,
                   height: 50,
@@ -141,7 +141,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                           });
 
                           if (!faceMatched) {
-                            errorSnackBar(context, 'You are Not the Owner Of this ID card \n If you insist take another Picture and Try again ! ');
+                            errorSnackBar(context, 'Sorry you are not eligible for voting!');
                           }
                         } else {
                           errorSnackBar(context, 'Sorry retry');
@@ -170,7 +170,6 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                   ),
                 ),
               ),
-            SizedBox()
           ],
         ),
       ),

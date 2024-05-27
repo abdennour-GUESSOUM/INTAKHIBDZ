@@ -20,13 +20,13 @@ class _BiometricScreen extends State<BiometricScreen> {
     try {
       setState(() {
         _isAuthenticating = true;
-        _authorized = 'Authentification...';
+        _authorized = 'Authentication...';
       });
       authenticated = await auth.authenticate(
-        localizedReason: 'veuiller placer votre pouce sur le capteur d\'empreinte',
+        localizedReason: 'Place scan your fingerprint',
       );
       setState(() {
-        _authorized = authenticated ? 'Succées' : 'réessayer';
+        _authorized = authenticated ? 'Success' : 'Retry';
       });
       if (authenticated) {
         Navigator.push(
@@ -80,7 +80,7 @@ class _BiometricScreen extends State<BiometricScreen> {
                 children: [
                   SizedBox(height: 40),
                   Text(
-                    'Biometric authentification',
+                    'Biometric authentication',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 28,
@@ -127,7 +127,6 @@ class _BiometricScreen extends State<BiometricScreen> {
               ),
             ),
             Align(
-              alignment: Alignment.bottomCenter,
               child: SizedBox(
                 width: 300,
                 height: 60,
@@ -151,6 +150,7 @@ class _BiometricScreen extends State<BiometricScreen> {
                 ),
               ),
             ),
+            SizedBox(height: edgePadding),
             SizedBox(height: edgePadding),
           ],
         ),

@@ -64,7 +64,7 @@ class UserAuthenticatedPage extends StatelessWidget {
               ),
             ),
             Text(
-                  'hey ${Firstname} !',
+                  'Welcome ${Firstname} !',
               textAlign: TextAlign.center,
               style:  TextStyle(
 
@@ -81,7 +81,6 @@ class UserAuthenticatedPage extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
-            const SizedBox(height: 20),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(

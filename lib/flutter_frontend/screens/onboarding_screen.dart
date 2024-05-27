@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -6,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'intro_screens/intro_page_1.dart';
 import 'intro_screens/intro_page_2.dart';
 import 'intro_screens/intro_page_3.dart';
-import 'facial_screen.dart';
 import 'mrz_nfc_scan_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {

@@ -293,9 +293,10 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
             TextFormField(
               enabled: !_disabledInput(),
               controller: _docNumber,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Document number',
+                labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                 fillColor: Colors.white,
               ),
               inputFormatters: <TextInputFormatter>[
@@ -304,6 +305,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
               ],
               textInputAction: TextInputAction.done,
               textCapitalization: TextCapitalization.characters,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
               autofocus: true,
               validator: (value) {
                 if (value?.isEmpty ?? false) {
@@ -316,12 +318,14 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
             TextFormField(
               enabled: !_disabledInput(),
               controller: _dob,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Date of Birth',
+                labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                 fillColor: Colors.white,
               ),
               autofocus: false,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
               validator: (value) {
                 if (value?.isEmpty ?? false) {
                   return 'Please select Date of Birth';
@@ -346,12 +350,14 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
             TextFormField(
               enabled: !_disabledInput(),
               controller: _doe,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Date of Expiry',
+                labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                 fillColor: Colors.white,
               ),
               autofocus: false,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
               validator: (value) {
                 if (value?.isEmpty ?? false) {
                   return 'Please select Date of Expiry';
@@ -431,7 +437,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Lottie.asset(
@@ -481,7 +487,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
                             _readMRTD();
                             _showUserInstructions = false;
                           },
-                          child: Text('Next'),
+                          child: Text('Next', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -518,7 +524,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
                             _initPlatformState();
                             _showUserInstructions = true;
                           },
-                          child: Text('Check NFC'),
+                          child: Text('Check NFC', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                         ),
                       ),
                       const SizedBox(height: 10),

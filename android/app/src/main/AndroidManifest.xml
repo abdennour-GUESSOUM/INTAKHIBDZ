@@ -6,7 +6,7 @@
 
     <application
         android:name="${applicationName}"
-        android:label="INTAKHIBDZ"
+        android:label="INTAKHIB"
         android:icon="@mipmap/ic_launcher">
 
         <activity

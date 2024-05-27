@@ -18,10 +18,8 @@ Widget glassmorphicContainer({
           filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
           child: Container(
             decoration: decoration ?? BoxDecoration(
-
               boxShadow: [
                 BoxShadow(
-
                   blurRadius: 1,
                   spreadRadius: 1,
                   color: Theme.of(context).colorScheme.primary.withOpacity(0.1),

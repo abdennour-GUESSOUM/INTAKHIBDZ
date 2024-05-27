@@ -67,8 +67,8 @@ class _AnimatedViewState extends State<AnimatedView>
     super.build(context);
 
     return SizedBox(
-      height: 280,
-      width: 280,
+      height: 200,
+      width: 200,
       child: CustomPaint(
         painter: AnimatedCircle(
             value: animation.value,

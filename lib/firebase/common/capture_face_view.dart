@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import '../constants/colors.dart';
 
 
@@ -30,18 +31,19 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 20),
+        SizedBox(height: 40),
         Text(
-          'Face identity check.',
+          'FaceID authentification',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
-        SizedBox(height: 20),
-
+        SizedBox(height: 40),
         Text(
           'take a picture and click on the button.',
           textAlign: TextAlign.center,
@@ -50,23 +52,20 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
-        SizedBox(height: 20),
-
+        SizedBox(height: 100),
         CircleAvatar(
-          radius: 140,
-          backgroundColor: const Color(0xffD9D9D9),
+          radius: 100,
+          backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.1),
           backgroundImage: _image == null ? null : FileImage(_image!),
           child: _image == null
-              ? const Center(
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: 80,
-                    color: primaryGrey,
+              ?  Center(
+                  child: Lottie.asset(
+                    "assets/face_auth.json",
+                    height: 200,
                   ),
                 )
               : null,
         ),
-
         GestureDetector(
           onTap: () async {
             setState(() {
@@ -93,11 +92,11 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
             widget.onImageCaptured(imageBytes);
           },
           child: Container(
-            margin: const EdgeInsets.only(top: 40),
-            height: 60,
+            margin: const EdgeInsets.only(top: 60),
+            height: 80,
             decoration:  BoxDecoration(
               gradient: RadialGradient(
-                stops: [0.4, 0.65, 1],
+                stops: [0.9, 0.65, 1],
                 colors: [
                   Theme.of(context).colorScheme.secondary,
                   Theme.of(context).colorScheme.background,
@@ -110,7 +109,7 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
         ),
         const SizedBox(height: 20),
         Text(
-          'Click to take a picture',
+          'take a picture',
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),
