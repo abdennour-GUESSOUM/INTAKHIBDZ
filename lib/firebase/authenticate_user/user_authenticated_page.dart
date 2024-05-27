@@ -6,9 +6,12 @@ import '../constants/colors.dart';
 
 class UserAuthenticatedPage extends StatelessWidget {
   final String Firstname;
+  final String lastname;
+
 
   const UserAuthenticatedPage({
     required this.Firstname,
+    required this.lastname,
     super.key,
   });
 
@@ -65,7 +68,7 @@ class UserAuthenticatedPage extends StatelessWidget {
               ),
             ),
             Text(
-                  'Welcome ${Firstname} !',
+                  'Welcome ${Firstname} ${lastname}!',
               textAlign: TextAlign.center,
               style:  TextStyle(
 

@@ -123,7 +123,10 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                                       faceMatched = true;
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) => UserAuthenticatedPage(Firstname: user.firstName),
+                                          builder: (context) => UserAuthenticatedPage(
+                                              Firstname: user.firstName,
+                                              lastname: user.lastName,
+                                          ),
                                         ),
                                       );
                                       break;
