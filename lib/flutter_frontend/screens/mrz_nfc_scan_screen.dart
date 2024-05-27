@@ -1,3 +1,4 @@
+import 'package:INTAKHIB/flutter_frontend/screens/voter_profile_screen.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ import '../dmrtd_lib/src/lds/df1/efdg9.dart';
 import '../dmrtd_lib/src/passport.dart';
 import '../dmrtd_lib/src/proto/dba_keys.dart';
 import '../utils/mrtd_data.dart';
-import 'scanned_data_screen.dart';
 
 class MRZNFCScan extends StatefulWidget {
   const MRZNFCScan.MRZNFCScanScreen({super.key});
@@ -237,9 +237,8 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => scannedDataScreen(
+          builder: (context) => VoterProfileScreen(
             mrtdData: mrtdData,
-            rawImageData: rawImageData,
             rawHandSignatureData: rawHandSignatureData,
           ),
         ),
