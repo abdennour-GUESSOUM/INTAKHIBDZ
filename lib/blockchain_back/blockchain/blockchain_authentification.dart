@@ -61,7 +61,7 @@ class _BlockchainAuthentificationState extends State<BlockchainAuthentification>
       Navigator.pushAndRemoveUntil(
         context,
         SlideRightRoute(page: WelcomeScreen()),
-            (Route<dynamic> route) => true,
+            (Route<dynamic> route) => false,
       );
     });
   }

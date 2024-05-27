@@ -1,4 +1,4 @@
-import 'package:INTAKHIB/flutter_frontend/screens/mrz_nfc_scan_screen.dart';
+import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';
@@ -32,7 +32,7 @@ class _BiometricScreen extends State<BiometricScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MRZNFCScan.MRZNFCScanScreen(),
+            builder: (context) =>  BlockchainAuthentification(),
           ),
         );
       }

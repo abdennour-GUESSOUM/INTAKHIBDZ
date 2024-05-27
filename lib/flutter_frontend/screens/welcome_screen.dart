@@ -9,9 +9,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../blockchain_back/blockchain/blockachain.dart';
-import '../../blockchain_back/blockchain/blockchain_authentification.dart';
-import 'noblockchain_connection_screen.dart';
 
 
 

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? AuthenticateUserPage() : AuthenticateUserPage(),
+      home: seenOnboarding ? OnboardingScreen() : AuthenticateUserPage(),
       debugShowCheckedModeBanner: false,
     );
   }
