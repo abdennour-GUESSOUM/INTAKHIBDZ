@@ -12,8 +12,6 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  bool _isDarkMode = false;
-
   @override
   void initState() {
     super.initState();

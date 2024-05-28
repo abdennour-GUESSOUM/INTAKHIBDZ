@@ -93,9 +93,9 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                         if (snap.docs.isNotEmpty) {
                           for (var doc in snap.docs) {
                             try {
-                              final user = User.fromJson(doc.data() ?? {});
+                              final user = User.fromJson(doc.data());
 
-                              if (user.image == null || user.image.isEmpty) {
+                              if (user.image.isEmpty) {
                                 print('User image is null or empty');
                                 continue;
                               }
@@ -109,7 +109,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
                               var value = await regula.FaceSDK.matchFaces(jsonEncode(request));
                               var response = regula.MatchFacesResponse.fromJson(json.decode(value));
 
-                              if (response != null && response.results != null) {
+                              if (response != null) {
                                 var str = await regula.FaceSDK.matchFacesSimilarityThresholdSplit(jsonEncode(response.results), 0.75);
                                 var split = regula.MatchFacesSimilarityThresholdSplit.fromJson(json.decode(str));
 

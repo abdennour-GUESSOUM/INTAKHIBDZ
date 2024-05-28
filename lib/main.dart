@@ -2,6 +2,7 @@ import 'package:INTAKHIB/flutter_frontend/screens/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'blockchain_back/blockchain/blockchain_authentification.dart';
 import 'firebase/authenticate_user/authenticate_user_page.dart';
 import 'firebase_options.dart';
 import 'flutter_frontend/themes/dark_theme.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? OnboardingScreen() : AuthenticateUserPage(),
+      home: seenOnboarding ? BlockchainAuthentification() : BlockchainAuthentification(),
       debugShowCheckedModeBanner: false,
     );
   }

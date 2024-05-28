@@ -20,8 +20,9 @@ class BlockchainAuthentification extends StatefulWidget {
 class _BlockchainAuthentificationState extends State<BlockchainAuthentification> {
   Uint8List? _persistentImage;
 
-  final String president_contract_address = "0x5092471F8a3f50C4468b1f4dcbFC9b1FaCBa5385";
-  final String deputies_contract_address = "0xA81791E36597df82d35e468598f1E01c7Ac9e5b2"; // Replace with your actual second contract address
+  final String president_contract_address = "0x982A4F68460253a44F038Cb1573172671a2419Bf";
+  final String deputies_contract_address = "0x27abb5A7e49a24c09013f2c4D5AaF739070246ee"; // Replace with your actual second contract address
+
 
   final keyController = TextEditingController();
 

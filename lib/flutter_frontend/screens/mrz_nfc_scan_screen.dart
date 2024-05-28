@@ -44,6 +44,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
   final _dob = TextEditingController();
   final _doe = TextEditingController();
   final NfcProvider _nfc = NfcProvider();
+
   late Timer _timerStateUpdater;
   final _scrollController = ScrollController();
   bool _showUserInstructions = true;

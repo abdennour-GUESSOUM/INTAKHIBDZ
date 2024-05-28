@@ -1,7 +1,5 @@
-import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/biometric_screen.dart';
 import 'package:flutter/material.dart';
-import '../constants/colors.dart';
 
 
 class UserAuthenticatedPage extends StatelessWidget {
@@ -52,17 +50,17 @@ class UserAuthenticatedPage extends StatelessWidget {
             Container(
               height: 100,
               decoration: BoxDecoration(
-                color: accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 shape: BoxShape.circle,
                 border: Border.all(
                   width: 2,
-                  color: primaryWhite,
+                  color: Colors.white,
                 ),
               ),
               child: const Center(
                 child: Icon(
                   Icons.check,
-                  color: primaryWhite,
+                  color: Colors.white,
                   size: 48,
                 ),
               ),

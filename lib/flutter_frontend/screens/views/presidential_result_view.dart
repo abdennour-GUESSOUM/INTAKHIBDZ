@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
@@ -37,7 +36,7 @@ class _PresidentialResultViewState extends State<PresidentialResultView> {
     _showLoadingDialog("Getting results...", "");
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      blockchain.queryView("get_results", []).then((value) {
+      blockchain.queryView("getElectionResults", []).then((value) {
         Navigator.of(context).pop();
 
         setState(() {

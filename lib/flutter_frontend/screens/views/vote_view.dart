@@ -1,12 +1,8 @@
-import 'package:INTAKHIB/flutter_frontend/screens/views/deputies_result_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_voting_process_view.dart';
-import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_result_view.dart';
-import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
-import '../../utils/glassmorphismContainer.dart';
 import 'deputies_voting_process_view.dart';
 
 class Voteview extends StatefulWidget {
@@ -137,68 +133,6 @@ class _VoteviewState extends State<Voteview> {
           },
         );
       }).toList(),
-    );
-  }
-
-  Widget _buildHorizontalList(BuildContext context) {
-    return SizedBox(
-      height: 160,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) => _buildGlassmorphicContainer(
-          context: context,
-          height: 155,
-          width: 260,
-          image: 'assets/images/news_${index + 1}.jpg', // Placeholder for image assets
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGlassmorphicContainer({
-    required BuildContext context,
-    required double width,
-    required double height,
-    String? additionalText,
-    String? image,
-    Widget? child,
-  }) {
-    return glassmorphicContainer(
-      context: context,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (child != null) // Render the child widget if provided
-            child,
-          if (image != null) // Render the image if provided
-            Container(
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: height * 0.89,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.error, size: 50); // Placeholder for error cases
-                },
-              ),
-            ),
-          if (additionalText != null) // Render additional text if provided
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                additionalText,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-        ],
-      ),
-      height: height,
-      width: width,
     );
   }
 }

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import '../constants/colors.dart';
 
 
 class CaptureFaceView extends StatefulWidget {

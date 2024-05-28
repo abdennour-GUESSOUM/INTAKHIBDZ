@@ -1,4 +1,3 @@
-import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';

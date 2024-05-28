@@ -180,7 +180,7 @@
         "type": "bytes32"
       }
     ],
-    "name": "cast_envelope",
+    "name": "castVote",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -198,21 +198,21 @@
         "type": "address"
       }
     ],
-    "name": "confirm_envelope",
+    "name": "confirmVote",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "valid_candidate_check",
+    "name": "finalizeElection",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "auto_declare_results",
+    "name": "declareResultsAutomatically",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -225,7 +225,7 @@
         "type": "address"
       }
     ],
-    "name": "get_status",
+    "name": "getVotingStatus",
     "outputs": [
       {
         "internalType": "uint32",
@@ -317,7 +317,7 @@
   },
   {
     "inputs": [],
-    "name": "getGroupDetails",
+    "name": "getAllGroupDetails",
     "outputs": [
       {
         "internalType": "string[]",
@@ -341,7 +341,7 @@
   },
   {
     "inputs": [],
-    "name": "getCandidateDetails",
+    "name": "getAllCandidateDetails",
     "outputs": [
       {
         "internalType": "address[]",
@@ -395,7 +395,7 @@
   },
   {
     "inputs": [],
-    "name": "get_results",
+    "name": "getElectionResults",
     "outputs": [
       {
         "internalType": "address[]",
@@ -424,7 +424,7 @@
   },
   {
     "inputs": [],
-    "name": "get_deadline",
+    "name": "getVotingDeadline",
     "outputs": [
       {
         "internalType": "uint256",
@@ -438,7 +438,7 @@
   },
   {
     "inputs": [],
-    "name": "get_vote_count",
+    "name": "getTotalVotes",
     "outputs": [
       {
         "internalType": "uint256",

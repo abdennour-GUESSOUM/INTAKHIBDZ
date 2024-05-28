@@ -282,7 +282,6 @@ class HomeView2 extends StatelessWidget {
     String? additionalText,
     String? image,
     Widget? child,
-    BoxFit? fit,
   }) {
     return glassmorphicContainer(
       context: context,

@@ -1,5 +1,4 @@
 import 'package:INTAKHIB/flutter_frontend/screens/views/deputies_result_view.dart';
-import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_voting_process_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/views/presidential_result_view.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../blockchain_back/blockchain/blockachain.dart';
-import 'deputies_voting_process_view.dart';
 
 class ResultsView extends StatefulWidget {
   @override
@@ -32,7 +30,7 @@ class _ResultsViewState extends State<ResultsView> {
     try {
       // Get the current deadline
       print("Fetching deadline...");
-      final deadlineResult = await blockchain.queryView("get_deadline", []);
+      final deadlineResult = await blockchain.queryView("getVotingDeadline", []);
       print("Deadline result: $deadlineResult");
 
       if (deadlineResult.isEmpty) {
@@ -46,8 +44,8 @@ class _ResultsViewState extends State<ResultsView> {
       if (currentTime > deadline.toInt()) {
         // Call the valid_candidate_check function in the contract if the deadline has passed
         print("Deadline has passed. Calling valid_candidate_check...");
-        await blockchain.query("auto_declare_results", []);
-        print("auto_declare_results called successfully.");
+        await blockchain.query("declareResultsAutomatically", []);
+        print("declareResultsAutomatically called successfully.");
       } else {
         throw Exception("Voting period has not ended yet.");
       }
@@ -73,7 +71,7 @@ class _ResultsViewState extends State<ResultsView> {
         return;
       }
 
-      print("Error during valid_candidate_check: $error");
+      print("Error during finalizing elections: $error");
 
       // Handle specific RPCError type
       if (error is RPCError) {
@@ -93,7 +91,7 @@ class _ResultsViewState extends State<ResultsView> {
     try {
       // Get the current deadline
       print("Fetching deadline...");
-      final deadlineResult = await blockchain.queryViewSecond("get_deadline", []);
+      final deadlineResult = await blockchain.queryViewSecond("getVotingDeadline", []);
       print("Deadline result: $deadlineResult");
 
       if (deadlineResult.isEmpty) {
@@ -107,8 +105,8 @@ class _ResultsViewState extends State<ResultsView> {
       if (currentTime > deadline.toInt()) {
         // Call the valid_candidate_check function in the contract if the deadline has passed
         print("Deadline has passed. Calling valid_candidate_check...");
-        await blockchain.querySecond("auto_declare_results", []);
-        print("auto_declare_results called successfully.");
+        await blockchain.querySecond("declareResultsAutomatically", []);
+        print("declareResultsAutomatically called successfully.");
       } else {
         throw Exception("Voting period has not ended yet.");
       }
@@ -197,73 +195,6 @@ class _ResultsViewState extends State<ResultsView> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildElectionTypeCarousel(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(height: 300.0),
-      items: [
-        {
-          'image': 'assets/images/news_2.jpg',
-          'text': 'Presidential',
-          'onTap': () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PresidentialVotingProcessView(isConfirming: false)),
-            );
-          }
-        },
-        {
-          'image': 'assets/images/news_1.jpg',
-          'text': 'Deputies',
-          'onTap': () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DeputiesVotingProcessView(isConfirming: false)),
-            );
-          }
-        },
-      ].map((item) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: item['onTap'] as void Function()?,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16.0),
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        item['image'] as String,
-                        fit: BoxFit.cover,
-                        height: 300.0,
-                        width: double.infinity,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.25), // Semi-transparent black overlay
-                        ),
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 0, 0, 40),
-                            child: Text(
-                              item['text'] as String,
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      }).toList(),
     );
   }
 

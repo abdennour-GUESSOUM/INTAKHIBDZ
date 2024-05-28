@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3dart/json_rpc.dart';
-
 import '../../../blockchain_back/blockchain/blockachain.dart';
 
 class PresidentialVotingProcessView extends StatefulWidget {
@@ -48,7 +44,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   bool _isConfirmButtonDisabled = true;
   bool _isVotingPeriodEnded = false;
-  String _submitVoteButtonText = 'Submit Vote';
+  String _castVoteButtonText = 'Cast Vote';
 
   Timer? _timer;
   Timer? _voterCountTimer;
@@ -81,8 +77,8 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   Future<void> _fetchNumberOfVoters() async {
     try {
-      final result = await blockchain.queryView("get_vote_count", []);
-      print("Result from get_vote_count: $result"); // Add logging
+      final result = await blockchain.queryView("getTotalVotes", []);
+      print("Result from getTotalVotes: $result"); // Add logging
 
       if (result.isNotEmpty) {
         setState(() {
@@ -97,8 +93,8 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
   Future<void> _fetchTotalVoters() async {
     try {
-      final result = await blockchain.queryView("get_total_voters", []);
-      print("Result from get_total_voters: $result"); // Add logging
+      final result = await blockchain.queryView("getTotalVotes", []);
+      print("Result from getTotalVotes: $result"); // Add logging
 
       if (result.isNotEmpty) {
         setState(() {
@@ -129,7 +125,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   }
 
   Future<void> _loadDeadline() async {
-    final result = await blockchain.queryView("get_deadline", []);
+    final result = await blockchain.queryView("getVotingDeadline", []);
     if (result.isNotEmpty) {
       final deadline = result[0] as BigInt;
       final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
@@ -139,8 +135,8 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
       setState(() {
         if (timeRemaining > BigInt.zero) {
-          final hours = (timeRemaining / BigInt.from(3600)).toInt();
-          final minutes = ((timeRemaining % BigInt.from(3600)) / BigInt.from(60)).toInt();
+          final hours = timeRemaining ~/ BigInt.from(3600);
+          final minutes = (timeRemaining % BigInt.from(3600)) ~/ BigInt.from(60);
           final seconds = (timeRemaining % BigInt.from(60)).toInt();
 
           timeRemainingText = "$hours:$minutes:$seconds";
@@ -151,44 +147,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
           timeRemainingText = "Voting period has ended";
           timeRemainingCircle = 1.0;
           _isVotingPeriodEnded = true;
-          _submitVoteButtonText = 'Submit Vote';
-          _isConfirmButtonDisabled = true;
-        }
-      });
-    } else {
-      if (!mounted) return; // Added check
-
-      setState(() {
-        timeRemainingText = "Failed to get status";
-        timeRemainingCircle = 0.0;
-      });
-    }
-  }
-
-  Future<void> _updateTimeRemaining() async {
-    final result = await blockchain.queryView("get_deadline", []);
-    if (result.isNotEmpty) {
-      final deadline = result[0] as BigInt;
-      final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
-      final timeRemaining = deadline - currentTime;
-
-      if (!mounted) return; // Added check
-
-      setState(() {
-        if (timeRemaining > BigInt.zero) {
-          final hours = (timeRemaining / BigInt.from(3600)).toInt();
-          final minutes = ((timeRemaining % BigInt.from(3600)) / BigInt.from(60)).toInt();
-          final seconds = (timeRemaining % BigInt.from(60)).toInt();
-
-          timeRemainingText = "$hours:$minutes:$seconds remaining";
-          timeRemainingCircle = timeRemaining.toDouble() / (deadline - currentTime).toDouble();
-          _isVotingPeriodEnded = false;
-          _isConfirmButtonDisabled = false;
-        } else {
-          timeRemainingText = "Voting period has ended";
-          timeRemainingCircle = 1.0;
-          _isVotingPeriodEnded = true;
-          _submitVoteButtonText = 'Submit Vote';
+          _castVoteButtonText = 'Cast Vote';
           _isConfirmButtonDisabled = true;
         }
       });
@@ -205,7 +164,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       final currentTime = BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000);
-      final result = await blockchain.queryView("get_deadline", []);
+      final result = await blockchain.queryView("getVotingDeadline", []);
       if (result.isNotEmpty) {
         final deadline = result[0] as BigInt;
         final timeRemaining = deadline - currentTime;
@@ -253,7 +212,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        final value = await blockchain.queryView("get_candidate_names", []);
+        final value = await blockchain.queryView("getAllCandidateDetails", []);
         Navigator.of(context).pop();
         setState(() {
           candidates = value[0];
@@ -289,12 +248,12 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        await blockchain.query("confirm_envelope", args);
+        await blockchain.query("confirmVote", args);
         Navigator.of(context).pop();
         _showSuccessDialog("OK", "Your vote has been confirmed!");
 
         setState(() {
-          _submitVoteButtonText = 'Submit Vote';
+          _castVoteButtonText = 'Cast Vote';
           _isConfirmButtonDisabled = true;
         });
       } catch (error) {
@@ -317,12 +276,12 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
 
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
-        await blockchain.query("cast_envelope", args);
+        await blockchain.query("castVote", args);
         Navigator.of(context).pop();
-        _showSuccessDialog("OK", "Your vote has been submitted!");
+        _showSuccessDialog("OK", "Your vote has been casted!");
 
         setState(() {
-          _submitVoteButtonText = 'Edit Vote';
+          _castVoteButtonText = 'Cast Vote';
           _isConfirmButtonDisabled = false;
         });
       } catch (error) {
@@ -570,7 +529,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                           Text(
                             'Select a candidate.\n'
                                 'Enter your secret code.\n'
-                                'Submit / Edit your vote.\n'
+                                'Cast your vote.\n'
                                 'Confirm your selection.',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -751,7 +710,7 @@ class _PresidentialVotingProcessViewState extends State<PresidentialVotingProces
                                             padding: const EdgeInsets.all(2.0), // Add padding around the button for better spacing
                                             child: ElevatedButton.icon(
                                               icon: Icon(Icons.send), // Add an icon for visual clarity
-                                              label: Text(_submitVoteButtonText),
+                                              label: Text(_castVoteButtonText),
                                               style: ElevatedButton.styleFrom(
                                                 foregroundColor: Colors.white,
                                                 backgroundColor: Theme.of(context).colorScheme.secondary, // Button background color

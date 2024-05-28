@@ -118,7 +118,7 @@ contract President {
         });
     }
 
-    function cast_envelope(bytes32 _envelope) public canVote {
+    function castVote(bytes32 _envelope) public canVote {
         if (envelopes[msg.sender] == 0x0) {
             voting_condition.envelopes_casted++;
         }
@@ -126,9 +126,9 @@ contract President {
         emit EnvelopeCast(msg.sender);
     }
 
-    function confirm_envelope(uint _sigil, address _sign) public canConfirm {
+    function confirmVote(uint _sigil, address _sign) public canConfirm {
         bytes32 _casted_envelope = envelopes[msg.sender];
-        bytes32 _sent_envelope = compute_envelope(_sigil, _sign);
+        bytes32 _sent_envelope = hashVote(_sigil, _sign);
 
         require(_casted_envelope == _sent_envelope, "Sent envelope does not correspond to the one cast");
 
@@ -141,7 +141,7 @@ contract President {
         emit EnvelopeOpen(msg.sender, _sign);
     }
 
-    function valid_candidate_check() canCheckOutcome public {
+    function finalizeElection() canCheckOutcome public {
         voting_condition.open = false;
 
         address elected = address(0);
@@ -168,24 +168,24 @@ contract President {
         }
     }
 
-    function auto_declare_results() public canCheckOutcome {
+    function declareResultsAutomatically() public canCheckOutcome {
         // Automatically declare results after the deadline
         if (voting_condition.open) {
-            valid_candidate_check();
+            finalizeElection();
         }
     }
 
-    function get_status(address addr) public view returns (uint32, uint32, bool, bool, bool) {
+    function getVotingStatus(address addr) public view returns (uint32, uint32, bool, bool, bool) {
         return (
             voting_condition.envelopes_casted,
             voting_condition.envelopes_opened,
             envelopes[addr] != 0x0,
             voting_condition.open,
-            is_candidate(addr)
+            isCandidate(addr)
         );
     }
 
-    function get_candidate_names() public view returns (
+    function getAllCandidateDetails() public view returns (
         address[] memory addresses,
         string[] memory firstNames,
         string[] memory lastNames,
@@ -221,7 +221,7 @@ contract President {
         return (addresses, firstNames, lastNames, imageUrls, genders, jobPositions, electoralDistricts, politicalAffiliations, ages);
     }
 
-    function get_results() public view canGetResults returns (
+    function getElectionResults() public view canGetResults returns (
         address[] memory, uint[] memory, string[] memory firstNames, string[] memory lastNames, string[] memory imageUrls, string[] memory genders, string[] memory jobPositions, string[] memory electoralDistricts, string[] memory politicalAffiliations, uint32[] memory ages  // Added ages to return values
     ) {
         uint[] memory all_votes = new uint[](candidate.length);
@@ -249,11 +249,11 @@ contract President {
         return (candidate, all_votes, firstNames, lastNames, imageUrls, genders, jobPositions, electoralDistricts, politicalAffiliations, ages);
     }
 
-    function compute_envelope(uint _sigil, address _sign) private pure returns (bytes32) {
+    function hashVote(uint _sigil, address _sign) private pure returns (bytes32) {
         return keccak256(abi.encode(_sigil, _sign));
     }
 
-    function is_candidate(address addr) private view returns (bool) {
+    function isCandidate(address addr) private view returns (bool) {
         for (uint i = 0; i < candidate.length; i++) {
             if (addr == candidate[i]) {
                 return true;
@@ -262,11 +262,11 @@ contract President {
         return false;
     }
 
-    function get_deadline() public view returns (uint256) {
+    function getVotingDeadline() public view returns (uint256) {
         return voting_condition.deadline;
     }
 
-    function get_vote_count() public view returns (uint256) {
+    function getTotalVotes() public view returns (uint256) {
         return voters.length;
     }
 }

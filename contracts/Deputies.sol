@@ -103,7 +103,7 @@ contract Deputies {
         });
     }
 
-    function cast_envelope(bytes32 _envelope) public canVote {
+    function castVote(bytes32 _envelope) public canVote {
         if (envelopes[msg.sender] == 0x0) {
             voting_condition.envelopes_casted++;
         }
@@ -111,9 +111,9 @@ contract Deputies {
         emit EnvelopeCast(msg.sender);
     }
 
-    function confirm_envelope(uint _sigil, address _group) public canConfirm {
+    function confirmVote(uint _sigil, address _group) public canConfirm {
         bytes32 _casted_envelope = envelopes[msg.sender];
-        bytes32 _sent_envelope = compute_envelope(_sigil, _group);
+        bytes32 _sent_envelope = hashVote(_sigil, _group);
 
         require(_casted_envelope == _sent_envelope, "Sent envelope does not correspond to the one cast");
 
@@ -131,7 +131,7 @@ contract Deputies {
         emit EnvelopeOpen(msg.sender, _group);
     }
 
-    function valid_candidate_check() canCheckOutcome public {
+    function finalizeElection() canCheckOutcome public {
         voting_condition.open = false;
 
         uint maxVotes = 0;
@@ -156,19 +156,19 @@ contract Deputies {
         }
     }
 
-    function auto_declare_results() public canCheckOutcome {
+    function declareResultsAutomatically() public canCheckOutcome {
         if (voting_condition.open) {
-            valid_candidate_check();
+            finalizeElection();
         }
     }
 
-    function get_status(address addr) public view returns (uint32, uint32, bool, bool, bool) {
+    function getVotingStatus(address addr) public view returns (uint32, uint32, bool, bool, bool) {
         return (
             voting_condition.envelopes_opened,
             voting_condition.envelopes_casted,
             (envelopes[addr] != 0x0),
             voting_condition.open,
-            is_candidate(addr)
+            isCandidate(addr)
         );
     }
 
@@ -184,7 +184,7 @@ contract Deputies {
         string memory politicalAffiliation,
         uint32 age
     ) public {
-        require(isGroupAddress(groupAddress), "Group does not exist");
+        require(isGroup(groupAddress), "Group does not exist");
         candidates[candidateAddress] = Candidate({
             firstName: firstName,
             lastName: lastName,
@@ -203,7 +203,7 @@ contract Deputies {
         }
     }
 
-    function getGroupDetails() public view returns (
+    function getAllGroupDetails() public view returns (
         string[] memory groupNames,
         string[] memory groupPictures,
         address[][] memory groupCandidatesArray
@@ -224,7 +224,7 @@ contract Deputies {
         return (groupNames, groupPictures, groupCandidatesArray);
     }
 
-    function getCandidateDetails() public view returns (
+    function getAllCandidateDetails() public view returns (
         address[] memory candidateAddresses,
         string[] memory candidateFirstNames,
         string[] memory candidateLastNames,
@@ -281,7 +281,7 @@ contract Deputies {
         );
     }
 
-    function get_results() public view canGetResults returns (
+    function getElectionResults() public view canGetResults returns (
         address[] memory groupAddresses,
         uint32[] memory groupVotes,
         string[] memory groupNames,
@@ -309,15 +309,15 @@ contract Deputies {
         );
     }
 
-    function compute_envelope(uint _sigil, address groupAddr) private pure returns (bytes32) {
+    function hashVote(uint _sigil, address groupAddr) private pure returns (bytes32) {
         return keccak256(abi.encode(_sigil, groupAddr));
     }
 
-    function is_candidate(address addr) private view returns (bool) {
+    function isCandidate(address addr) private view returns (bool) {
         return bytes(candidates[addr].firstName).length > 0;
     }
 
-    function isGroupAddress(address groupAddr) private view returns (bool) {
+    function isGroup(address groupAddr) private view returns (bool) {
         for (uint i = 0; i < groups.length; i++) {
             if (groups[i].candidateAddresses[0] == groupAddr) {
                 return true;
@@ -326,11 +326,11 @@ contract Deputies {
         return false;
     }
 
-    function get_deadline() public view returns (uint256) {
+    function getVotingDeadline() public view returns (uint256) {
         return voting_condition.deadline;
     }
 
-    function get_vote_count() public view returns (uint256) {
+    function getTotalVotes() public view returns (uint256) {
         return voters.length;
     }
 }

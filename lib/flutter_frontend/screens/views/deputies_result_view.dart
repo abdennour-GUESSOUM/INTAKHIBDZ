@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -36,7 +35,7 @@ class _DeputiesResultViewState extends State<DeputiesResultView> {
     _showLoadingDialog("Getting results...", "");
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      blockchain.queryViewSecond("get_results", []).then((value) {
+      blockchain.queryViewSecond("getElectionResults", []).then((value) {
         Navigator.of(context).pop();
         print("Results fetched successfully: $value");
         setState(() {

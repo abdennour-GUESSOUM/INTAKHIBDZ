@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../constants/colors.dart';
 
 errorSnackBar(BuildContext context, String content) {
   return ScaffoldMessenger.of(context).showSnackBar(
