@@ -1,50 +1,6 @@
 import 'package:INTAKHIB/flutter_frontend/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(context, _createRoute());
-          },
-          child: Text('Go to Infographic'),
-        ),
-      ),
-    );
-  }
-
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => InfographicScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return ScaleTransition(
-          scale: animation,
-          child: child,
-        );
-      },
-    );
-  }
-}
-
 class InfographicScreen extends StatefulWidget {
   @override
   _InfographicScreenState createState() => _InfographicScreenState();
@@ -99,11 +55,7 @@ class _InfographicScreenState extends State<InfographicScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: Column(
-          children: <Widget>[
-            Image.asset('assets/infographic.jpg'),
-          ],
-        ),
+        child: Image.asset('assets/infographic.jpg'),
       ),
       floatingActionButton: _isAtBottom
           ? FloatingActionButton(
