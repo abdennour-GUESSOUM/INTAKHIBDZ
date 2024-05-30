@@ -1,10 +1,9 @@
-import 'package:INTAKHIB/flutter_frontend/screens/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'blockchain_back/blockchain/blockchain_authentification.dart';
 import 'firebase/authenticate_user/authenticate_user_page.dart';
 import 'firebase_options.dart';
+import 'flutter_frontend/screens/intro_screens/infographic.dart';
 import 'flutter_frontend/themes/dark_theme.dart';
 import 'flutter_frontend/themes/light_theme.dart';
 
@@ -27,14 +26,13 @@ class MyApp extends StatelessWidget {
 
 
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? AuthenticateUserPage() : OnboardingScreen(),
+      home: seenOnboarding ? AuthenticateUserPage() : InfographicScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
