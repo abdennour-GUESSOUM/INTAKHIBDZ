@@ -1,3 +1,4 @@
+import 'package:INTAKHIB/blockchain_back/blockchain/blockchain_authentification.dart';
 import 'package:INTAKHIB/flutter_frontend/screens/biometric_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -94,7 +95,7 @@ class UserAuthenticatedPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return BiometricScreen();
+                          return BlockchainAuthentification();
                         },
                       ),
                     );

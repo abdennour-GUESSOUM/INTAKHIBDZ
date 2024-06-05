@@ -144,36 +144,23 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
               ],
             ),
           ),
-
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('First Name', widget.mrtdData.dg1!.mrz.firstName),
-            height: 50,
-          ),
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('Last Name', widget.mrtdData.dg1!.mrz.lastName),
-            height: 50,
-          ),
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('Document Number', widget.mrtdData.dg1!.mrz.documentNumber),
-            height: 50,
-          ),
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('Date of Birth', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth)),
-            height: 50,
-          ),
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('Nationality', widget.mrtdData.dg1!.mrz.nationality),
-            height: 50,
-          ),
-          glassmorphicContainer(
-            context: context,
-            child: _detailsChip('Expires', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry)),
-            height: 50,
+          Column(
+            children: [
+              Card(
+                  child: _detailsChip('National identification number', formatDG11(widget.mrtdData.dg11!))),
+              Card(
+                  child: _detailsChip('First Name', widget.mrtdData.dg1!.mrz.firstName)),
+              Card(
+                  child: _detailsChip('Last Name', widget.mrtdData.dg1!.mrz.lastName)),
+              Card(
+                  child: _detailsChip('Document Number', widget.mrtdData.dg1!.mrz.documentNumber)),
+              Card(child:
+              _detailsChip('Date of Birth', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth))),
+              Card(child:
+              _detailsChip('Nationality', widget.mrtdData.dg1!.mrz.nationality)),
+              Card(
+                  child: _detailsChip('Expires', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry))),
+            ],
           ),
         ],
       ),
@@ -251,11 +238,13 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
       'nationality': widget.mrtdData.dg1!.mrz.nationality,
       'expiryDate': DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry),
       'image': base64Encode(widget.mrtdData.dg2!.imageData!), // Encoding image to base64 string
+      'nationalIdentificationNumber': widget.mrtdData.dg11!.personalNumber,
     };
 
     // Save to Firestore
     FirebaseFirestore.instance.collection('users').add(profileData).then((docRef) {
       print("User data saved to Firestore with ID: ${docRef.id}");
+      print("National identification number: ${widget.mrtdData.dg11!.personalNumber}");
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => AuthenticateUserPage(),

@@ -50,9 +50,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 60), // Add some space below the AppBar
-
-            SizedBox(height: 20),
+            SizedBox(height: 40),
             Stack(
               children: [
                 CaptureFaceView(
@@ -76,7 +74,7 @@ class _AuthenticateUserPageState extends State<AuthenticateUserPage> {
             ),
             if (canAuthenticate)
               Padding(
-                padding: const EdgeInsets.only(top: 40), // Added top padding
+                padding: const EdgeInsets.only(top: 10), // Added top padding
                 child: SizedBox(
                   width: 300,
                   height: 50,

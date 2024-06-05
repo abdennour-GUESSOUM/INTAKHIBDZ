@@ -16,8 +16,8 @@ extension StringDecodeApis on String {
 
 extension StringYYMMDDateApi on String {
   DateTime parseDateYYMMDD() {
-    if(length < 6) {
-      throw const FormatException("invalid length of compact date string");
+    if (length < 6) {
+      throw FormatException("invalid length of compact date string");
     }
 
     int y = int.parse(substring(0, 2)) + 2000;
@@ -27,10 +27,17 @@ extension StringYYMMDDateApi on String {
     // Sub 100 years from parsed year if greater than 10 years and 5 months from now.
     final now = DateTime.now();
     final tenYearsFromNow = now.year + 10;
-    if (y > tenYearsFromNow ||
-       (y == tenYearsFromNow && now.month + 5 < m)) {
+    if (y > tenYearsFromNow || (y == tenYearsFromNow && now.month + 5 < m)) {
       y -= 100;
     }
     return DateTime(y, m, d);
+  }
+
+  DateTime parseDate() {
+    if (length == 6) {
+      return this.parseDateYYMMDD();
+    } else {
+      return DateTime.parse(this);
+    }
   }
 }

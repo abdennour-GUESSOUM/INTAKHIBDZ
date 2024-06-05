@@ -132,6 +132,22 @@ String formatMRZ(final MRZ mrz) {
       "Date of Birth: ${DateFormat.yMd().format(mrz.dateOfBirth)}\n" +
       "Date of Expiry: ${DateFormat.yMd().format(mrz.dateOfExpiry)}\n" ;
 }
+
+String formatDG11(final EfDG11 dg11) {
+  return
+    //"Full Name: ${dg11.nameOfHolder}\n" +
+    "-National identification number: ${dg11.personalNumber}\n" +
+        "-Full Date of Birth: ${dg11.fullDateOfBirth != null ? DateFormat.yMd().format(dg11.fullDateOfBirth!) : 'N/A'}\n" +
+        // "Place of Birth: ${dg11.placeOfBirth}\n" +
+        // "Permanent Address: ${dg11.permanentAddress}\n" +
+        // "Telephone: ${dg11.telephone}\n" +
+        // "Profession: ${dg11.profession}\n" +
+        // "Title: ${dg11.title}\n" +
+        //"Personal Summary: ${dg11.personalSummary}\n" +
+        "-Proof of Citizenship: ${dg11.proofOfCitizenship != null ? 'Available' : 'Not Available'}\n" ;
+  // "Other Valid TD Numbers: ${dg11.otherValidTDNumbers}\n" +
+  //"Blood Type: ${dg11.custodyInformation}";
+}
 String formatDG2(final EfDG2 dg2) {
   return "DG2\n"
       "faceImageType ${dg2.faceImageType}\n" +

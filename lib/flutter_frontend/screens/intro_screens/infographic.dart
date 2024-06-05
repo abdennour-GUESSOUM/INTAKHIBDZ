@@ -1,5 +1,7 @@
 import 'package:INTAKHIB/flutter_frontend/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import '../mrz_nfc_scan_screen.dart';
+
 
 class InfographicScreen extends StatefulWidget {
   @override
@@ -39,7 +41,7 @@ class _InfographicScreenState extends State<InfographicScreen> {
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) => MRZNFCScan.MRZNFCScanScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
           scale: animation,
