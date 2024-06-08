@@ -27,7 +27,7 @@ Widget glassmorphicContainer({
               ],
             ),
             height: height,
-            width: width,
+            width: double.infinity,
             child: Center(child: child),
           ),
         ),

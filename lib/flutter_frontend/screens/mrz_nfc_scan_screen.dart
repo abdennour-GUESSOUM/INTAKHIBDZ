@@ -435,7 +435,7 @@ class _MRZNFCScanState extends State<MRZNFCScan> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                      Text(
-                      'Device NFC available: ',
+                      ' NFC available: ',
                       style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.primary),
                     ),
                     const SizedBox(width: 4),

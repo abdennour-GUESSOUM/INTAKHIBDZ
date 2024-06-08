@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'dart:typed_data';
 import '../../firebase/authenticate_user/authenticate_user_page.dart';
 import '../utils/mrtd_data.dart';
+import 'dart:ui';
 
 class VoterProfileScreen extends StatefulWidget {
   final MrtdData mrtdData;
@@ -53,10 +54,10 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             _isVisible ? _profileDetails() : Container(),
             _isVisible ? _signatureSection() : Container(),
-            SizedBox(height: 40),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
@@ -116,16 +117,14 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
 
   Widget _profileDetails() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 30),
           Align(
             alignment: Alignment.center,
             child: Column(
               children: [
-                SizedBox(height: 20),
                 Text(
                   "Image",
                   style: TextStyle(
@@ -140,27 +139,17 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
                     fit: BoxFit.contain,
                   ),
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),
-          Column(
-            children: [
-              Card(
-                  child: _detailsChip('National identification number', formatDG11(widget.mrtdData.dg11!))),
-              Card(
-                  child: _detailsChip('First Name', widget.mrtdData.dg1!.mrz.firstName)),
-              Card(
-                  child: _detailsChip('Last Name', widget.mrtdData.dg1!.mrz.lastName)),
-              Card(
-                  child: _detailsChip('Document Number', widget.mrtdData.dg1!.mrz.documentNumber)),
-              Card(child:
-              _detailsChip('Date of Birth', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth))),
-              Card(child:
-              _detailsChip('Nationality', widget.mrtdData.dg1!.mrz.nationality)),
-              Card(
-                  child: _detailsChip('Expires', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry))),
-            ],
-          ),
+          _glassmorphicDetails('NIN', formatDG11(widget.mrtdData.dg11!)),
+          _glassmorphicDetails('First Name', widget.mrtdData.dg1!.mrz.firstName),
+          _glassmorphicDetails('Last Name', widget.mrtdData.dg1!.mrz.lastName),
+          _glassmorphicDetails('Document Number', widget.mrtdData.dg1!.mrz.documentNumber),
+          _glassmorphicDetails('Date of Birth', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfBirth)),
+          _glassmorphicDetails('Nationality', widget.mrtdData.dg1!.mrz.nationality),
+          _glassmorphicDetails('Expires', DateFormat.yMd().format(widget.mrtdData.dg1!.mrz.dateOfExpiry)),
         ],
       ),
     );
@@ -208,23 +197,30 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
     );
   }
 
-  Widget _detailsChip(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(width: 8),
-          Text(
-            textAlign: TextAlign.left,
-            '$label: $value',
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).colorScheme.primary,
+  Widget _glassmorphicDetails(String label, String value) {
+    return glassmorphicContainer(
+      context: context,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start, // Align children to the start
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                '$label: $value',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                textAlign: TextAlign.left, // Ensure text is aligned to the left
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      height: 50,
     );
   }
 
@@ -253,4 +249,36 @@ class _VoterProfileScreenState extends State<VoterProfileScreen> {
       print("Failed to save user data: $error");
     });
   }
+}
+
+Widget glassmorphicContainer({
+  required BuildContext context,
+  BoxDecoration? decoration,
+  required Widget child,
+  double? height,
+  double? width,
+}) {
+  return Padding(
+    padding: const EdgeInsets.all(10.0),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+        child: Container(
+          decoration: decoration ?? BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 50,
+                spreadRadius: 5,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              )
+            ],
+          ),
+          height: height,
+          width: double.infinity,
+          child: Container(child: child),
+        ),
+      ),
+    ),
+  );
 }
