@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
 import '../../firebase/authenticate_user/authenticate_user_page.dart';
-import '../utils/glassmorphismContainer.dart';
 import '../utils/mrtd_data.dart';
 
 class VoterProfileScreen extends StatefulWidget {

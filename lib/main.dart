@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       home: seenOnboarding ? InfographicScreen() : MRZNFCScan.MRZNFCScanScreen(),
       debugShowCheckedModeBanner: false,
+
     );
   }
 }
