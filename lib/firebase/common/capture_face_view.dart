@@ -32,7 +32,7 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 40),
+        SizedBox(height: 80),
         Text(
           'FaceID authentification',
           textAlign: TextAlign.center,
@@ -42,7 +42,8 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
-        SizedBox(height: 40),
+        SizedBox(height: 50),
+
         Text(
           'take a picture and click on the button.',
           textAlign: TextAlign.center,
@@ -51,7 +52,7 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
-        SizedBox(height: 100),
+        SizedBox(height: 50),
         CircleAvatar(
           radius: 100,
           backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.1),
@@ -113,6 +114,8 @@ class _CaptureFaceViewState extends State<CaptureFaceView> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
+        const SizedBox(height: 20),
+
       ],
     );
   }

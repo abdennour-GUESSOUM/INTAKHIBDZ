@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase/authenticate_user/authenticate_user_page.dart';
 import 'firebase_options.dart';
 import 'flutter_frontend/screens/intro_screens/infographic.dart';
+import 'flutter_frontend/screens/mrz_nfc_scan_screen.dart';
+import 'flutter_frontend/screens/mrz_nfc_scan_screen.dart';
 import 'flutter_frontend/themes/dark_theme.dart';
 import 'flutter_frontend/themes/light_theme.dart';
 
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'INTAKHIB',
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: seenOnboarding ? InfographicScreen() : UserAuthenticatedPage(Firstname: 'Guessoum', lastname: 'Abdennour'),
+      home: seenOnboarding ? InfographicScreen() : MRZNFCScan.MRZNFCScanScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
