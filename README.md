@@ -1,4 +1,4 @@
-# INTAKHIBDZ, an NFC and Blockchain-Based Mobile Voting System for Secure Elections  
+# NFC and Blockchain-Based Mobile Voting System for Secure Elections  
 
 ## Overview
 This project presents a secure, decentralized mobile voting application designed for presidential and legislative elections. Leveraging **NFC (Near Field Communication)** for voter authentication and **blockchain technology** for ensuring vote integrity, the system enhances electoral transparency, security, and accessibility. Developed as part of a master's thesis at Badji Mokhtar University - Annaba, Algeria, the application streamlines the voting process while addressing challenges like voter fraud, low turnout, and logistical inefficiencies.
