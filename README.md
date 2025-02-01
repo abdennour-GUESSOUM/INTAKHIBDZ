@@ -92,7 +92,7 @@ This project presents a secure, decentralized mobile voting application designed
 - **Badji Mokhtar University** - academic support.
 - **Flutter**, **Firebase**, and **Truffle** communities for open-source tools.
 
-**Note**: This project is still a prototype.
+**Note**: This project is still in development.
 
 
 
