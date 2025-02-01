@@ -24,22 +24,20 @@ This project presents a secure, decentralized mobile voting application designed
   - **Android Studio** for development.
   - **Git** for version control.
 
- ## Installation
-1. **Clone the Repository**:
-   git clone https://github.com/abdennour-GUESSOUM/INTAKHIBDZ
-   cd mobile-voting-system
+## Installation
+- **Clone the Repository**:
+  - git clone https://github.com/abdennour-GUESSOUM/INTAKHIBDZ
+  - cd mobile-voting-system
+- **Install Dependencies**:
+  - flutter pub get
+- **Set Up Firebase**:
+   - Create a Firebase project and add google-services.json (Android)
 
-2. **Install Dependencies**:
-   flutter pub get
-
-3. **Set Up Firebase**:
-   Create a Firebase project and add google-services.json (Android).
-
-4. **Set Up Firebase**:
-   truffle migrate --network ganache
+- **Set Up Firebase**:
+  - truffle migrate --network ganache
    
-5. **Run the App**:
-   flutter run
+- **Run the App**:
+  - flutter run
 
 ## Usage
 1. **Launch the App**: Open the app and navigate to the authentication screen.
