@@ -53,9 +53,9 @@ This project presents a secure, decentralized mobile voting application designed
 ## Screens UI
 ### Onboarding screens
 ![image](https://github.com/user-attachments/assets/78ac1ad9-9ce2-466d-84aa-cde46aadd89c)
-### MRZ card input
+### MRZ card inforamations input
 ![image](https://github.com/user-attachments/assets/6c5d1470-8276-431d-a0b4-fbadd636cd88)
-### ID Card (CNIBE) successfully scanned
+### ID Card successfully scanned
 ![dsq](https://github.com/user-attachments/assets/cfdab863-0cf7-48ed-a78d-4ba2d5caf679)
 ### Facial authentication ( success | failure )
 ![image](https://github.com/user-attachments/assets/8325c514-3903-40a1-b9e5-169955c8caba)
