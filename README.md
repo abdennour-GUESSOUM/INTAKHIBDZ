@@ -27,15 +27,13 @@ This project presents a secure, decentralized mobile voting application designed
 ## Installation
 - **Clone the Repository**:
   - git clone https://github.com/abdennour-GUESSOUM/INTAKHIBDZ
-  - cd mobile-voting-system
+  - cd INTAKHIBDZ
 - **Install Dependencies**:
   - flutter pub get
 - **Set Up Firebase**:
-   - Create a Firebase project and add google-services.json (Android)
-
-- **Set Up Firebase**:
+   - Create a Firebase project and update google-services.json (Android)
+- **Deploy Smart Contracts**:
   - truffle migrate --network ganache
-   
 - **Run the App**:
   - flutter run
 
