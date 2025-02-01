@@ -26,7 +26,7 @@ This project presents a secure, decentralized mobile voting application designed
 
  ## Installation
 1. **Clone the Repository**:
-   git clone https://github.com/yourusername/mobile-voting-system.git
+   git clone https://github.com/abdennour-GUESSOUM/INTAKHIBDZ/edit/main/README.md
    cd mobile-voting-system
 
 2. **Install Dependencies**:
@@ -44,23 +44,19 @@ This project presents a secure, decentralized mobile voting application designed
 ## Usage
 1. **Launch the App**: Open the app and navigate to the authentication screen.
 2. **NFC Authentication**:
-- Enter the MRZ code from your CNIBE.
-- Tap the CNIBE card against the phone to scan via NFC.
+  - Enter the MRZ code from your CNIBE.
+  - Tap the CNIBE card against the phone to scan via NFC.
 3. **Facial Recognition**: Capture a live photo for identity verification.
 4. **Private Key Validation**: Enter the unique private key provided post-authentication.
 5. **Vote**:
-- Select a candidate/party.
-- Confirm your choice with a secure PIN.
+  - Select a candidate/party.
+  - Confirm your choice with a secure PIN.
 6. **View Results**: Access real-time results post-election via the blockchain explorer once elections closed.
 
 ## Acknowledgments
-
 - **Badji Mokhtar University** - Annaba for academic support.
-
 - **Prof. Boudour Rachid** (Thesis Advisor) for guidance.
-
 - **Flutter**, **Firebase**, and **Truffle** communities for open-source tools.
-
 
 **Note**: This project is a prototype. Always ensure compliance with local electoral laws before deployment.
 
