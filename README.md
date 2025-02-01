@@ -89,8 +89,7 @@ This project presents a secure, decentralized mobile voting application designed
 ![image](https://github.com/user-attachments/assets/20981f34-b538-4b1d-8696-d9543b951ecc)
 
 ## Acknowledgments
-- **Badji Mokhtar University** - Annaba for academic support.
-- **Prof. Boudour Rachid** (Thesis Advisor) for guidance.
+- **Badji Mokhtar University** - academic support.
 - **Flutter**, **Firebase**, and **Truffle** communities for open-source tools.
 
 **Note**: This project is still a prototype.
